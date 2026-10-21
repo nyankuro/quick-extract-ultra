@@ -43,6 +43,7 @@ contextBridge.exposeInMainWorld('quickExtract', {
   openToolPage: (url) => ipcRenderer.invoke('tools:open-page', url),
   openToolsFolder: () => ipcRenderer.invoke('tools:open-folder'),
   downloadTool: (toolId, consent) => ipcRenderer.invoke('tools:download', { toolId, consent }),
+  setupAllTools: (consent) => ipcRenderer.invoke('tools:setup-all', { consent }),
   onToolProgress: (callback) => subscribe('tools:progress', callback),
   inspectZip: (zipPath) => ipcRenderer.invoke('recovery:inspect', { zipPath }),
   startRecovery: (options) => ipcRenderer.invoke('recovery:start', options),

@@ -179,9 +179,19 @@ async function main() {
   const languageCount = await window.webContents.executeJavaScript("document.querySelectorAll('.language-select select option').length");
   assert.equal(languageCount, 5, 'five languages');
 
-  // The ZIP password recovery tab renders with its ownership note.
-  await window.webContents.executeJavaScript("[...document.querySelectorAll('.tab-button')].find(b => b.textContent.includes('Recover')).click()");
+  // The ZIP password recovery tab (highlighted) shows the first-run setup screen,
+  // because no recovery tools are installed in this test profile.
+  await window.webContents.executeJavaScript("[...document.querySelectorAll('.tab-button.tab-special')][0].click()");
   await until("document.querySelector('.ownership-note') !== null");
+  await until("document.querySelector('.recover-setup') !== null");
+  await shoot('recover-setup.png');
+  // The (?) info opens the explanation dialog.
+  await window.webContents.executeJavaScript("document.querySelector('.info-button').click()");
+  await until("document.querySelector('.recover-modal') !== null");
+  await window.webContents.executeJavaScript("document.querySelector('.recover-modal .picker-header button').click()");
+  await until("document.querySelector('.recover-modal') === null");
+  // "Add them myself" reveals the three tools for manual download.
+  await window.webContents.executeJavaScript("document.querySelector('.setup-manual').click()");
   await until("document.querySelectorAll('.tool-row').length === 3");
   await shoot('recover.png');
 

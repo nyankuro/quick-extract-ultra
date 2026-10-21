@@ -56,9 +56,16 @@ test('charset and length helpers', () => {
   assert.equal(clampLength('x', 8), 8);
 });
 
-test('hashcat and john have no verified auto-download; the manifest says so', async () => {
-  await assert.rejects(downloadTool('hashcat', { userDataDir: workspace }), { code: 'NO_AUTO' });
-  await assert.rejects(downloadTool('john', { userDataDir: workspace }), { code: 'NO_AUTO' });
+test('scrape patterns resolve the official Windows binary URLs', () => {
+  const sources = require('../electron/tool-sources.json');
+  const hashcatPage = '<a href="/files/hashcat-7.1.2.7z">binaries</a>';
+  const johnPage = '<a href="k/john-1.9.0-jumbo-1-win64.7z">win64</a> <a href="k/john-1.9.0-jumbo-1-win32.7z">win32</a>';
+  const h = new RegExp(sources.hashcat.auto.linkPattern, 'i').exec(hashcatPage);
+  assert.equal(new URL(h[0], sources.hashcat.auto.base).toString(), 'https://hashcat.net/files/hashcat-7.1.2.7z');
+  const j = new RegExp(sources.john.auto.linkPattern, 'i').exec(johnPage);
+  assert.equal(new URL(j[0], sources.john.auto.base).toString(), 'https://www.openwall.com/john/k/john-1.9.0-jumbo-1-win64.7z');
+  // bkcrack has no auto scraping; it uses a GitHub release.
+  assert.equal(sources.bkcrack.auto.provider, 'github');
 });
 
 test('tool detection finds exes placed under tools/<id>/', async () => {

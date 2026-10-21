@@ -7,9 +7,11 @@ import {
   ClipboardCopy,
   Cpu,
   Download,
+  DownloadCloud,
   ExternalLink,
   FileKey,
   FolderOpen,
+  HelpCircle,
   Key,
   KeyRound,
   LoaderCircle,
@@ -17,6 +19,8 @@ import {
   Play,
   ShieldAlert,
   Square,
+  Wrench,
+  X,
   Zap
 } from 'lucide-react';
 import { useT, type Translate } from './i18n';
@@ -81,6 +85,12 @@ export default function RecoverView({ addLog }: Props) {
   const [copied, setCopied] = useState(false);
   const extractedRef = useRef('');
 
+  const [manualChosen, setManualChosen] = useState(false);
+  const [settingUp, setSettingUp] = useState(false);
+  const [setupProgress, setSetupProgress] = useState<{ toolId: string; phase: string; percent: number } | null>(null);
+  const [setupSummary, setSetupSummary] = useState('');
+  const [showInfo, setShowInfo] = useState(false);
+
   const refreshTools = async () => {
     const result = await window.quickExtract.listTools();
     if (result.ok) {
@@ -91,8 +101,9 @@ export default function RecoverView({ addLog }: Props) {
 
   useEffect(() => { void refreshTools(); }, []);
   useEffect(() => window.quickExtract.onToolProgress((event) => {
-    if (event.toolId === downloading) setDownloadProgress({ phase: event.phase, percent: event.percent });
-  }), [downloading]);
+    setDownloadProgress({ phase: event.phase, percent: event.percent });
+    setSetupProgress({ toolId: event.toolId, phase: event.phase, percent: event.percent });
+  }), []);
 
   useEffect(() => window.quickExtract.onRecoveryEvent((event: RecoveryEvent) => {
     switch (event.type) {
@@ -159,6 +170,26 @@ export default function RecoverView({ addLog }: Props) {
     }
   };
 
+  const autoSetup = async () => {
+    setSettingUp(true);
+    setSetupSummary('');
+    setSetupProgress(null);
+    setMessage('');
+    const result = await window.quickExtract.setupAllTools(true);
+    setSettingUp(false);
+    if (result.ok) {
+      const added = result.value.filter((r) => r.ok && !r.skipped);
+      const failed = result.value.filter((r) => !r.ok);
+      setSetupSummary(t('recover.setupSummary', { added: added.length, failed: failed.length }));
+      if (added.length) addLog('done', t('recover.setupDone', { names: added.map((r) => r.toolId).join(', ') }));
+      if (failed.length) addLog('error', t('recover.setupFailed', { names: failed.map((r) => r.toolId).join(', ') }));
+      await refreshTools();
+    } else {
+      setMessage(result.message);
+      addLog('error', result.message);
+    }
+  };
+
   const start = async () => {
     setFound(null);
     setMessage('');
@@ -205,9 +236,71 @@ export default function RecoverView({ addLog }: Props) {
   const anyToolReady = Boolean(tool('john')?.installed) || canBkcrack;
 
   const progressPercent = progress.percent != null ? Math.max(0, Math.min(100, progress.percent)) : null;
+  const anyInstalled = Boolean(toolList?.tools.some((item) => item.installed));
+  const showSetup = Boolean(toolList) && !anyInstalled && !manualChosen;
+
+  const infoModal = showInfo && (
+    <div className="recover-modal-backdrop" onClick={() => setShowInfo(false)}>
+      <div className="recover-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+        <header className="picker-header">
+          <h2><HelpCircle size={20} className="accent-icon" />{t('recover.infoTitle')}</h2>
+          <button type="button" onClick={() => setShowInfo(false)} aria-label={t('common.close')}><X /></button>
+        </header>
+        <div className="recover-modal-body">
+          <h3>{t('recover.infoWhyTitle')}</h3>
+          <p>{t('recover.infoWhy')}</p>
+          <h3>{t('recover.infoSafetyTitle')}</h3>
+          <p>{t('recover.infoSafety')}</p>
+          <ul className="muted">
+            {toolList?.tools.map((item) => (
+              <li key={item.id}><strong>{item.name}</strong> ({item.license}) — {item.page}</li>
+            ))}
+          </ul>
+          <p className="muted small-print">{t('recover.infoAutoNote')}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (showSetup) {
+    return (
+      <div className="recover-view setup">
+        <p className="ownership-note" role="note"><ShieldAlert size={18} />{t('recover.ownership')}</p>
+        <section className="recover-setup">
+          <KeyRound size={46} className="accent-icon" />
+          <h2>{t('recover.setupTitle')}</h2>
+          <p className="setup-intro">{t('recover.setupIntro')}</p>
+          <div className="setup-choices">
+            <button className="primary-button wide setup-auto" type="button" data-action="setup-auto" onClick={() => void autoSetup()} disabled={settingUp}>
+              {settingUp ? <LoaderCircle size={20} className="spin" /> : <DownloadCloud size={20} />}
+              {t('recover.setupAuto')}
+            </button>
+            <button className="secondary-button setup-manual" type="button" onClick={() => setManualChosen(true)} disabled={settingUp}>
+              <Wrench size={18} />{t('recover.setupManual')}
+            </button>
+            <button className="icon-button info-button" type="button" onClick={() => setShowInfo(true)} aria-label={t('recover.infoTitle')} title={t('recover.infoTitle')}>
+              <HelpCircle size={22} />
+            </button>
+          </div>
+          <p className="setup-sizes muted">{toolList?.tools.map((item) => `${item.name} ~${item.approxSizeMb} MB`).join(' · ')}</p>
+          <p className="setup-auto-note muted small-print">{t('recover.autoRiskNote')}</p>
+          {settingUp && setupProgress && (
+            <div className="setup-progress">
+              <div className="status-line"><LoaderCircle size={16} className="spin" /><span>{t('recover.setupDownloading', { name: setupProgress.toolId })} · {t(`recover.phase.${setupProgress.phase || 'download'}`, { percent: String(setupProgress.percent) })}</span></div>
+              <div className="progress-cell wide"><span className="progress-track"><span className="progress-fill" style={{ width: `${setupProgress.percent}%` }} /></span><span>{setupProgress.percent}%</span></div>
+            </div>
+          )}
+          {setupSummary && <p className="good-text">{setupSummary}</p>}
+          {message && <p className="picker-error" role="alert">{message}</p>}
+        </section>
+        {infoModal}
+      </div>
+    );
+  }
 
   return (
     <div className="recover-view">
+      {infoModal}
       <p className="ownership-note" role="note">
         <ShieldAlert size={18} />
         {t('recover.ownership')}
@@ -217,9 +310,17 @@ export default function RecoverView({ addLog }: Props) {
         <section className="tool-panel recover-tools" aria-label={t('recover.toolsTitle')}>
           <div className="panel-header">
             <h2><KeyRound size={20} className="accent-icon" />{t('recover.toolsTitle')}</h2>
-            <button className="secondary-button compact" type="button" onClick={() => void window.quickExtract.openToolsFolder()}>
-              <FolderOpen size={18} />{t('recover.openToolsFolder')}
-            </button>
+            <div className="panel-actions">
+              {!anyInstalled && (
+                <button className="secondary-button compact" type="button" onClick={() => void autoSetup()} disabled={settingUp}>
+                  {settingUp ? <LoaderCircle size={18} className="spin" /> : <DownloadCloud size={18} />}{t('recover.setupAutoShort')}
+                </button>
+              )}
+              <button className="icon-button small" type="button" onClick={() => setShowInfo(true)} aria-label={t('recover.infoTitle')} title={t('recover.infoTitle')}><HelpCircle size={18} /></button>
+              <button className="secondary-button compact" type="button" onClick={() => void window.quickExtract.openToolsFolder()}>
+                <FolderOpen size={18} />{t('recover.openToolsFolder')}
+              </button>
+            </div>
           </div>
           <p className="muted">{t('recover.toolsHint')}</p>
           {toolList?.tools.map((item) => (

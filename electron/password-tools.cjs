@@ -120,12 +120,28 @@ function httpsGet(url, { headers = {}, redirects = 5 } = {}) {
   });
 }
 
-async function fetchJson(url) {
-  const response = await httpsGet(url);
+async function fetchText(url) {
+  const response = await httpsGet(url, { headers: { Accept: 'text/html,*/*' } });
   let body = '';
   response.setEncoding('utf8');
   for await (const chunk of response) body += chunk;
-  return JSON.parse(body);
+  return body;
+}
+
+async function fetchJson(url) {
+  return JSON.parse(await fetchText(url));
+}
+
+// Reads the official download page and builds the current Windows binary URL.
+// These sources publish a PGP signature, not a machine-readable checksum, so the
+// download is trusted to its official HTTPS host and its SHA-256 is recorded, not gated.
+async function resolveScrapeAsset(spec) {
+  const page = await fetchText(spec.page);
+  const match = new RegExp(spec.linkPattern, 'i').exec(page);
+  if (!match) throw Object.assign(new Error('Could not find the current Windows build on the official page.'), { code: 'NO_ASSET' });
+  const url = new URL(match[0], spec.base.endsWith('/') || match[0].startsWith('/') ? spec.base : `${spec.base}/`).toString();
+  const version = (/(\d+\.\d+(?:\.\d+)?(?:-[\w.]+)?)/.exec(match[0]) || [])[1] || '';
+  return { name: url.split('/').pop(), url, size: 0, expectedSha256: '', version };
 }
 
 async function downloadToFile(url, destination, onProgress) {
@@ -168,11 +184,13 @@ async function resolveGithubAsset(repo, assetPattern) {
  */
 async function downloadTool(toolId, { userDataDir, sevenZipPath, extract, onProgress }) {
   const spec = REGISTRY[toolId];
-  if (!spec?.auto) throw Object.assign(new Error('This tool has no verified automatic download. Use the manual button.'), { code: 'NO_AUTO' });
-  if (spec.auto.provider !== 'github') throw Object.assign(new Error('Unsupported download source.'), { code: 'NO_AUTO' });
+  if (!spec?.auto) throw Object.assign(new Error('This tool has no automatic download. Use the manual button.'), { code: 'NO_AUTO' });
 
-  const asset = await resolveGithubAsset(spec.auto.repo, spec.auto.assetPattern);
+  const asset = spec.auto.provider === 'github'
+    ? await resolveGithubAsset(spec.auto.repo, spec.auto.assetPattern)
+    : await resolveScrapeAsset(spec.auto);
   const dir = path.join(toolsDir(userDataDir), toolId);
+  await fs.rm(dir, { recursive: true, force: true }).catch(() => {});
   await fs.mkdir(dir, { recursive: true });
   const tempFile = path.join(dir, `.download-${Date.now()}-${asset.name}`);
   try {
@@ -196,4 +214,21 @@ async function downloadTool(toolId, { userDataDir, sevenZipPath, extract, onProg
   }
 }
 
-module.exports = { REGISTRY, toolsDir, detectTools, detectTool, downloadTool, locateExe };
+// Downloads every tool that is not installed yet, from each tool's official source.
+async function setupAllTools(opts) {
+  const roots = searchRoots(opts.userDataDir);
+  const results = [];
+  for (const id of Object.keys(REGISTRY)) {
+    const existing = await detectTool(id, roots);
+    if (existing.installed) { results.push({ toolId: id, ok: true, skipped: true }); continue; }
+    try {
+      const outcome = await downloadTool(id, { ...opts, onProgress: (p) => opts.onProgress?.({ toolId: id, ...p }) });
+      results.push({ toolId: id, ok: true, ...outcome });
+    } catch (error) {
+      results.push({ toolId: id, ok: false, code: error.code || '', message: error.message });
+    }
+  }
+  return results;
+}
+
+module.exports = { REGISTRY, toolsDir, detectTools, detectTool, downloadTool, setupAllTools, resolveScrapeAsset, locateExe };

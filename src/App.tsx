@@ -713,7 +713,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
               <button
                 key={id}
                 type="button"
-                className={`tab-button ${tab === id ? 'active' : ''}`}
+                className={`tab-button ${tab === id ? 'active' : ''} ${id === 'recover' ? 'tab-special' : ''}`}
                 aria-current={tab === id ? 'page' : undefined}
                 onClick={() => setTab(id)}
               >

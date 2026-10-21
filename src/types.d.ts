@@ -248,6 +248,7 @@ declare global {
       openToolPage: (url: string) => Promise<void>;
       openToolsFolder: () => Promise<string>;
       downloadTool: (toolId: string, consent: boolean) => Promise<TaskResult<{ verified: boolean; sha256: string; checksumPublished: boolean; version: string; source: string }>>;
+      setupAllTools: (consent: boolean) => Promise<TaskResult<Array<{ toolId: string; ok: boolean; skipped?: boolean; verified?: boolean; sha256?: string; message?: string }>>>;
       onToolProgress: (callback: (event: ToolProgress) => void) => () => void;
       inspectZip: (zipPath: string) => Promise<TaskResult<ZipInspection>>;
       startRecovery: (options: RecoveryOptions) => Promise<TaskResult<boolean>>;

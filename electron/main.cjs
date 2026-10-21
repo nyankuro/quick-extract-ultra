@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const { existsSync } = require('node:fs');
 const sevenZipBin = require('7zip-bin-full');
 const { extractWithSevenZip, extractInto } = require('./extraction.cjs');
-const { detectTools, downloadTool, toolsDir } = require('./password-tools.cjs');
+const { detectTools, downloadTool, setupAllTools, toolsDir } = require('./password-tools.cjs');
 const { RecoveryJob } = require('./password-recovery.cjs');
 const { PasswordQueue } = require('./password-queue.cjs');
 const { browseArchives } = require('./folder-browser.cjs');
@@ -729,6 +729,19 @@ ipcMain.handle('tools:download', async (_event, { toolId, consent } = {}) => asR
   });
   log('done', tr('recover.toolReady', { name: toolId }));
   return result;
+}));
+
+ipcMain.handle('tools:setup-all', async (_event, { consent } = {}) => asResult(async () => {
+  if (consent !== true) throw Object.assign(new Error('Setup needs your confirmation first.'), { code: 'NO_CONSENT' });
+  const results = await setupAllTools({
+    userDataDir: app.getPath('userData'),
+    sevenZipPath: resolveSevenZipPath(),
+    extract: extractInto,
+    onProgress: (progress) => mainWindow?.webContents.send('tools:progress', progress)
+  });
+  const added = results.filter((r) => r.ok && !r.skipped).map((r) => r.toolId);
+  if (added.length) log('done', tr('recover.setupDone', { names: added.join(', ') }));
+  return results;
 }));
 
 ipcMain.handle('recovery:inspect', async (_event, { zipPath }) => asResult(async () => {

@@ -1945,3 +1945,71 @@ input:focus-visible,
 @media (max-width: 1100px) {
   .recover-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: minmax(0, auto); }
 }
+
+/* The recovery tab stands apart from the plain tools. */
+.tab-button.tab-special {
+  padding: 9px 20px;
+  color: #ffe6b3;
+  border-color: rgba(255, 171, 46, 0.55);
+  background: linear-gradient(135deg, rgba(255, 171, 46, 0.14), rgba(169, 72, 232, 0.14));
+  box-shadow: 0 0 18px rgba(255, 171, 46, 0.12);
+}
+
+.tab-button.tab-special svg { color: #ffc257; }
+
+.tab-button.tab-special.active {
+  color: #fff6e6;
+  border-color: rgba(255, 193, 87, 0.95);
+  background: linear-gradient(135deg, rgba(255, 171, 46, 0.34), rgba(169, 72, 232, 0.4));
+  box-shadow: 0 0 26px rgba(255, 171, 46, 0.3);
+}
+
+.recover-setup {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 14px;
+  min-height: 0;
+  padding: 32px;
+  text-align: center;
+  border: 1px solid rgba(255, 171, 46, 0.3);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(9, 18, 38, 0.86), rgba(3, 10, 24, 0.76));
+}
+
+.recover-setup h2 { margin: 0; font-size: 26px; }
+.setup-intro { max-width: 620px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.setup-choices { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+.setup-auto { min-width: 280px; width: auto; }
+.setup-manual { min-width: 0; height: 50px; padding: 0 22px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.info-button { width: 50px; height: 50px; border-radius: 999px; }
+.setup-sizes { margin: 0; font-size: 13px; }
+.setup-auto-note { max-width: 680px; margin: 0; line-height: 1.5; }
+.setup-progress { width: min(560px, 100%); display: grid; gap: 8px; margin-top: 8px; }
+
+.recover-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 3, 12, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+.recover-modal {
+  width: min(680px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: #081226;
+  box-shadow: var(--shadow);
+}
+
+.recover-modal .picker-header { padding: 18px 22px; border-bottom: 1px solid var(--line); }
+.recover-modal-body { display: grid; gap: 10px; padding: 18px 22px 24px; }
+.recover-modal-body h3 { margin: 6px 0 0; font-size: 16px; color: var(--cyan-soft); }
+.recover-modal-body p { margin: 0; line-height: 1.6; }
+.recover-modal-body ul { margin: 2px 0; padding-left: 20px; display: grid; gap: 4px; overflow-wrap: anywhere; }
