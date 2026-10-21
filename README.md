@@ -61,7 +61,7 @@ Most archive tools were designed decades ago. Quick Extract Ultra does the same 
 1. Go to the [**latest release**](https://github.com/nyankuro/quick-extract-ultra/releases/latest).
 2. Download one of these:
    - **`QuickExtractUltra-Setup-x.y.z.exe`**: installer (recommended). Adds Start menu and Desktop shortcuts. No administrator rights needed.
-   - **`QuickExtractUltra-Portable-x.y.z.exe`**: a single file you can run from anywhere, even a USB stick.
+   - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`**: portable version. Unzip it anywhere (even a USB stick) and run `Quick Extract Ultra.exe`.
 3. Run it. If Windows SmartScreen says *"Windows protected your PC"*, click **More info → Run anyway**. This appears because the app is new and not code-signed yet; the full source code is right here for anyone to check.
 
 To uninstall, use **Settings → Apps** in Windows. The Explorer menu is removed automatically.
@@ -72,6 +72,7 @@ To uninstall, use **Settings → Apps** in Windows. The Explorer menu is removed
 1. Open the **Extract** tab.
 2. Drop archives into the window, or click **Choose files**, **Scan folder** or **Deep scan** (includes subfolders).
 3. Optional switches:
+   - **Save to**: by default each archive is extracted next to itself. Click it to pick another folder (the × button switches back).
    - **Smart**: if an archive contains just one folder or file, it comes out directly, without an extra wrapper folder.
    - **Main folder**: all results go into one `Main Zip` folder. **New main** makes a fresh `Main Zip (1)` for this run.
 4. Click **Extract all**. Each archive goes into a new folder named after it; if that name is taken, `(1)`, `(2)`… is added. Nothing is ever overwritten.
@@ -89,7 +90,7 @@ To uninstall, use **Settings → Apps** in Windows. The Explorer menu is removed
 Open **Browse archive**, then **Open archive** (or drop one in). Double-click folders to move around, use the search box, tick items and press **Extract selected**, or **Test** to verify everything.
 
 ### Add the right-click menu
-Click ⚙️ **Settings** → turn on **Explorer right-click menu**. On Windows 11 the entries are under **Show more options** (or press Shift+F10). The menu is only added for your Windows account and is removed when you turn the setting off.
+Click ⚙️ **Settings** → turn on **Explorer right-click menu**. It adds *Extract files… (choose folder)*, *Extract here (smart)*, *Extract to folder* and more. On Windows 11 the entries are under **Show more options** (or press Shift+F10). The menu is only added for your Windows account and is removed when you turn the setting off.
 
 ### Settings
 | Setting | Default | Meaning |

@@ -38,6 +38,7 @@ function buildRegFile(root, launcher, labels) {
   };
   cascade(ARCHIVE_KEY, labels.archiveMenu, [
     ['open', labels.open, 'open'],
+    ['extractto', labels.extractTo, 'extract-to'],
     ['extracthere', labels.extractHere, 'extract-here'],
     ['extractfolder', labels.extractFolder, 'extract-folder'],
     ['test', labels.test, 'test']

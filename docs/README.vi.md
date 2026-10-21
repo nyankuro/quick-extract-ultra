@@ -60,7 +60,7 @@ Làm được những việc như WinRAR hay 7-Zip, nhưng với giao diện hi�
 1. Vào trang [**bản phát hành mới nhất**](https://github.com/nyankuro/quick-extract-ultra/releases/latest).
 2. Tải một trong hai file:
    - **`QuickExtractUltra-Setup-x.y.z.exe`**: bản cài đặt (nên dùng). Tạo lối tắt ở menu Start và màn hình Desktop. Không cần quyền quản trị.
-   - **`QuickExtractUltra-Portable-x.y.z.exe`**: chỉ một file, chạy ở đâu cũng được, kể cả từ USB.
+   - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`**: bản portable. Giải nén ra bất kỳ đâu (kể cả USB) rồi chạy `Quick Extract Ultra.exe`.
 3. Chạy file vừa tải. Nếu Windows SmartScreen báo *"Windows protected your PC"*, bấm **More info → Run anyway**. Thông báo này xuất hiện vì ứng dụng còn mới và chưa có chữ ký số; toàn bộ mã nguồn được công khai ngay tại đây để ai cũng kiểm tra được.
 
 Muốn gỡ cài đặt, vào **Settings → Apps** của Windows. Menu chuột phải sẽ tự được gỡ theo.
@@ -71,6 +71,7 @@ Muốn gỡ cài đặt, vào **Settings → Apps** của Windows. Menu chuột 
 1. Mở thẻ **Giải nén**.
 2. Kéo thả file nén vào cửa sổ, hoặc bấm **Chọn file**, **Quét thư mục** hay **Quét sâu** (quét cả thư mục con).
 3. Các công tắc tùy chọn:
+   - **Lưu vào**: mặc định mỗi file nén được giải nén ngay cạnh nó. Bấm vào để chọn thư mục khác (nút × để quay lại như cũ).
    - **Thông minh**: nếu file nén chỉ chứa một thư mục hoặc một file, nó được lấy ra trực tiếp, không bọc thêm thư mục.
    - **Thư mục chung**: mọi kết quả được gom vào một thư mục `Main Zip`. **Thư mục chung mới** tạo `Main Zip (1)` mới cho lần này.
 4. Bấm **Giải nén tất cả**. Mỗi file nén vào một thư mục mới mang tên của nó; nếu tên đã có thì thêm `(1)`, `(2)`… Không bao giờ ghi đè.
@@ -88,7 +89,7 @@ Muốn gỡ cài đặt, vào **Settings → Apps** của Windows. Menu chuột 
 Mở thẻ **Xem bên trong**, bấm **Mở file nén** (hoặc kéo thả vào). Bấm đúp vào thư mục để đi vào, dùng ô tìm kiếm, đánh dấu các mục rồi bấm **Giải nén mục đã chọn**, hoặc **Kiểm tra** để xác nhận file còn nguyên vẹn.
 
 ### Bật menu chuột phải
-Bấm ⚙️ **Cài đặt** → bật **Menu chuột phải trong Explorer**. Trên Windows 11, các mục nằm trong **Show more options** (hoặc nhấn Shift+F10). Menu chỉ thêm cho tài khoản Windows của bạn và sẽ được gỡ khi bạn tắt cài đặt này.
+Bấm ⚙️ **Cài đặt** → bật **Menu chuột phải trong Explorer**. Menu sẽ có *Giải nén... (chọn nơi lưu)*, *Giải nén tại đây (thông minh)*, *Giải nén vào thư mục* và nhiều mục khác. Trên Windows 11, các mục nằm trong **Show more options** (hoặc nhấn Shift+F10). Menu chỉ thêm cho tài khoản Windows của bạn và sẽ được gỡ khi bạn tắt cài đặt này.
 
 ### Cài đặt
 | Cài đặt | Mặc định | Ý nghĩa |

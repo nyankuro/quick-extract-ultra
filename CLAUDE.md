@@ -37,7 +37,8 @@ Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nh�
 Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-Zip 26.02). Chỉ `7zip-bin-full` là dependency lúc chạy; React/lucide được Vite đóng gói nên nằm trong devDependencies.
 
 - `npm ci`, `npm run dev`, `npm run build`, `npm run typecheck`, `npm test`, `npm run test:ui`.
-- `npm run dist`: bản cài NSIS (per-user) + portable vào `dist/`.
+- `npm run dist`: bản cài NSIS (per-user) + portable dạng .zip vào `dist/`. Không dùng target `portable` (exe tự bung): mỗi lần chạy mất ~3 giây nên menu chuột phải rất chậm.
+- `electron scripts/picker-preview.cjs [rộng] [cao]`: chụp mọi chế độ xem của bảng chọn file và kiểm tra không có chữ/biểu tượng tràn ô.
 - `npm run package`: thư mục `dist/win-unpacked` + shortcut Desktop "Quick Extract Ultra".
 - Phát hành: tăng `version` trong `package.json`, cập nhật `CHANGELOG.md`, commit, `git tag vX.Y.Z`, `git push --tags`; GitHub Actions build và đăng Release.
 
@@ -56,7 +57,8 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 - **7-Zip và list file:** `@listfile` phải đứng sau tên archive và không có `--` (sau `--` nó thành tên file thường). Mọi đường dẫn truyền vào đều tuyệt đối.
 - **Mật khẩu ZIP chỉ ASCII:** 7-Zip báo "The parameter is incorrect" với mật khẩu ZIP có ký tự Unicode; app báo lỗi `ZIP_PASSWORD_ASCII` và gợi ý 7Z.
 - **Lỗi mật khẩu qua IPC trả về dạng dữ liệu** `{ ok, code, message }` vì Electron làm mất `error.code`.
-- **Menu Explorer chỉ ở HKCU và chỉ khi người dùng bật;** kiểm thử dùng khóa riêng `HKCU\Software\QuickExtractUltraTest`, không đụng menu thật.
+- **Lệnh từ Explorer chạy tuần tự** trong hàng đợi ở renderer (gộp các file cùng lệnh); Explorer mở một tiến trình cho mỗi file được chọn.
+- **Menu Explorer chỉ ở HKCU và chỉ khi người dùng bật;** tự đăng ký lại theo đường dẫn app đang chạy mỗi lần khởi động; kiểm thử dùng khóa riêng `HKCU\Software\QuickExtractUltraTest`, không đụng menu thật.
 
 ## 6. Lỗi đã biết, việc dở dang, dự định
 

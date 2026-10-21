@@ -9,6 +9,29 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.0.1 - 2026-10-21
+
+### Fixed
+
+- Right-click extraction was slow (about 3.3 s per file instead of 0.4 s) and sometimes failed. Cause: the menu pointed at the single-file portable exe, which unpacks the whole app on every launch, and Explorer starts one launch per selected file. Commands arriving while a batch ran could also start a second batch ("already running"). The portable build is now a zip (instant start), the menu refuses to register from a self-extracting exe, the menu re-registers itself to the running copy at startup, and Explorer commands run one after another in a queue (same-action requests are merged).
+- Archive picker layout: in the extra large view icons could spill over names and dates in some folders. The CSS also contained a duplicated block. Tiles now size to their content (`grid-auto-rows: max-content`, grid tiles).
+
+### Added
+
+- Choose where to extract: "Save to" control on the Extract tab (default: next to each archive; × resets), works with Main folder. Browse archive shows its destination with a Change button. New Explorer item "Extract files... (choose folder)".
+- Archive picker "View" menu like Windows Explorer: extra large, large, medium, small icons, list, details (sortable columns: name, date modified, type, size) and tiles. View and sort are remembered.
+
+### Verified
+
+- `npm run typecheck`; `npm test` 29/29 (new: chosen destination with and without Main folder, relative destination rejected; registry entries include `extract-to`).
+- `npm run test:ui` passes, now also sending three Explorer extract commands in quick succession and checking all three finish without errors.
+- `scripts/picker-preview.cjs` renders every picker view at 1040x720, 1280x800 and 1920x1080 with 32 entries and checks that no icon or text leaves its tile.
+- Timing on this machine: installed build extracts via right-click in 0.4 s; the old portable exe took 3.3 s.
+
+### Package
+
+- `npm run dist` writes `QuickExtractUltra-Setup-2.0.1.exe` and `QuickExtractUltra-Portable-2.0.1-win-x64.zip` (replaces the self-extracting portable exe).
+
 ## 2.0.0 - 2026-10-21 (Quick Extract Ultra)
 
 First release under the new name. Copied from Quick Extract 1.0.2; the original app folder is unchanged.

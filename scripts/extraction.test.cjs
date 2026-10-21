@@ -257,3 +257,19 @@ test('deep scan and Main folder reserve collisions while a password archive wait
     assert.deepEqual(await snapshot(updated.patch.targetPath), await snapshot(path.join(workspace, 'source')));
   }
 });
+
+test('a chosen destination receives every archive, with or without Main folder', { timeout: 10000 }, async () => {
+  const handlers = await loadMain(() => {});
+  const archivePaths = ['flat.zip', 'solid.7z'].map((name) => path.join(workspace, name));
+  const destination = path.join(workspace, 'chosen destination');
+  for (const options of [{ outputFolder: destination }, { outputFolder: destination, useMainFolder: true }]) {
+    const jobs = await handlers.get('archives:scan-files')(null, { folderPath: workspace, archivePaths, options });
+    const expectedParent = options.useMainFolder ? path.join(destination, 'Main Zip') : destination;
+    assert.ok(jobs.every((job) => path.dirname(job.targetPath) === expectedParent), JSON.stringify(jobs.map((job) => job.targetPath)));
+    const result = await handlers.get('archives:extract-all')(null, { folderPath: workspace, archiveIds: jobs.map((job) => job.id), archivePaths, options });
+    assert.equal(result.done, 2);
+    assert.equal(result.openFolderPath, expectedParent);
+  }
+  assert.deepEqual((await fs.readdir(destination)).sort(), ['Main Zip', 'flat', 'solid']);
+  await assert.rejects(handlers.get('archives:scan-files')(null, { folderPath: workspace, archivePaths, options: { outputFolder: 'relative\\path' } }), /absolute/);
+});

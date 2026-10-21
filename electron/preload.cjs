@@ -7,7 +7,7 @@ function subscribe(channel, callback) {
 }
 
 contextBridge.exposeInMainWorld('quickExtract', {
-  selectFolder: () => ipcRenderer.invoke('folder:select'),
+  selectFolder: (options) => ipcRenderer.invoke('folder:select', options),
   selectArchiveFiles: (options, archivePaths) => ipcRenderer.invoke('archives:select-files', { options, archivePaths }),
   browseArchives: (folderPath) => ipcRenderer.invoke('archives:browse', folderPath),
   scanArchives: (folderPath, options) => ipcRenderer.invoke('archives:scan', { folderPath, options }),

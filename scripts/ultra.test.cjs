@@ -179,13 +179,13 @@ test('settings are sanitised and saved', async () => {
   assert.equal(reloaded.value.language, 'en');
 });
 
-const labels = { archiveMenu: 'QEU', open: 'Mở', extractHere: 'ここに展開', extractFolder: 'Folder', test: 'Test', addMenu: 'Add', addArchive: 'Add...', addZip: 'ZIP', add7z: '7Z', hash: 'Hash' };
+const labels = { archiveMenu: 'QEU', open: 'Mở', extractTo: 'To...', extractHere: 'ここに展開', extractFolder: 'Folder', test: 'Test', addMenu: 'Add', addArchive: 'Add...', addZip: 'ZIP', add7z: '7Z', hash: 'Hash' };
 const launcher = { executable: 'C:\\Apps\\Quick "Extract".exe', args: [] };
 
 test('registry script escapes paths and covers every menu action', () => {
   const text = buildRegFile('HKEY_CURRENT_USER\\Software\\Classes', launcher, labels);
   assert.match(text, /^Windows Registry Editor Version 5\.00/);
-  for (const action of ['open', 'extract-here', 'extract-folder', 'test', 'compress', 'add-zip', 'add-7z', 'hash']) {
+  for (const action of ['open', 'extract-to', 'extract-here', 'extract-folder', 'test', 'compress', 'add-zip', 'add-7z', 'hash']) {
     assert.ok(text.includes(`--qe-action=${action} \\"%1\\"`), action);
   }
   assert.ok(text.includes('C:\\\\Apps\\\\Quick \\"Extract\\".exe'));
@@ -197,9 +197,9 @@ test('context menu registers and unregisters under an isolated test key', { skip
   try {
     await registerContextMenu(launcher, labels, root);
     assert.equal(await isContextMenuRegistered(root), true);
-    const query = spawnSync('reg.exe', ['query', `${root}\\*\\shell\\QuickExtractUltra.Archive\\shell\\2extracthere\\command`, '/ve'], { encoding: 'utf8' });
+    const query = spawnSync('reg.exe', ['query', `${root}\\*\\shell\\QuickExtractUltra.Archive\\shell\\3extracthere\\command`, '/ve'], { encoding: 'utf8' });
     assert.match(query.stdout, /--qe-action=extract-here "%1"/);
-    const label = spawnSync('reg.exe', ['query', `${root}\\*\\shell\\QuickExtractUltra.Archive\\shell\\2extracthere`, '/v', 'MUIVerb'], { encoding: 'buffer' });
+    const label = spawnSync('reg.exe', ['query', `${root}\\*\\shell\\QuickExtractUltra.Archive\\shell\\3extracthere`, '/v', 'MUIVerb'], { encoding: 'buffer' });
     assert.equal(label.status, 0);
     await unregisterContextMenu(root);
     assert.equal(await isContextMenuRegistered(root), false);

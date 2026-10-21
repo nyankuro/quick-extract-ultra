@@ -40,6 +40,7 @@ export interface ScanOptions {
   newMainFolder?: boolean;
   deepScan?: boolean;
   smart?: boolean;
+  outputFolder?: string;
 }
 
 export type Language = 'en' | 'ja' | 'vi';
@@ -59,7 +60,7 @@ export interface AppInfo {
   hashAlgorithms: string[];
 }
 
-export type AppCommandAction = 'open' | 'extract-here' | 'extract-folder' | 'test' | 'compress' | 'add-zip' | 'add-7z' | 'hash';
+export type AppCommandAction = 'open' | 'extract-to' | 'extract-here' | 'extract-folder' | 'test' | 'compress' | 'add-zip' | 'add-7z' | 'hash';
 
 export interface AppCommand {
   action: AppCommandAction;
@@ -128,7 +129,7 @@ export interface BrowserFolder {
 declare global {
   interface Window {
     quickExtract: {
-      selectFolder: () => Promise<string | null>;
+      selectFolder: (options?: { defaultPath?: string; purpose?: 'destination' }) => Promise<string | null>;
       selectArchiveFiles: (options?: ScanOptions, archivePaths?: string[]) => Promise<{
         folderPath: string;
         archivePaths: string[];

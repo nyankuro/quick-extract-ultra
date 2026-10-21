@@ -139,6 +139,31 @@ async function main() {
   await until("document.querySelectorAll('.status-done').length === 1");
   await fs.access(path.join(workspace, 'smart', 'nested', 'child.zip'));
 
+  // Explorer delivers multi-selections as separate launches; none may collide with a running batch.
+  await fs.mkdir(path.join(workspace, 'burst'));
+  for (const name of ['one', 'two', 'three']) {
+    await fs.mkdir(path.join(workspace, 'burst-src', name), { recursive: true });
+    await fs.writeFile(path.join(workspace, 'burst-src', name, 'file.txt'), name);
+    spawnSync(path7z, ['a', '-tzip', path.join(workspace, 'burst', `${name}.zip`), name], { cwd: path.join(workspace, 'burst-src'), windowsHide: true });
+  }
+  command('extract-folder', [path.join(workspace, 'burst', 'one.zip')]);
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  command('extract-folder', [path.join(workspace, 'burst', 'two.zip')]);
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  command('extract-folder', [path.join(workspace, 'burst', 'three.zip')]);
+  for (const name of ['one', 'two', 'three']) {
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+      try { await fs.access(path.join(workspace, 'burst', name, 'file.txt')); break; } catch { await new Promise((resolve) => setTimeout(resolve, 100)); }
+    }
+    assert.equal(await fs.readFile(path.join(workspace, 'burst', name, 'file.txt'), 'utf8'), name);
+  }
+  const burstErrors = await window.webContents.executeJavaScript("[...document.querySelectorAll('.log-error')].map(el => el.textContent)");
+  assert.deepEqual(burstErrors, [], 'no errors while commands arrive during a running batch');
+
+  // The Extract tab shows where files will be saved.
+  assert.ok(await window.webContents.executeJavaScript("document.querySelector('[data-action=choose-destination]').textContent.includes('Next to each archive')"));
+
   // Language switch re-renders the whole interface.
   for (const [language, label, name] of [['ja', '展開', 'extract-ja.png'], ['vi', 'Giải nén', 'extract-vi.png'], ['en', 'Extract', 'extract-en.png']]) {
     await window.webContents.executeJavaScript(`

@@ -10,6 +10,7 @@ import {
   Clock3,
   Folder,
   FolderOpen,
+  FolderOutput,
   FolderSearch,
   HardDrive,
   Languages,
@@ -23,7 +24,8 @@ import {
   Sparkles,
   Square,
   Trash2,
-  Wand2
+  Wand2,
+  X
 } from 'lucide-react';
 import galaxyUrl from './assets/galaxy-background.png';
 import ArchivePicker from './ArchivePicker';
@@ -82,6 +84,11 @@ function createWelcomeLog(t: Translate): ActivityLog {
     level: 'info',
     message: t('log.welcome')
   };
+}
+
+export function parentOf(filePath: string) {
+  const index = filePath.replace(/[\\/]+$/, '').search(/[\\/][^\\/]*$/);
+  return index > 0 ? filePath.slice(0, index) : filePath;
 }
 
 export function formatBytes(bytes: number) {
@@ -148,6 +155,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
   const [useMainFolder, setUseMainFolder] = useState(false);
   const [newMainFolder, setNewMainFolder] = useState(false);
   const [smartExtract, setSmartExtract] = useState(false);
+  const [outputFolder, setOutputFolder] = useState('');
   const [lastFolderScanWasDeep, setLastFolderScanWasDeep] = useState(false);
   const [lastOutputFolderPath, setLastOutputFolderPath] = useState('');
   const [notice, setNotice] = useState('');
@@ -160,8 +168,9 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
   const [toolsRequest, setToolsRequest] = useState<ToolsRequest | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const extractingRef = useRef(false);
-  const queuedCommands = useRef<AppCommand[]>([]);
-  const commandHandler = useRef<(command: AppCommand) => void>(() => {});
+  const commandQueue = useRef<AppCommand[]>([]);
+  const commandRunning = useRef(false);
+  const commandHandler = useRef<(command: AppCommand) => Promise<void>>(async () => {});
 
   useEffect(() => {
     extractingRef.current = isExtracting;
@@ -196,8 +205,6 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
           setLastOutputFolderPath(event.summary.openFolderPath);
         }
         setNotice('');
-        const next = queuedCommands.current.shift();
-        if (next) setTimeout(() => commandHandler.current(next), 0);
       }
     });
   }, []);
@@ -249,19 +256,22 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
   const buildScanOptions = (
     nextUseMainFolder = useMainFolder,
     nextNewMainFolder = newMainFolder,
-    deepScan = false
+    deepScan = false,
+    nextOutputFolder = outputFolder
   ): ScanOptions => ({
     useMainFolder: nextUseMainFolder,
     newMainFolder: nextUseMainFolder && nextNewMainFolder,
     deepScan,
-    smart: smartExtract
+    smart: smartExtract,
+    outputFolder: nextOutputFolder || undefined
   });
 
   const scanFolder = async (
     nextFolderPath = folderPath,
     nextUseMainFolder = useMainFolder,
     nextNewMainFolder = newMainFolder,
-    deepScan = false
+    deepScan = false,
+    nextOutputFolder = outputFolder
   ) => {
     if (!nextFolderPath) {
       addLog('error', t('log.selectFolderFirst'));
@@ -274,7 +284,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     try {
       const result = await window.quickExtract.scanArchives(
         nextFolderPath,
-        buildScanOptions(nextUseMainFolder, nextNewMainFolder, deepScan)
+        buildScanOptions(nextUseMainFolder, nextNewMainFolder, deepScan, nextOutputFolder)
       );
       setSelectedArchivePaths([]);
       setLastFolderScanWasDeep(deepScan);
@@ -432,21 +442,40 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     setUseMainFolder(false);
     setNewMainFolder(false);
     setSmartExtract(false);
+    setOutputFolder('');
     setLastFolderScanWasDeep(false);
     setLastOutputFolderPath('');
     setPasswordDrafts({});
     setNotice('');
   };
 
-  const rescan = (nextUseMainFolder: boolean, nextNewMainFolder: boolean) => {
+  const rescan = (nextUseMainFolder: boolean, nextNewMainFolder: boolean, nextOutputFolder = outputFolder) => {
     if (selectedArchivePaths.length > 0) {
-      void rescanSelectedFiles(selectedArchivePaths, nextUseMainFolder, nextNewMainFolder);
+      void rescanSelectedFiles(selectedArchivePaths, nextUseMainFolder, nextNewMainFolder, nextOutputFolder);
       return;
     }
 
     if (folderPath) {
-      void scanFolder(folderPath, nextUseMainFolder, nextNewMainFolder, lastFolderScanWasDeep);
+      void scanFolder(folderPath, nextUseMainFolder, nextNewMainFolder, lastFolderScanWasDeep, nextOutputFolder);
     }
+  };
+
+  const chooseOutputFolder = async () => {
+    const firstArchive = archives[0]?.archivePath;
+    const picked = await window.quickExtract.selectFolder({
+      purpose: 'destination',
+      defaultPath: outputFolder || (firstArchive ? parentOf(firstArchive) : folderPath) || undefined
+    });
+    if (!picked) return;
+    setOutputFolder(picked);
+    addLog('info', t('log.destinationSet', { folder: picked }));
+    rescan(useMainFolder, newMainFolder, picked);
+  };
+
+  const resetOutputFolder = () => {
+    setOutputFolder('');
+    addLog('info', t('log.destinationReset'));
+    rescan(useMainFolder, newMainFolder, '');
   };
 
   const toggleMainFolder = () => {
@@ -489,7 +518,8 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
   const rescanSelectedFiles = async (
     archivePaths: string[],
     nextUseMainFolder: boolean,
-    nextNewMainFolder = newMainFolder
+    nextNewMainFolder = newMainFolder,
+    nextOutputFolder = outputFolder
   ) => {
     if (!folderPath || archivePaths.length === 0) {
       return;
@@ -497,10 +527,11 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
 
     setIsScanning(true);
     try {
-      const result = await window.quickExtract.scanSelectedArchives(folderPath, archivePaths, {
-        useMainFolder: nextUseMainFolder,
-        newMainFolder: nextUseMainFolder && nextNewMainFolder
-      });
+      const result = await window.quickExtract.scanSelectedArchives(
+        folderPath,
+        archivePaths,
+        buildScanOptions(nextUseMainFolder, nextNewMainFolder, false, nextOutputFolder)
+      );
       setArchives(result);
     } catch (error) {
       addLog('error', error instanceof Error ? error.message : t('log.rescanFailed'));
@@ -537,17 +568,24 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     }
   };
 
-  // Explorer menu and drag & drop both arrive here.
+  // Explorer menu commands. Each one finishes (including its extraction) before the next starts.
   const handleCommand = async (command: AppCommand) => {
     const nonce = Date.now() + Math.random();
-    if (command.action === 'extract-here' || command.action === 'extract-folder') {
-      if (extractingRef.current || isScanning) {
-        queuedCommands.current.push(command);
-        addLog('info', t('log.commandQueued'));
-        return;
-      }
+    if (command.action === 'extract-here' || command.action === 'extract-folder' || command.action === 'extract-to') {
       setTab('extract');
       const options: ScanOptions = { smart: command.action === 'extract-here' };
+      if (command.action === 'extract-to') {
+        const picked = await window.quickExtract.selectFolder({ purpose: 'destination', defaultPath: parentOf(command.paths[0]) });
+        if (!picked) {
+          await chooseArchiveFiles(command.paths, options).catch(() => null);
+          return;
+        }
+        options.outputFolder = picked;
+      }
+      setOutputFolder(options.outputFolder ?? '');
+      setSmartExtract(Boolean(options.smart));
+      setUseMainFolder(false);
+      setNewMainFolder(false);
       const result = await chooseArchiveFiles(command.paths, options).catch(() => null);
       if (result && result.archives.length) {
         await runExtraction(result.folderPath, result.archives.map((item) => item.id), result.archivePaths, options);
@@ -577,10 +615,41 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
       nonce
     });
   };
-  commandHandler.current = (command) => void handleCommand(command);
+  commandHandler.current = handleCommand;
+
+  const drainCommands = async () => {
+    if (commandRunning.current) return;
+    commandRunning.current = true;
+    try {
+      let next: AppCommand | undefined;
+      while ((next = commandQueue.current.shift())) {
+        // Wait out a batch the user started by hand.
+        while (extractingRef.current) await new Promise((resolve) => setTimeout(resolve, 200));
+        try {
+          await commandHandler.current(next);
+        } catch (error) {
+          addLog('error', error instanceof Error ? error.message : String(error));
+        }
+      }
+    } finally {
+      commandRunning.current = false;
+    }
+  };
+
+  const enqueueCommand = (command: AppCommand) => {
+    // Explorer may deliver files one at a time; fold them into the request still waiting.
+    const waiting = commandQueue.current.at(-1);
+    if (waiting && waiting.action === command.action) {
+      waiting.paths.push(...command.paths.filter((item) => !waiting.paths.includes(item)));
+    } else {
+      commandQueue.current.push({ action: command.action, paths: [...command.paths] });
+    }
+    if (commandRunning.current || extractingRef.current) addLog('info', t('log.commandQueued'));
+    void drainCommands();
+  };
 
   useEffect(() => {
-    const unsubscribe = window.quickExtract.onAppCommand((command) => commandHandler.current(command));
+    const unsubscribe = window.quickExtract.onAppCommand((command) => enqueueCommand(command));
     void window.quickExtract.readyForCommands();
     return unsubscribe;
   }, []);
@@ -676,7 +745,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
                     <Folder size={24} aria-hidden="true" />
                     <span>{sourceLabel}</span>
                   </div>
-                  <button className="secondary-button" type="button" onClick={() => setIsPickerOpen(true)} disabled={busy}>
+                  <button className="secondary-button" type="button" data-action="choose-files" onClick={() => setIsPickerOpen(true)} disabled={busy}>
                     <Files size={20} aria-hidden="true" />
                     {t('extract.chooseFiles')}
                   </button>
@@ -689,6 +758,25 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
                     {t('extract.deepScan')}
                   </button>
                   <div className="control-divider" />
+                  <div className={`destination-control ${outputFolder ? 'active' : ''}`}>
+                    <button
+                      className="secondary-button destination-button"
+                      type="button"
+                      data-action="choose-destination"
+                      onClick={() => void chooseOutputFolder()}
+                      disabled={busy}
+                      title={outputFolder || t('extract.destinationHint')}
+                    >
+                      <FolderOutput size={20} aria-hidden="true" />
+                      <span className="destination-label">{t('extract.saveTo')}</span>
+                      <span className="destination-value">{outputFolder || t('extract.besideArchive')}</span>
+                    </button>
+                    {outputFolder && (
+                      <button className="icon-button small" type="button" onClick={resetOutputFolder} disabled={busy} aria-label={t('extract.resetDestination')} title={t('extract.resetDestination')}>
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
                   <button
                     className={`secondary-button mode-button ${smartExtract ? 'active' : ''}`}
                     type="button"

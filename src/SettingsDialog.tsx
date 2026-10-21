@@ -34,8 +34,9 @@ export default function SettingsDialog({ settings, appInfo, onChange, onClose, a
       onChange(result.value);
       if ('explorerMenu' in patch) addLog('done', t(result.value.explorerMenu ? 'settings.menuAdded' : 'settings.menuRemoved'));
     } else {
-      setError(result.message);
-      addLog('error', result.message);
+      const message = result.code === 'PORTABLE_MENU' ? t('settings.portableMenu') : result.message;
+      setError(message);
+      addLog('error', message);
     }
   };
 

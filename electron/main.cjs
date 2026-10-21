@@ -116,6 +116,7 @@ if (hasInstanceLock) {
     await settings.load();
     queueCommand(parseCommand(process.argv));
     createWindow();
+    void refreshContextMenu();
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -216,7 +217,15 @@ async function getOutputParentFolder(folderPath, useMainFolder, newMainFolder = 
 }
 
 function displayTargetFolder(folderPath, targetPath) {
-  return path.relative(folderPath, targetPath) || path.basename(targetPath);
+  const relative = path.relative(folderPath, targetPath);
+  // A chosen destination elsewhere reads better as a full path than as ../../name.
+  if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) return targetPath;
+  return relative;
+}
+
+function outputFolderOption(options = {}) {
+  if (!options.outputFolder) return null;
+  return requirePath(options.outputFolder, 'Destination');
 }
 
 async function ensureFolder(folderPath) {
@@ -255,9 +264,10 @@ async function scanArchivePaths(filePaths, rootFolder, options = {}) {
   const archivePaths = [...new Set(filePaths)]
     .filter((filePath) => isArchiveFile(filePath))
     .sort((a, b) => path.basename(a).localeCompare(path.basename(b)));
+  const outputFolder = outputFolderOption(options);
   const sharedOutputParentPath = options.useMainFolder
-    ? await getOutputParentFolder(rootFolder, true, Boolean(options.newMainFolder))
-    : null;
+    ? await getOutputParentFolder(outputFolder || rootFolder, true, Boolean(options.newMainFolder))
+    : outputFolder;
   const reservedTargets = new Set();
   const archives = [];
 
@@ -375,13 +385,26 @@ function requirePath(value, label) {
 }
 
 function launcher() {
-  // Portable builds unpack to a temp folder; Explorer must call the original .exe.
-  const executable = process.env.PORTABLE_EXECUTABLE_FILE || process.execPath;
-  return { executable, args: app.isPackaged ? [] : [path.resolve(__dirname, '..')] };
+  // A self-extracting portable exe unpacks the whole app on every launch, which made
+  // each right-click take seconds and let parallel launches collide.
+  if (process.env.PORTABLE_EXECUTABLE_FILE) {
+    throw Object.assign(new Error('The Explorer menu needs the installed or unzipped app, not the single-file portable exe.'), { code: 'PORTABLE_MENU' });
+  }
+  return { executable: process.execPath, args: app.isPackaged ? [] : [path.resolve(__dirname, '..')] };
+}
+
+// Keeps the menu pointing at this copy of the app after an update or a move.
+async function refreshContextMenu() {
+  if (!settings.value.explorerMenu || process.env.PORTABLE_EXECUTABLE_FILE) return;
+  try {
+    await registerContextMenu(launcher(), menuLabels());
+  } catch (error) {
+    log('error', error.message);
+  }
 }
 
 function menuLabels() {
-  const keys = ['archiveMenu', 'open', 'extractHere', 'extractFolder', 'test', 'addMenu', 'addArchive', 'addZip', 'add7z', 'hash'];
+  const keys = ['archiveMenu', 'open', 'extractTo', 'extractHere', 'extractFolder', 'test', 'addMenu', 'addArchive', 'addZip', 'add7z', 'hash'];
   return Object.fromEntries(keys.map((key) => [key, tr(`menu.${key}`)]));
 }
 
@@ -420,11 +443,13 @@ ipcMain.handle('settings:update', async (_event, patch) => asResult(async () => 
   return settings.value;
 }));
 
-ipcMain.handle('folder:select', async () => {
-  const defaultPath = await getLastFolder();
+ipcMain.handle('folder:select', async (_event, options = {}) => {
+  const defaultPath = typeof options?.defaultPath === 'string' && path.isAbsolute(options.defaultPath)
+    ? options.defaultPath
+    : await getLastFolder();
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: tr('main.dialogSelectFolder'),
-    properties: ['openDirectory'],
+    title: options?.purpose === 'destination' ? tr('main.dialogSelectDestination') : tr('main.dialogSelectFolder'),
+    properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
     defaultPath: defaultPath || undefined
   });
 

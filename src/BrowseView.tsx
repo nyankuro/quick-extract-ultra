@@ -11,10 +11,11 @@ import {
   Search,
   ShieldCheck,
   Square,
-  Download
+  Download,
+  FolderOutput
 } from 'lucide-react';
 import { useT } from './i18n';
-import { formatBytes, type AddLog } from './App';
+import { formatBytes, parentOf, type AddLog } from './App';
 import type { ArchiveListing } from './types';
 
 export interface BrowseRequest {
@@ -56,6 +57,7 @@ export default function BrowseView({ request, addLog }: Props) {
   const [testState, setTestState] = useState<'ok' | 'failed' | null>(null);
   const [lastOutput, setLastOutput] = useState('');
   const [pendingDestination, setPendingDestination] = useState('');
+  const [destination, setDestination] = useState('');
 
   useEffect(() => window.quickExtract.onTaskProgress((event) => {
     if (event.task === 'browse' || event.task === 'test') setProgress(event.progress);
@@ -76,6 +78,7 @@ export default function BrowseView({ request, addLog }: Props) {
     setArchivePath(target);
     if (response.ok) {
       setListing(response.value);
+      setDestination((current) => (target === archivePath && current) || parentOf(target));
       setPassword(secret);
       setPending(null);
       setCurrentDir('');
@@ -157,9 +160,13 @@ export default function BrowseView({ request, addLog }: Props) {
   };
 
   const extract = async (entries: string[], secret = password) => {
-    const destination = await window.quickExtract.selectFolder();
     if (!destination) return;
     await runExtract(entries, destination, secret);
+  };
+
+  const changeDestination = async () => {
+    const picked = await window.quickExtract.selectFolder({ purpose: 'destination', defaultPath: destination || undefined });
+    if (picked) setDestination(picked);
   };
 
   const runExtract = async (entries: string[], destination: string, secret: string) => {
@@ -240,6 +247,18 @@ export default function BrowseView({ request, addLog }: Props) {
         </div>
       </section>
 
+      {listing && (
+        <section className="tool-panel destination-row" aria-label={t('extract.saveTo')}>
+          <FolderOutput size={20} className="accent-icon" />
+          <span className="destination-label">{t('extract.saveTo')}</span>
+          <span className="destination-value" title={destination}>{destination}</span>
+          <button className="secondary-button compact" type="button" data-action="browse-destination" onClick={() => void changeDestination()} disabled={busy}>
+            <FolderOpen size={16} />{t('browse.changeDestination')}
+          </button>
+          <span className="muted destination-note">{t('browse.destinationHint')}</span>
+        </section>
+      )}
+
       {pending && (
         <form className="tool-panel password-row standalone" onSubmit={(event) => { event.preventDefault(); void submitPassword(); }}>
           <LockKeyhole size={18} />
@@ -314,7 +333,6 @@ export default function BrowseView({ request, addLog }: Props) {
           ))}
         </div>
       </section>
-      {listing && <p className="muted footnote">{t('browse.destinationHint')}</p>}
     </div>
   );
 }
