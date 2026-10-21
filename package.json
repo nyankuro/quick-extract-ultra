@@ -1,0 +1,109 @@
+{
+  "name": "quick-extract-ultra",
+  "version": "2.0.0",
+  "description": "Free, open-source archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese and Vietnamese.",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "test": "node --test scripts/extraction.test.cjs scripts/ultra.test.cjs",
+    "test:ui": "npm run build && electron scripts/smoke-test.cjs",
+    "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "build": "vite build",
+    "start": "electron .",
+    "package": "npm run build && electron-builder --win dir --x64 && node scripts/create-shortcut.cjs",
+    "dist": "npm run build && electron-builder --win nsis portable --x64",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "archive",
+    "zip",
+    "7z",
+    "rar",
+    "extract",
+    "compress",
+    "winrar-alternative",
+    "electron",
+    "windows"
+  ],
+  "author": "nyankuro",
+  "license": "MIT",
+  "dependencies": {
+    "7zip-bin-full": "^26.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "concurrently": "^10.0.3",
+    "electron": "^43.0.0",
+    "electron-builder": "^26.15.3",
+    "lucide-react": "^1.23.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.3",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "io.github.nyankuro.quickextractultra",
+    "productName": "Quick Extract Ultra",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "dist-renderer/**/*",
+      "electron/**/*",
+      "locales/**/*",
+      "build/icon.ico",
+      "node_modules/**/*",
+      "package.json",
+      "!node_modules/7zip-bin-full/linux/**",
+      "!node_modules/7zip-bin-full/mac/**"
+    ],
+    "asarUnpack": [
+      "electron/folder-view.ps1",
+      "node_modules/7zip-bin-full/**/*"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "copyright": "Copyright © 2026 nyankuro",
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Quick Extract Ultra",
+      "include": "build/installer.nsh",
+      "artifactName": "QuickExtractUltra-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "QuickExtractUltra-Portable-${version}.${ext}"
+    },
+    "extraResources": [
+      {
+        "from": "LICENSE",
+        "to": "LICENSE.txt"
+      },
+      {
+        "from": "THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      }
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "nyankuro",
+      "repo": "quick-extract-ultra",
+      "releaseType": "release"
+    }
+  },
+  "homepage": "https://github.com/nyankuro/quick-extract-ultra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nyankuro/quick-extract-ultra.git"
+  }
+}

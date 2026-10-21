@@ -1,0 +1,25 @@
+# Third-party notices
+
+Quick Extract Ultra is MIT licensed. It ships with the following third-party software.
+
+## 7-Zip
+
+The `7z.exe` / `7z.dll` binaries (via the `7zip-bin-full` npm package) are part of 7-Zip,
+Copyright (C) 1999-2026 Igor Pavlov.
+
+- Most of 7-Zip is licensed under the **GNU LGPL** (version 2.1 or later).
+- Some code is under the **BSD 3-clause** and **BSD 2-clause** licenses.
+- The RAR decompression code is under the **GNU LGPL + unRAR restriction**: the unRAR
+  source code may not be used to develop a RAR (WinRAR) compatible archiver.
+
+Quick Extract Ultra only runs the unmodified 7-Zip program. Source code and full license
+text: https://www.7-zip.org/
+
+## Electron, Chromium and Node.js
+
+Electron is MIT licensed. Chromium and Node.js licenses are included in the packaged app as
+`LICENSES.chromium.html` and `LICENSE.electron.txt`.
+
+## JavaScript libraries
+
+React, React DOM (MIT) and lucide-react (ISC) are bundled into the interface.

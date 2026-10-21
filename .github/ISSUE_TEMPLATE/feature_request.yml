@@ -1,0 +1,11 @@
+name: Feature idea / Đề xuất tính năng / 機能の提案
+description: Suggest an improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like? / Bạn muốn gì? / ご希望は？
+      description: Describe the feature and why it would help you.
+    validations:
+      required: true

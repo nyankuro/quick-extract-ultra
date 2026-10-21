@@ -1,0 +1,27 @@
+name: Bug report / Báo lỗi / 不具合の報告
+description: Something doesn't work as expected.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / Chuyện gì xảy ra? / 何が起きましたか？
+      description: Steps to reproduce, what you expected, and what you saw. Screenshots help a lot.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version / Phiên bản / バージョン
+      description: Shown in Settings (⚙️).
+      placeholder: "2.0.0"
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2
+  - type: input
+    id: format
+    attributes:
+      label: Archive format (if related)
+      placeholder: RAR5, 7Z with password, ...
