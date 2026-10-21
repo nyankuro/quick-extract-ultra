@@ -317,6 +317,8 @@
   "recover.chooseZip": "選擇 ZIP",
   "recover.noZip": "未選擇 ZIP",
   "recover.notEncrypted": "此 ZIP 沒有密碼。",
+  "recover.notZip": "此功能只支援 ZIP 檔案。“{name}”是 {type} 檔案。RAR 或其他格式這裡不支援恢復。",
+  "recover.zipOnly": "僅支援 ZIP 檔案（不支援 RAR 等其他格式）。",
   "recover.busy": "已有一個恢復任務在執行。",
   "recover.zipcrypto": "舊式 ZipCrypto",
   "recover.aes": "AES-256",

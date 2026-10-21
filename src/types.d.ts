@@ -234,7 +234,7 @@ declare global {
       getAppInfo: () => Promise<AppInfo>;
       getSettings: () => Promise<AppSettings>;
       updateSettings: (patch: Partial<AppSettings>) => Promise<TaskResult<AppSettings>>;
-      selectPaths: (options: { folders?: boolean; archives?: boolean }) => Promise<string[]>;
+      selectPaths: (options: { folders?: boolean; archives?: boolean; zip?: boolean }) => Promise<string[]>;
       statPaths: (paths: string[]) => Promise<PathInfo[]>;
       pathForFile: (file: File) => string;
       listArchive: (archivePath: string, password?: string) => Promise<TaskResult<ArchiveListing>>;

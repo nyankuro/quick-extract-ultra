@@ -317,6 +317,8 @@
   "recover.chooseZip": "Chọn file ZIP",
   "recover.noZip": "Chưa chọn ZIP",
   "recover.notEncrypted": "File ZIP này không có mật khẩu.",
+  "recover.notZip": "Tính năng này chỉ dùng được với file ZIP. \"{name}\" là file {type}. RAR hay định dạng khác thì chưa hỗ trợ khôi phục ở đây.",
+  "recover.zipOnly": "Chỉ hỗ trợ file ZIP (RAR và các định dạng khác chưa được hỗ trợ ở đây).",
   "recover.busy": "Đang có một lượt khôi phục chạy rồi.",
   "recover.zipcrypto": "ZipCrypto (kiểu cũ)",
   "recover.aes": "AES-256",

@@ -425,7 +425,9 @@ ipcMain.handle('app:ready', () => {
 });
 
 ipcMain.handle('app:info', () => ({
-  version: app.getVersion(),
+  // Read straight from package.json so it is correct in dev too (app.getVersion
+  // returns Electron's version when the app is not packaged).
+  version: require('../package.json').version,
   extractFormats: EXTRACT_EXTENSIONS,
   createFormats: Object.keys(CREATE_FORMATS),
   hashAlgorithms: HASH_ALGORITHMS
@@ -471,15 +473,18 @@ ipcMain.handle('folder:select', async (_event, options = {}) => {
   return result.filePaths[0];
 });
 
-ipcMain.handle('files:select', async (_event, { folders = false, archives = false } = {}) => {
+ipcMain.handle('files:select', async (_event, { folders = false, archives = false, zip = false } = {}) => {
   const defaultPath = await getLastFolder();
+  const filters = zip
+    ? [{ name: 'ZIP', extensions: ['zip'] }, { name: tr('main.allFiles'), extensions: ['*'] }]
+    : archives
+      ? [{ name: tr('main.archiveFilter'), extensions: EXTRACT_EXTENSIONS }, { name: tr('main.allFiles'), extensions: ['*'] }]
+      : undefined;
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: archives ? tr('main.dialogSelectArchive') : tr('main.dialogSelectFiles'),
+    title: archives || zip ? tr('main.dialogSelectArchive') : tr('main.dialogSelectFiles'),
     properties: [folders ? 'openDirectory' : 'openFile', 'multiSelections'],
     defaultPath: defaultPath || undefined,
-    filters: archives
-      ? [{ name: tr('main.archiveFilter'), extensions: EXTRACT_EXTENSIONS }, { name: tr('main.allFiles'), extensions: ['*'] }]
-      : undefined
+    filters
   });
   if (result.canceled || result.filePaths.length === 0) return [];
   await rememberLastFolder(path.dirname(result.filePaths[0]));
@@ -748,6 +753,10 @@ ipcMain.handle('recovery:inspect', async (_event, { zipPath }) => asResult(async
   requirePath(zipPath, 'ZIP');
   const { listArchive } = require('./archive-ops.cjs');
   const listing = await listArchive(resolveSevenZipPath(), zipPath, '');
+  // The recovery tools (zip2john, bkcrack) are ZIP-only. Reject anything else clearly.
+  if (!/^zip$/i.test(listing.info.type || '')) {
+    throw Object.assign(new Error(tr('recover.notZip', { name: path.basename(zipPath), type: (listing.info.type || path.extname(zipPath).slice(1) || '?').toUpperCase() })), { code: 'NOT_ZIP' });
+  }
   const encrypted = listing.entries.filter((entry) => entry.encrypted && !entry.isDirectory)
     .map((entry) => ({ path: entry.path, size: entry.size, method: entry.method }));
   if (!encrypted.length) throw Object.assign(new Error(tr('recover.notEncrypted')), { code: 'NOT_ENCRYPTED' });

@@ -9,6 +9,24 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.1.2 - 2026-10-22
+
+### Added
+
+- The version number is shown as a small badge next to "Quick Extract Ultra" in the header, so you can always tell which build you are running. It is read from `package.json` (the `app:info` version now comes from `package.json`, not `app.getVersion()`, which returned Electron's version when unpackaged).
+
+### Changed
+
+- Password recovery is ZIP-only (its tools — `zip2john`, `bkcrack` — do not read RAR or 7z). The "Choose ZIP" picker now filters to `.zip`, and a non-ZIP file (e.g. a `.rar`) is rejected up front with a clear message instead of the generic "Could not read a password hash". A short "ZIP files only" note sits under the chooser.
+
+### Verified
+
+- `npm test` 42/42, `npm run typecheck`, `npm run build`, `npm run test:ui`. Version badge confirmed to read the app version (2.1.2). Archive-type check confirmed: `.zip` accepted, `.7z`/`.rar` rejected as NOT_ZIP.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.1.2.exe`, `QuickExtractUltra-Portable-2.1.2-win-x64.zip`.
+
 ## 2.1.1 - 2026-10-22
 
 ### Changed

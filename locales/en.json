@@ -317,6 +317,8 @@
   "recover.chooseZip": "Choose ZIP",
   "recover.noZip": "No ZIP chosen",
   "recover.notEncrypted": "This ZIP is not password-protected.",
+  "recover.notZip": "This feature works with ZIP files only. \"{name}\" is a {type} file. For RAR or other formats, there is no supported recovery here.",
+  "recover.zipOnly": "ZIP files only (RAR and other formats are not supported here).",
   "recover.busy": "A recovery is already running.",
   "recover.zipcrypto": "Legacy ZipCrypto",
   "recover.aes": "AES-256",

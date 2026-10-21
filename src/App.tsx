@@ -706,7 +706,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
               <Archive size={28} />
             </div>
             <div>
-              <h1>Quick Extract <em>Ultra</em></h1>
+              <h1>Quick Extract <em>Ultra</em>{appInfo?.version && <small className="app-version">v{appInfo.version}</small>}</h1>
               <span>{notice || t('notice.ready')}</span>
             </div>
           </div>

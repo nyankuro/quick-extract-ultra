@@ -2035,3 +2035,16 @@ input:focus-visible,
 }
 
 .auto-pitch { margin: 0; line-height: 1.6; font-size: 14px; }
+
+.app-version {
+  margin-left: 10px;
+  padding: 2px 8px;
+  border: 1px solid rgba(170, 211, 255, 0.3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--cyan-soft);
+  background: rgba(25, 200, 255, 0.1);
+  vertical-align: middle;
+}

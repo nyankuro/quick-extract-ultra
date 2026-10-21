@@ -131,16 +131,17 @@ export default function RecoverView({ addLog }: Props) {
     && (canBkcrack || Boolean(tool('john')?.installed));
 
   const chooseZip = async () => {
-    const [picked] = await window.quickExtract.selectPaths({ archives: true });
+    const [picked] = await window.quickExtract.selectPaths({ zip: true });
     if (!picked) return;
     setZipPath(picked);
     setInspection(null);
     setFound(null);
     setPhase('idle');
+    setMessage('');
     setKnownPlaintext('');
     const result = await window.quickExtract.inspectZip(picked);
     if (result.ok) setInspection(result.value);
-    else { setMessage(result.message); addLog('error', result.message); }
+    else { setPhase('error'); setMessage(result.message); addLog('error', result.message); }
   };
 
   const chooseKnownPlaintext = async () => {
@@ -384,6 +385,7 @@ export default function RecoverView({ addLog }: Props) {
             </button>
             <span className="muted zip-name" title={zipPath}>{inspection?.fileName || t('recover.noZip')}</span>
           </div>
+          <p className="muted small-print">{t('recover.zipOnly')}</p>
 
           {inspection && (
             <div className="zip-facts">

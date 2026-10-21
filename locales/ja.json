@@ -317,6 +317,8 @@
   "recover.chooseZip": "ZIP を選択",
   "recover.noZip": "ZIP 未選択",
   "recover.notEncrypted": "この ZIP にはパスワードがかかっていません。",
+  "recover.notZip": "この機能は ZIP ファイルのみ対応です。「{name}」は {type} ファイルです。RAR などの形式はここでは復元できません。",
+  "recover.zipOnly": "ZIP ファイルのみ対応（RAR など他の形式は非対応です）。",
   "recover.busy": "すでに復元を実行中です。",
   "recover.zipcrypto": "旧式 ZipCrypto",
   "recover.aes": "AES-256",
