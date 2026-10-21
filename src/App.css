@@ -2013,3 +2013,25 @@ input:focus-visible,
 .recover-modal-body h3 { margin: 6px 0 0; font-size: 16px; color: var(--cyan-soft); }
 .recover-modal-body p { margin: 0; line-height: 1.6; }
 .recover-modal-body ul { margin: 2px 0; padding-left: 20px; display: grid; gap: 4px; overflow-wrap: anywhere; }
+
+.picker-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  color: var(--muted);
+}
+
+.picker-sort select {
+  min-height: 40px;
+  padding: 6px 10px;
+}
+
+.archive-picker .picker-sort .sort-direction {
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  gap: 0;
+}
+
+.auto-pitch { margin: 0; line-height: 1.6; font-size: 14px; }

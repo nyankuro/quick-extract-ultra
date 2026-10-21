@@ -100,7 +100,7 @@ class RecoveryJob {
 
   log(message) { this.emit({ type: 'info', message }); }
 
-  run(exePath, args, { onLine, cwd } = {}) {
+  run(exePath, args, { onLine, onStdout, onStderr, cwd } = {}) {
     return new Promise((resolve, reject) => {
       if (this.cancelled) { reject(Object.assign(new Error('cancelled'), { code: 'CANCELLED' })); return; }
       const child = this.spawn(exePath, args, { cwd: cwd || this.workDir, windowsHide: true });
@@ -117,8 +117,8 @@ class RecoveryJob {
       };
       child.stdout?.setEncoding('utf8');
       child.stderr?.setEncoding('utf8');
-      child.stdout?.on('data', feed);
-      child.stderr?.on('data', feed);
+      child.stdout?.on('data', (chunk) => { onStdout?.(chunk); feed(chunk); });
+      child.stderr?.on('data', (chunk) => { onStderr?.(chunk); feed(chunk); });
       child.on('error', reject);
       child.on('close', (code) => {
         this.child = null;
@@ -177,14 +177,18 @@ class RecoveryJob {
     const zip2john = this.tools.john?.helpers?.zip2john;
     if (!zip2john) throw Object.assign(new Error('zip2john (part of John the Ripper) is needed to read the ZIP hash.'), { code: 'NEED_JOHN' });
     const hashPath = path.join(this.workDir, 'hash.txt');
-    let output = '';
-    await this.run(zip2john, [this.options.zipPath], { onLine: (line) => { if (line.includes('$zip2$') || line.includes('$pkzip')) output += `${line}\n`; } });
-    const hashLine = output.split('\n').find(Boolean);
-    if (!hashLine) throw Object.assign(new Error('Could not read a password hash from this ZIP.'), { code: 'NO_HASH' });
-    // zip2john prints "name:hash:...": keep from the first "$" for a clean hash file.
-    const clean = hashLine.slice(hashLine.indexOf('$'));
-    await fs.writeFile(hashPath, `${clean}\n`, 'utf8');
-    return { hashPath, isAes: clean.includes('$zip2$') };
+    let out = '';
+    let err = '';
+    // zip2john writes the hash to stdout and notes to stderr; keep both.
+    await this.run(zip2john, [this.options.zipPath], { onLine: () => {}, onStdout: (chunk) => { out += chunk; }, onStderr: (chunk) => { err += chunk; } });
+    // Pull out just the hash token ($zip2$...$/zip2$ or $pkzip2$...$/pkzip2$); both John and hashcat take it bare.
+    const match = out.match(/\$(?:zip2|pkzip2?)\$[\s\S]*?\$\/(?:zip2|pkzip2?)\$/);
+    if (!match) {
+      const reason = (err.split('\n').map((line) => line.trim()).filter(Boolean).pop() || '').replace(/^ver [\d.]+ /, '');
+      throw Object.assign(new Error(reason ? `Could not read a password hash from this ZIP: ${reason}` : 'Could not read a password hash from this ZIP.'), { code: 'NO_HASH' });
+    }
+    await fs.writeFile(hashPath, `${match[0]}\n`, 'utf8');
+    return { hashPath, isAes: match[0].startsWith('$zip2$') };
   }
 
   emitHashcat(status) {
@@ -200,12 +204,21 @@ class RecoveryJob {
     const base = ['-m', mode, '--status', '--status-json', '--status-timer', '1', '--potfile-path', potfile, '-o', outfile, '--outfile-format', '2', '--session', this.session, '--restore-file-path', restoreFile, '-w', '3'];
     const attack = this.options.attack || {};
     const stages = [];
-    if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath]);
-    if (attack.mode === 'bruteforce' || !attack.wordlistPath) {
+    if (attack.mode === 'bruteforce') {
+      // Advanced: exactly the charset/length the user picked.
       const set = customCharset(attack.charset);
       const min = clampLength(attack.minLen, 1);
       const max = clampLength(attack.maxLen, 8);
       stages.push(['-a', '3', '-1', set, hashPath, '?1'.repeat(max), '--increment', '--increment-min', String(min), '--increment-max', String(max)]);
+    } else if (attack.mode === 'wordlist') {
+      if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath]);
+    } else {
+      // Auto (default): most effective real-world order — common passwords with
+      // rules, then digits (PINs/dates), then a Markov-ordered mixed search.
+      const rule = path.join(path.dirname(this.tools.hashcat), 'rules', 'best64.rule');
+      if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath, ...(await pathExists(rule) ? ['-r', rule] : [])]);
+      stages.push(['-a', '3', hashPath, '?d'.repeat(10), '--increment', '--increment-min', '1']);
+      stages.push(['-a', '3', '-1', '?l?u?d', hashPath, '?1'.repeat(8), '--increment', '--increment-min', '1']);
     }
     this.emit({ type: 'stage', stage: 'hashcat', device: 'gpu', mode });
     for (const stage of stages) {
@@ -241,12 +254,21 @@ class RecoveryJob {
     const attack = this.options.attack || {};
     const base = [`--pot=${pot}`, `--session=${this.session}`];
     const stages = [];
-    if (attack.wordlistPath) stages.push([`--wordlist=${attack.wordlistPath}`]);
-    if (attack.mode === 'bruteforce' || !attack.wordlistPath) {
+    if (attack.mode === 'bruteforce') {
       const set = customCharset(attack.charset);
       const min = clampLength(attack.minLen, 1);
       const max = clampLength(attack.maxLen, 8);
       stages.push([`--mask=${'?1'.repeat(max)}`, `-1=${set}`, `--min-length=${min}`, `--max-length=${max}`]);
+    } else if (attack.mode === 'wordlist') {
+      if (attack.wordlistPath) stages.push([`--wordlist=${attack.wordlistPath}`]);
+    } else {
+      // Auto (default): John's own common-password list with mangling rules, then
+      // digits-only (Markov order), then its smart Markov search of mixed passwords.
+      const builtin = path.join(path.dirname(john), 'password.lst');
+      const wordlist = attack.wordlistPath || (await pathExists(builtin) ? builtin : '');
+      if (wordlist) stages.push([`--wordlist=${wordlist}`, '--rules']);
+      stages.push(['--incremental=Digits', '--max-length=12']);
+      stages.push(['--incremental', '--max-length=10']);
     }
     this.emit({ type: 'stage', stage: 'john', device: 'cpu' });
     for (const stage of stages) {

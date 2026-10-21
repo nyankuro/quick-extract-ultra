@@ -71,7 +71,7 @@ export default function RecoverView({ addLog }: Props) {
   const [inspection, setInspection] = useState<ZipInspection | null>(null);
   const [knownPlaintext, setKnownPlaintext] = useState('');
   const [wordlistPath, setWordlistPath] = useState('');
-  const [attackMode, setAttackMode] = useState<'wordlist' | 'bruteforce'>('wordlist');
+  const [attackMode, setAttackMode] = useState<'auto' | 'wordlist' | 'bruteforce'>('auto');
   const [charset, setCharset] = useState<Charset>({ lower: true, digits: true });
   const [minLen, setMinLen] = useState(1);
   const [maxLen, setMaxLen] = useState(8);
@@ -201,7 +201,7 @@ export default function RecoverView({ addLog }: Props) {
       device,
       attack: {
         mode: attackMode,
-        wordlistPath: attackMode === 'wordlist' ? wordlistPath : undefined,
+        wordlistPath: attackMode === 'bruteforce' ? undefined : wordlistPath,
         charset,
         minLen,
         maxLen
@@ -409,11 +409,14 @@ export default function RecoverView({ addLog }: Props) {
 
           <div className="recover-attack">
             <div className="segmented">
+              <button type="button" className={attackMode === 'auto' ? 'active' : ''} onClick={() => setAttackMode('auto')} disabled={phase === 'running'}>{t('recover.autoMode')}</button>
               <button type="button" className={attackMode === 'wordlist' ? 'active' : ''} onClick={() => setAttackMode('wordlist')} disabled={phase === 'running'}>{t('recover.wordlistMode')}</button>
               <button type="button" className={attackMode === 'bruteforce' ? 'active' : ''} onClick={() => setAttackMode('bruteforce')} disabled={phase === 'running'}>{t('recover.bruteMode')}</button>
             </div>
 
-            {attackMode === 'wordlist' ? (
+            {attackMode === 'auto' ? (
+              <p className="auto-pitch muted">{t('recover.autoPitch')}</p>
+            ) : attackMode === 'wordlist' ? (
               <div className="field-row">
                 <input value={wordlistPath} onChange={(event) => setWordlistPath(event.target.value)} placeholder={t('recover.wordlistPlaceholder')} disabled={phase === 'running'} />
                 <button className="secondary-button compact" type="button" onClick={() => void chooseWordlist()} disabled={phase === 'running'}><FolderOpen size={18} />{t('common.browse')}</button>
@@ -451,7 +454,7 @@ export default function RecoverView({ addLog }: Props) {
           <div className="recover-controls">
             {phase !== 'running' && phase !== 'paused' && (
               <button className="primary-button wide" type="button" data-action="start-recovery" onClick={() => void start()} disabled={!canStart}>
-                <Play size={19} />{t('recover.start')}
+                <Play size={19} />{t(attackMode === 'auto' ? 'recover.startAuto' : 'recover.start')}
               </button>
             )}
             {phase === 'running' && (

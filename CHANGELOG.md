@@ -9,6 +9,31 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.1.1 - 2026-10-22
+
+### Changed
+
+- **Password recovery now has a one-button "Try automatically" default** that picks the most effective real-world strategy, so an ordinary user who forgot their own password does not have to understand wordlists or charsets. Order: common passwords with mangling rules (John `--rules`, hashcat `best64.rule`), then digits-only (John `--incremental=Digits`, hashcat `?d` increment) for PINs/dates, then a Markov-ordered smart search (John `--incremental`, hashcat mask with `--increment`) that tries the most likely passwords first. The a-z/A-Z/0-9/symbol charset pickers and custom wordlist moved into the "Wordlist" and "Brute force" tabs for advanced users; the default path needs no settings.
+- **Scanned folders extract beside each source archive again.** With "Scan folder" or "Deep scan", each archive is extracted into a folder next to itself; the "Save to" destination now applies only to files chosen with "Choose files".
+- **The file picker has a visible sort control** (name / date modified / type / size, ascending or descending) in every view, not only by clicking the Details columns.
+
+### Fixed
+
+- `zip2john` hash extraction now writes the bare hash token (`$zip2$…$/zip2$`), so hashcat (AES ZIPs, mode 13600) receives a valid hash; the previous code left a trailing `:name:path` that could break it. When no hash can be read, the error now includes `zip2john`'s own reason.
+
+### Notes
+
+- Windows Defender and some antivirus flag hashcat / John / bkcrack as hacktools and may quarantine the downloaded `.exe`. If a tool disappears or will not run, allow it in the antivirus. The app cannot prevent this; it is the nature of these tools.
+- The Windows 11 modern right-click menu is not supported: entries appear under "Show more options" (the classic menu). Appearing in the main Win11 menu next to WinRAR needs a signed MSIX package with an `IExplorerCommand` shell extension, which an unsigned Electron app cannot provide yet.
+
+### Verified
+
+- `npm test` 42/42. Real end-to-end: John auto-mode recovered a numeric ZipCrypto password ("1234") through the engine; the hash-extraction fix produces bare hashes for ZipCrypto and AES. `npm run typecheck`, `npm run build`, `npm run test:ui`, and `scripts/picker-preview.cjs` pass.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.1.1.exe`, `QuickExtractUltra-Portable-2.1.1-win-x64.zip`.
+
 ## 2.1.0 - 2026-10-21
 
 ### Added

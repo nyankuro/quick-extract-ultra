@@ -286,7 +286,8 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     try {
       const result = await window.quickExtract.scanArchives(
         nextFolderPath,
-        buildScanOptions(nextUseMainFolder, nextNewMainFolder, deepScan, nextOutputFolder)
+        // Folder and deep scans always extract beside each source archive, ignoring "Save to".
+        buildScanOptions(nextUseMainFolder, nextNewMainFolder, deepScan, '')
       );
       setSelectedArchivePaths([]);
       setLastFolderScanWasDeep(deepScan);
@@ -413,7 +414,8 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
       folderPath,
       selectedReadyIds,
       selectedArchivePaths.length > 0 ? selectedArchivePaths : undefined,
-      buildScanOptions(useMainFolder, newMainFolder, lastFolderScanWasDeep)
+      // "Save to" applies only to explicitly chosen files; scanned folders extract beside each archive.
+      buildScanOptions(useMainFolder, newMainFolder, lastFolderScanWasDeep, selectedArchivePaths.length > 0 ? outputFolder : '')
     );
   };
 

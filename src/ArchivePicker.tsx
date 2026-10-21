@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, 
 import {
   Archive,
   ArrowDown,
+  ArrowDownUp,
   ArrowUp,
   Check,
   ChevronDown,
@@ -159,6 +160,11 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
     store(SORT_KEY, next);
   };
 
+  const applySort = (next: { key: SortKey; descending: boolean }) => {
+    setSort(next);
+    store(SORT_KEY, next);
+  };
+
   const select = (entry: BrowserEntry, event: MouseEvent<HTMLButtonElement>) => {
     if (entry.isDirectory) return;
     const additive = event.ctrlKey || event.metaKey;
@@ -209,6 +215,19 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
           try { const path = await window.quickExtract.selectFolder(); if (path) await navigate(path); }
           catch (cause) { setError(cause instanceof Error ? cause.message : t('picker.selectFailed')); }
         }}><FolderOpen size={20} />{t('picker.browseFolder')}</button>
+        <div className="picker-sort">
+          <ArrowDownUp size={16} aria-hidden="true" />
+          <select aria-label={t('picker.sortBy')} value={sort.key} disabled={busy} onChange={(event) => applySort({ key: event.target.value as SortKey, descending: sort.descending })}>
+            <option value="name">{t('picker.sort.name')}</option>
+            <option value="modified">{t('picker.sort.modified')}</option>
+            <option value="type">{t('picker.sort.type')}</option>
+            <option value="size">{t('picker.sort.size')}</option>
+          </select>
+          <button type="button" className="sort-direction" disabled={busy} onClick={() => applySort({ key: sort.key, descending: !sort.descending })}
+            aria-label={t(sort.descending ? 'picker.descending' : 'picker.ascending')} title={t(sort.descending ? 'picker.descending' : 'picker.ascending')}>
+            {sort.descending ? <ArrowDown size={18} /> : <ArrowUp size={18} />}
+          </button>
+        </div>
         <div className="picker-view-menu" ref={menuRef}>
           <button type="button" data-action="picker-view" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
             <CurrentIcon size={18} />{t('picker.viewButton')}<ChevronDown size={16} />
