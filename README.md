@@ -6,7 +6,7 @@
 
 **A free, friendly archive manager for Windows. Extract, compress, look inside and verify ZIP, 7Z, RAR and 30+ other formats.**
 
-**English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md)
+**English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md) · 简体中文 · 繁體中文
 
 [![Latest release](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=download&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](LICENSE)
@@ -27,7 +27,7 @@ Most archive tools were designed decades ago. Quick Extract Ultra does the same 
 - 🔐 **Passwords never block the queue.** Protected archives wait politely while the rest keep going.
 - 🧠 **Smart extraction** avoids the annoying "folder inside a folder with the same name".
 - 🛡️ **Safe by design.** Nothing is ever overwritten, half-finished output never appears, and downloaded files keep Windows' safety warnings.
-- 🌏 **English, 日本語 and Tiếng Việt**, switchable at any time.
+- 🌏 **Five languages** — English, 日本語, Tiếng Việt, 简体中文, 繁體中文 — switchable at any time.
 - 💻 **100% offline.** Your files never leave your computer.
 
 ## Features
@@ -40,6 +40,7 @@ Most archive tools were designed decades ago. Quick Extract Ultra does the same 
 | **Test** | Check every file in an archive against its stored checksum, without extracting. |
 | **Checksums** | CRC32, MD5, SHA-1, SHA-256 and SHA-512, with copy buttons and a "paste to compare" box. |
 | **Explorer menu** | Right-click → *Extract here (smart)*, *Extract to folder*, *Open*, *Test*, *Add to archive…*, *Add to ZIP*, *Add to 7Z*, *Calculate checksums*. Turn it on in Settings. |
+| **Recover ZIP password** | For your own ZIP files: recover a forgotten password with the open-source tools bkcrack, hashcat (GPU) and John the Ripper (CPU), run as separate programs. See below. |
 | **Drag & drop** | Drop files on any tab: archives to extract, files to compress, an archive to browse, files to hash. |
 | **Multi-part archives** | `.part1.rar`, `.7z.001` and friends are opened through the first part; later parts are hidden from scans. |
 
@@ -55,6 +56,17 @@ Most archive tools were designed decades ago. Quick Extract Ultra does the same 
 | <img src="docs/screenshots/tools.png" width="440" /> | <img src="docs/screenshots/extract-password.png" width="440" /> |
 
 </details>
+
+## Recover a forgotten ZIP password
+
+The **Recover ZIP password** tab helps you back into a ZIP **you own or are allowed to open** (the app shows a reminder about this). It contains no cracking code of its own — it runs three well-known open-source tools as separate programs, so their licenses (including John's GPL) stay separate from this app:
+
+- **bkcrack** — if the ZIP uses the old ZipCrypto format and you still have one original (unencrypted) file that is inside it, this recovers the password very fast.
+- **hashcat** (GPU) and **John the Ripper** (CPU) — otherwise the app reads the ZIP's hash with John's `zip2john` and searches for the password: a wordlist first (a small common-password list is built in), then brute force over a character set and length you choose. On an AES ZIP it uses your GPU through hashcat; otherwise John on the CPU.
+
+These tools are **not bundled** and are never re-hosted. In the app you add each one either with an **automatic download** (a confirmation box shows the tool's name, license, size and official source, and the download is checked against the source's published SHA-256) or **manually** from its official page. Downloads are saved under `%APPDATA%\quick-extract-ultra\tools\`. John is the base tool (its `zip2john` reads the hash); hashcat is an optional GPU accelerator; bkcrack is the standalone fast path.
+
+The tab shows live progress, speed and estimated time, with Pause, Resume and Cancel. When the password is found it is shown clearly with a copy button and an **Extract now** button.
 
 ## Download & install
 

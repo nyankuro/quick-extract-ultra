@@ -6,7 +6,7 @@
 
 **Windows 向けの無料でやさしいアーカイブ管理ツール。ZIP・7Z・RAR など 30 種類以上の形式を展開・圧縮・中身の確認・検証できます。**
 
-[English](../README.md) · **日本語** · [Tiếng Việt](README.vi.md)
+[English](../README.md) · **日本語** · [Tiếng Việt](README.vi.md) · 简体中文 · 繁體中文
 
 [![最新リリース](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](../LICENSE)
@@ -26,7 +26,7 @@ WinRAR や 7-Zip と同じ作業を、今何が起きているかがひと目で
 - 🔐 **パスワードで止まらない**。保護されたアーカイブは待機し、他のファイルは展開を続けます。
 - 🧠 **スマート展開**で「同じ名前のフォルダーの中に同じ名前のフォルダー」を防ぎます。
 - 🛡️ **安全設計**。上書きは一切なし、途中までの中途半端な結果も残りません。ダウンロードしたファイルの安全警告も引き継ぎます。
-- 🌏 **English・日本語・Tiếng Việt** をいつでも切り替え可能。
+- 🌏 **5 言語**（English・日本語・Tiếng Việt・简体中文・繁體中文）をいつでも切り替え可能。
 - 💻 **完全オフライン**。ファイルがパソコンの外に出ることはありません。
 
 ## 機能一覧
@@ -54,6 +54,17 @@ WinRAR や 7-Zip と同じ作業を、今何が起きているかがひと目で
 | <img src="screenshots/tools.png" width="440" /> | <img src="screenshots/extract-password.png" width="440" /> |
 
 </details>
+
+## 忘れた ZIP パスワードの復元
+
+**ZIP パスワード復元** タブは、**ご自身が所有する（または開く許可のある）** ZIP を開き直すのを助けます（アプリ内にその旨の注意書きがあります）。独自の解析コードは持たず、3 つの有名なオープンソースツールを別プログラムとして実行します（そのためライセンス、特に John の GPL は本アプリに及びません）。
+
+- **bkcrack** — ZIP が旧式 ZipCrypto で、中に入っていた元ファイル（暗号化前）が 1 つでも手元にあれば、非常に高速に復元します。
+- **hashcat**（GPU）と **John the Ripper**（CPU）— それ以外は John の `zip2john` でハッシュを取り出し、まずワードリスト（よく使われるパスワードの小さな一覧を内蔵）、次に選んだ文字種・長さで総当たりを行います。AES の ZIP では hashcat で GPU を使い、そうでなければ John で CPU を使います。
+
+これらのツールは**同梱しておらず**、再配布もしません。アプリ内で各ツールを**自動ダウンロード**（ツール名・ライセンス・サイズ・公式配布元を示す確認ボックスを表示し、配布元が公開する SHA-256 で検証）または公式ページから**手動**で追加します。ダウンロード先は `%APPDATA%\quick-extract-ultra\tools\` です。John が基本ツール（`zip2john` がハッシュを読み取ります）、hashcat は任意の GPU 高速化、bkcrack は単独の高速経路です。
+
+進捗・速度・推定時間がリアルタイムで表示され、一時停止・再開・キャンセルができます。パスワードが見つかると、コピーボタンと **今すぐ展開** ボタンとともにはっきり表示されます。
 
 ## ダウンロードとインストール
 

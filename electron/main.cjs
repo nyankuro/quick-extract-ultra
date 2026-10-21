@@ -3,7 +3,9 @@ const path = require('node:path');
 const fs = require('node:fs/promises');
 const { existsSync } = require('node:fs');
 const sevenZipBin = require('7zip-bin-full');
-const { extractWithSevenZip } = require('./extraction.cjs');
+const { extractWithSevenZip, extractInto } = require('./extraction.cjs');
+const { detectTools, downloadTool, toolsDir } = require('./password-tools.cjs');
+const { RecoveryJob } = require('./password-recovery.cjs');
 const { PasswordQueue } = require('./password-queue.cjs');
 const { browseArchives } = require('./folder-browser.cjs');
 const { applyFolderView } = require('./folder-view.cjs');
@@ -15,7 +17,9 @@ const { ShellIcons } = require('./shell-icons.cjs');
 const locales = {
   en: require('../locales/en.json'),
   ja: require('../locales/ja.json'),
-  vi: require('../locales/vi.json')
+  vi: require('../locales/vi.json'),
+  'zh-Hans': require('../locales/zh-Hans.json'),
+  'zh-Hant': require('../locales/zh-Hant.json')
 };
 
 const MAIN_OUTPUT_FOLDER_NAME = 'Main Zip';
@@ -24,6 +28,7 @@ const APP_NAME = 'Quick Extract Ultra';
 let mainWindow;
 let sessionLastFolder = null;
 let activeBatch = null;
+let activeRecovery = null;
 let settings;
 let rendererReady = false;
 let pendingCommands = [];
@@ -681,6 +686,114 @@ ipcMain.handle('shell:icons', async (_event, { paths, size }) => {
 ipcMain.handle('shell:show-item', async (_event, itemPath) => {
   shell.showItemInFolder(requirePath(itemPath, 'Item'));
 });
+
+
+// --- ZIP password recovery (self-service, for the user's own files) ------------
+
+function bundledToolsRoot() {
+  return app.isPackaged ? path.join(process.resourcesPath, 'tools') : path.join(__dirname, '..', 'tools');
+}
+
+async function defaultWordlist() {
+  for (const root of [toolsDir(app.getPath('userData')), bundledToolsRoot()]) {
+    const candidate = path.join(root, 'wordlists', 'common-passwords.txt');
+    if (await pathExists(candidate)) return candidate;
+  }
+  return '';
+}
+
+ipcMain.handle('tools:list', async () => asResult(async () => {
+  const detected = await detectTools(app.getPath('userData'), [bundledToolsRoot()]);
+  return { ...detected, defaultWordlist: await defaultWordlist() };
+}));
+
+ipcMain.handle('tools:open-page', async (_event, url) => {
+  if (typeof url === 'string' && /^https:\/\//.test(url)) await shell.openExternal(url);
+});
+
+ipcMain.handle('tools:open-folder', async () => {
+  const dir = toolsDir(app.getPath('userData'));
+  await fs.mkdir(dir, { recursive: true });
+  await shell.openPath(dir);
+  return dir;
+});
+
+ipcMain.handle('tools:download', async (_event, { toolId, consent } = {}) => asResult(async () => {
+  // The UI only sends consent:true after the user ticks the per-tool confirmation box.
+  if (consent !== true) throw Object.assign(new Error('Download needs your confirmation first.'), { code: 'NO_CONSENT' });
+  const result = await downloadTool(toolId, {
+    userDataDir: app.getPath('userData'),
+    sevenZipPath: resolveSevenZipPath(),
+    extract: extractInto,
+    onProgress: (progress) => mainWindow?.webContents.send('tools:progress', { toolId, ...progress })
+  });
+  log('done', tr('recover.toolReady', { name: toolId }));
+  return result;
+}));
+
+ipcMain.handle('recovery:inspect', async (_event, { zipPath }) => asResult(async () => {
+  requirePath(zipPath, 'ZIP');
+  const { listArchive } = require('./archive-ops.cjs');
+  const listing = await listArchive(resolveSevenZipPath(), zipPath, '');
+  const encrypted = listing.entries.filter((entry) => entry.encrypted && !entry.isDirectory)
+    .map((entry) => ({ path: entry.path, size: entry.size, method: entry.method }));
+  if (!encrypted.length) throw Object.assign(new Error(tr('recover.notEncrypted')), { code: 'NOT_ENCRYPTED' });
+  const zipCrypto = encrypted.every((entry) => /ZipCrypto/i.test(entry.method));
+  return { fileName: path.basename(zipPath), encrypted, zipCrypto };
+}));
+
+ipcMain.handle('recovery:start', async (_event, options = {}) => asResult(async () => {
+  if (activeRecovery) throw Object.assign(new Error(tr('recover.busy')), { code: 'BUSY' });
+  requirePath(options.zipPath, 'ZIP');
+  if (options.knownPlaintextPath) requirePath(options.knownPlaintextPath, 'Known file');
+  if (options.attack?.wordlistPath) requirePath(options.attack.wordlistPath, 'Wordlist');
+  const detected = await detectTools(app.getPath('userData'), [bundledToolsRoot()]);
+  const tool = (id) => detected.tools.find((item) => item.id === id);
+  const tools = {
+    bkcrack: tool('bkcrack')?.installed ? tool('bkcrack').exePath : null,
+    hashcat: tool('hashcat')?.installed ? tool('hashcat').exePath : null,
+    john: tool('john')?.exePath ? { exe: tool('john').exePath, helpers: tool('john').helpers } : null
+  };
+  const workDir = path.join(app.getPath('userData'), 'recovery', `job-${Date.now()}`);
+  const job = new RecoveryJob(options, {
+    tools, workDir, sevenZipPath: resolveSevenZipPath(),
+    listArchive: require('./archive-ops.cjs').listArchive,
+    emit: (event) => {
+      mainWindow?.webContents.send('recovery:event', event);
+      if (['found', 'exhausted', 'cancelled', 'error'].includes(event.type)) {
+        if (event.type !== 'found') { job.cleanup(); if (activeRecovery === job) activeRecovery = null; }
+      }
+    }
+  });
+  activeRecovery = job;
+  void job.start();
+  return true;
+}));
+
+ipcMain.handle('recovery:pause', async () => { activeRecovery?.pause(); });
+ipcMain.handle('recovery:resume', async () => { activeRecovery?.resume(); });
+ipcMain.handle('recovery:cancel', async () => {
+  const job = activeRecovery;
+  activeRecovery = null;
+  if (job) { job.cancel(); await job.cleanup(); }
+});
+
+ipcMain.handle('recovery:extract', async (_event, { zipPath, password = '', decryptedZipPath = '', destinationFolder } = {}) => asResult(async () => {
+  requirePath(zipPath, 'ZIP');
+  const source = decryptedZipPath && await pathExists(decryptedZipPath) ? decryptedZipPath : zipPath;
+  const parent = destinationFolder ? requirePath(destinationFolder, 'Destination') : path.dirname(zipPath);
+  const fileName = path.basename(zipPath);
+  const { targetPath } = await findAvailableTarget(parent, targetNameFor(fileName));
+  const published = await extractWithSevenZip(resolveSevenZipPath(), { archivePath: source, fileName, targetPath }, {
+    password: decryptedZipPath ? '' : password,
+    propagateZone: settings.value.propagateZone
+  });
+  // The decrypted copy was only a means to extract; the user keeps the original ZIP.
+  if (decryptedZipPath && activeRecovery) { await activeRecovery.cleanup(); activeRecovery = null; }
+  log('done', tr('recover.extracted', { name: fileName, target: published }));
+  if (settings.value.openFolderAfter) void shell.openPath(path.dirname(published));
+  return published;
+}));
 
 ipcMain.handle('folder:open', async (_event, folderPath) => {
   await ensureFolder(folderPath);

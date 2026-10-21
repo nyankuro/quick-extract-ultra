@@ -1,10 +1,10 @@
 {
   "name": "quick-extract-ultra",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Free, open-source archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese and Vietnamese.",
   "main": "electron/main.cjs",
   "scripts": {
-    "test": "node --test scripts/extraction.test.cjs scripts/ultra.test.cjs",
+    "test": "node --test scripts/extraction.test.cjs scripts/ultra.test.cjs scripts/recovery.test.cjs",
     "test:ui": "npm run build && electron scripts/smoke-test.cjs",
     "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
     "build": "vite build",
@@ -57,7 +57,8 @@
       "node_modules/**/*",
       "package.json",
       "!node_modules/7zip-bin-full/linux/**",
-      "!node_modules/7zip-bin-full/mac/**"
+      "!node_modules/7zip-bin-full/mac/**",
+      "tools/wordlists/**/*"
     ],
     "asarUnpack": [
       "electron/folder-view.ps1",
@@ -91,6 +92,10 @@
       {
         "from": "THIRD_PARTY_NOTICES.md",
         "to": "THIRD_PARTY_NOTICES.md"
+      },
+      {
+        "from": "tools/wordlists",
+        "to": "tools/wordlists"
       }
     ],
     "publish": {

@@ -2,12 +2,14 @@ import { createContext, useCallback, useContext, type ReactNode } from 'react';
 import en from '../locales/en.json';
 import ja from '../locales/ja.json';
 import vi from '../locales/vi.json';
+import zhHans from '../locales/zh-Hans.json';
+import zhHant from '../locales/zh-Hant.json';
 import type { Language } from './types';
 
 type Dictionary = Record<string, string>;
-const DICTIONARIES: Record<Language, Dictionary> = { en, ja, vi };
+const DICTIONARIES: Record<Language, Dictionary> = { en, ja, vi, 'zh-Hans': zhHans, 'zh-Hant': zhHant };
 
-export const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', ja: '日本語', vi: 'Tiếng Việt' };
+export const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', ja: '日本語', vi: 'Tiếng Việt', 'zh-Hans': '简体中文', 'zh-Hant': '繁體中文' };
 
 export type Translate = (key: string, params?: Record<string, string | number>) => string;
 

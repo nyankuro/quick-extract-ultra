@@ -1,0 +1,38 @@
+{
+  "bkcrack": {
+    "name": "bkcrack",
+    "license": "zlib",
+    "licenseUrl": "https://github.com/kimci86/bkcrack/blob/master/license.txt",
+    "approxSizeMb": 2,
+    "page": "https://github.com/kimci86/bkcrack/releases/latest",
+    "purpose": "known-plaintext",
+    "exe": ["bkcrack.exe"],
+    "exeGlob": "bkcrack*/bkcrack.exe",
+    "auto": { "provider": "github", "repo": "kimci86/bkcrack", "assetPattern": "win(dows)?.*\\.zip$|.*windows.*\\.zip$" }
+  },
+  "hashcat": {
+    "name": "hashcat",
+    "license": "MIT",
+    "licenseUrl": "https://github.com/hashcat/hashcat/blob/master/docs/license.txt",
+    "approxSizeMb": 350,
+    "page": "https://hashcat.net/hashcat/",
+    "purpose": "gpu",
+    "exe": ["hashcat.exe"],
+    "exeGlob": "hashcat*/hashcat.exe",
+    "auto": null,
+    "autoNote": "hashcat publishes its Windows build on hashcat.net, which has no automatic release feed this app can verify a checksum against. Use the manual button and check the SHA-256 shown on the download page."
+  },
+  "john": {
+    "name": "John the Ripper (jumbo)",
+    "license": "GPLv2+",
+    "licenseUrl": "https://github.com/openwall/john/blob/bleeding-jumbo/doc/LICENSE",
+    "approxSizeMb": 40,
+    "page": "https://www.openwall.com/john/",
+    "purpose": "cpu",
+    "exe": ["run/john.exe", "john.exe"],
+    "helperExe": { "zip2john": ["run/zip2john.exe", "zip2john.exe"] },
+    "exeGlob": "*john*/run/john.exe",
+    "auto": null,
+    "autoNote": "The official Windows build of John the Ripper jumbo is a community package on openwall.com, with no automatic release feed this app can verify a checksum against. Use the manual button and follow openwall.com."
+  }
+}

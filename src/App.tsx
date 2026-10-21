@@ -21,6 +21,7 @@ import {
   Search,
   Settings as SettingsIcon,
   ShieldCheck,
+  KeyRound,
   Sparkles,
   Square,
   Trash2,
@@ -32,6 +33,7 @@ import ArchivePicker from './ArchivePicker';
 import CompressView, { type CompressRequest } from './CompressView';
 import BrowseView, { type BrowseRequest } from './BrowseView';
 import ToolsView, { type ToolsRequest } from './ToolsView';
+import RecoverView from './RecoverView';
 import SettingsDialog from './SettingsDialog';
 import { LANGUAGE_NAMES, LanguageProvider, useT, type Translate } from './i18n';
 import type {
@@ -47,7 +49,7 @@ import type {
 } from './types';
 
 export type AddLog = (level: ActivityLog['level'], message: string) => void;
-type Tab = 'extract' | 'compress' | 'browse' | 'tools';
+type Tab = 'extract' | 'compress' | 'browse' | 'tools' | 'recover';
 
 const STATUS_KEYS: Record<ArchiveStatus, string> = {
   ready: 'status.ready',
@@ -682,7 +684,8 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     { id: 'extract', icon: Archive, label: t('tab.extract') },
     { id: 'compress', icon: PackagePlus, label: t('tab.compress') },
     { id: 'browse', icon: FolderSearch, label: t('tab.browse') },
-    { id: 'tools', icon: ShieldCheck, label: t('tab.tools') }
+    { id: 'tools', icon: ShieldCheck, label: t('tab.tools') },
+    { id: 'recover', icon: KeyRound, label: t('tab.recover') }
   ];
 
   return (
@@ -918,6 +921,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
           <div hidden={tab !== 'compress'} className="view-pane"><CompressView request={compressRequest} addLog={addLog} formats={appInfo?.createFormats ?? []} /></div>
           <div hidden={tab !== 'browse'} className="view-pane"><BrowseView request={browseRequest} addLog={addLog} /></div>
           <div hidden={tab !== 'tools'} className="view-pane"><ToolsView request={toolsRequest} addLog={addLog} algorithms={appInfo?.hashAlgorithms ?? []} /></div>
+          <div hidden={tab !== 'recover'} className="view-pane"><RecoverView addLog={addLog} /></div>
         </div>
 
         <section className="activity-panel" aria-label={t('activity.title')}>

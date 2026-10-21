@@ -175,7 +175,17 @@ async function main() {
     await shoot(name);
   }
 
-  console.log('PASS: Explorer commands (add-7z, open, hash, extract-here), compress, browse, checksums and language switching.');
+  // The language switcher offers all five languages.
+  const languageCount = await window.webContents.executeJavaScript("document.querySelectorAll('.language-select select option').length");
+  assert.equal(languageCount, 5, 'five languages');
+
+  // The ZIP password recovery tab renders with its ownership note.
+  await window.webContents.executeJavaScript("[...document.querySelectorAll('.tab-button')].find(b => b.textContent.includes('Recover')).click()");
+  await until("document.querySelector('.ownership-note') !== null");
+  await until("document.querySelectorAll('.tool-row').length === 3");
+  await shoot('recover.png');
+
+  console.log('PASS: five languages, ZIP password recovery tab, Explorer commands (add-7z, open, hash, extract-here), compress, browse, checksums and language switching.');
   console.log('PASS: newest-first icon picker, Ctrl multi-select, password row, queue continuation, password submission, and complete output via real Electron IPC.');
 }
 

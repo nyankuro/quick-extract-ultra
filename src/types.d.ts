@@ -43,7 +43,7 @@ export interface ScanOptions {
   outputFolder?: string;
 }
 
-export type Language = 'en' | 'ja' | 'vi';
+export type Language = 'en' | 'ja' | 'vi' | 'zh-Hans' | 'zh-Hant';
 
 export interface AppSettings {
   language: Language;
@@ -126,6 +126,82 @@ export interface BrowserFolder {
   entries: BrowserEntry[];
 }
 
+export type ToolPurpose = 'known-plaintext' | 'gpu' | 'cpu';
+
+export interface ToolInfo {
+  id: 'bkcrack' | 'hashcat' | 'john';
+  name: string;
+  license: string;
+  licenseUrl: string;
+  approxSizeMb: number;
+  page: string;
+  purpose: ToolPurpose;
+  autoAvailable: boolean;
+  autoNote: string;
+  installed: boolean;
+  exePath: string;
+  helpers: Record<string, string>;
+  version: string;
+}
+
+export interface ToolList {
+  toolsDir: string;
+  tools: ToolInfo[];
+  defaultWordlist: string;
+}
+
+export interface EncryptedEntry {
+  path: string;
+  size: number;
+  method: string;
+}
+
+export interface ZipInspection {
+  fileName: string;
+  encrypted: EncryptedEntry[];
+  zipCrypto: boolean;
+}
+
+export interface Charset {
+  lower?: boolean;
+  upper?: boolean;
+  digits?: boolean;
+  symbols?: boolean;
+}
+
+export interface RecoveryOptions {
+  zipPath: string;
+  entryName?: string;
+  knownPlaintextPath?: string;
+  device?: 'auto' | 'gpu' | 'cpu';
+  attack?: {
+    mode: 'wordlist' | 'bruteforce';
+    wordlistPath?: string;
+    charset?: Charset;
+    minLen?: number;
+    maxLen?: number;
+  };
+}
+
+export type RecoveryEvent =
+  | { type: 'stage'; stage: string; device?: string; mode?: string; entry?: string }
+  | { type: 'info'; message: string }
+  | { type: 'progress'; percent: number | null; speed: number | null; eta: number | null; etaText?: string | null; tried?: number | null; total?: number | null }
+  | { type: 'found'; password: string | null; via: string; decryptedZipPath?: string }
+  | { type: 'exhausted' }
+  | { type: 'paused' }
+  | { type: 'resumed' }
+  | { type: 'cancelled' }
+  | { type: 'error'; message: string; code?: string };
+
+export interface ToolProgress {
+  toolId: string;
+  phase: 'download' | 'verify' | 'extract';
+  percent: number;
+  verified?: boolean;
+  sha256?: string;
+}
+
 declare global {
   interface Window {
     quickExtract: {
@@ -168,6 +244,18 @@ declare global {
       hashFile: (filePath: string, algorithms?: string[]) => Promise<TaskResult<HashResult>>;
       showItemInFolder: (itemPath: string) => Promise<void>;
       getShellIcons: (paths: string[], size: number) => Promise<Record<string, string>>;
+      listTools: () => Promise<TaskResult<ToolList>>;
+      openToolPage: (url: string) => Promise<void>;
+      openToolsFolder: () => Promise<string>;
+      downloadTool: (toolId: string, consent: boolean) => Promise<TaskResult<{ verified: boolean; sha256: string; checksumPublished: boolean; version: string; source: string }>>;
+      onToolProgress: (callback: (event: ToolProgress) => void) => () => void;
+      inspectZip: (zipPath: string) => Promise<TaskResult<ZipInspection>>;
+      startRecovery: (options: RecoveryOptions) => Promise<TaskResult<boolean>>;
+      pauseRecovery: () => Promise<void>;
+      resumeRecovery: () => Promise<void>;
+      cancelRecovery: () => Promise<void>;
+      recoveryExtract: (options: { zipPath: string; password?: string; decryptedZipPath?: string; destinationFolder?: string }) => Promise<TaskResult<string>>;
+      onRecoveryEvent: (callback: (event: RecoveryEvent) => void) => () => void;
     };
   }
 }

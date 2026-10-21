@@ -175,4 +175,10 @@ async function extractWithSevenZip(sevenZipPath, archive, { password = '', updat
   }
 }
 
-module.exports = { extractWithSevenZip, runSevenZipCommand, availablePath, pathExists };
+// Extracts a trusted archive (e.g. a verified tool download) straight into a folder.
+async function extractInto(sevenZipPath, archivePath, destinationFolder) {
+  await fs.mkdir(destinationFolder, { recursive: true });
+  await runSevenZipCommand(sevenZipPath, ['x', `-o${destinationFolder}`, '-y', '-aoa', '-bb0', '-bso0', '-sccUTF-8', '--', archivePath]);
+}
+
+module.exports = { extractWithSevenZip, runSevenZipCommand, availablePath, pathExists, extractInto };

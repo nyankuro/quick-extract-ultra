@@ -6,7 +6,7 @@ Bản gốc `H:\Quick Extract` (1.0.2, làm bằng Codex) được giữ nguyên
 
 ## 1. Ứng dụng này làm gì, dành cho ai
 
-Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nhưng giao diện hiện đại: giải nén hàng loạt, nén, xem bên trong, kiểm tra, mã băm, menu chuột phải Explorer. Chạy hoàn toàn cục bộ bằng 7-Zip đi kèm. Giao diện mặc định tiếng Anh, đổi được sang tiếng Nhật và tiếng Việt.
+Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nhưng giao diện hiện đại: giải nén hàng loạt, nén, xem bên trong, kiểm tra, mã băm, menu chuột phải Explorer, và khôi phục mật khẩu ZIP (cho file của chính người dùng). Chạy hoàn toàn cục bộ bằng 7-Zip đi kèm. Giao diện mặc định tiếng Anh, đổi được sang Nhật, Việt, Trung giản thể (zh-Hans) và Trung phồn thể (zh-Hant). Khi thêm khóa dịch phải cập nhật cả 5 file trong `locales/`; `zh-Hant.json` được sinh từ `zh-Hans.json` bằng OpenCC (`s2twp`) lúc build, không sửa tay.
 
 ## 2. Tính năng đã hoàn thành
 
@@ -26,10 +26,14 @@ Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nh�
 - `electron/formats.cjs`: danh sách định dạng, tên gốc, nhận diện file nhiều phần.
 - `electron/shell-icons.cjs` + `shell-icons.ps1`: biểu tượng/ảnh thu nhỏ thật của Windows cho bảng chọn file (PowerShell chạy suốt phiên, có cache). Không dùng `createThumbnailFromPath` (chỉ đọc cache, lỗi với file nén) hay chỉ `getFileIcon` (tối đa 32 px).
 - `electron/shell-integration.cjs`: tạo file `.reg` (UTF-16LE) và `reg import`/`reg delete` dưới HKCU.
+- `electron/password-tools.cjs` + `tool-sources.json`: dò công cụ khôi phục trong `tools/<id>/`, tải tự động từ GitHub Releases có xác minh SHA-256 (chỉ bkcrack có; hashcat/john tải thủ công), giải nén bằng 7-Zip. Tải về `%APPDATA%\quick-extract-ultra\tools`.
+- `electron/password-recovery.cjs`: engine khôi phục mật khẩu ZIP. Chọn chiến lược: ZipCrypto + file gốc → bkcrack; AES → hashcat (GPU) mode 13600; còn lại/không GPU → john (CPU). Đọc hash bằng `zip2john` (thuộc john) nên john là công cụ nền; hashcat chỉ tăng tốc AES. Parser cho hashcat `--status-json`, john `--status`, bkcrack. Tạm dừng/tiếp tục bằng session restore của hashcat/john; hủy bằng taskkill + kill. Gọi mọi công cụ như tiến trình riêng, không trộn code.
+- `src/RecoverView.tsx`: giao diện khôi phục (đồng ý tải, tiến độ, tốc độ/ETA, tạm dừng/hủy, hiện mật khẩu, giải nén ngay).
+- `tools/`: README + `wordlists/common-passwords.txt` (wordlist kèm sẵn, MIT). Công cụ bẻ khóa KHÔNG kèm sẵn.
 - `electron/settings.cjs`, `password-queue.cjs`, `folder-browser.cjs`, `folder-view.*`, `preload.cjs`.
 - `src/App.tsx` (khung, thẻ Giải nén, xử lý lệnh), `CompressView.tsx`, `BrowseView.tsx`, `ToolsView.tsx`, `SettingsDialog.tsx`, `ArchivePicker.tsx`, `i18n.tsx`, `types.d.ts`.
 - `locales/{en,ja,vi}.json`: bản dịch dùng chung cho renderer và main. Thêm khóa mới vào cả 3 file.
-- `scripts/extraction.test.cjs`, `scripts/ultra.test.cjs` (`npm test`), `scripts/smoke-test.cjs` (`npm run test:ui`, tạo ảnh trong `docs/screenshots/`).
+- `scripts/extraction.test.cjs`, `scripts/ultra.test.cjs`, `scripts/recovery.test.cjs` (`npm test`), `scripts/smoke-test.cjs` (`npm run test:ui`, tạo ảnh trong `docs/screenshots/`).
 - `build/icon.ico`, `build/installer.nsh` (gỡ menu Explorer khi gỡ cài đặt).
 - `README.md` (EN), `docs/README.ja.md`, `docs/README.vi.md`; `.github/` (workflow phát hành, mẫu issue, FUNDING.yml giữ chỗ).
 
@@ -66,6 +70,8 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 - Chưa có chữ ký số nên SmartScreen cảnh báo lần đầu chạy.
 - Menu Windows 11 kiểu mới (không qua "Show more options") cần sparse package/IExplorerCommand; chưa làm.
 - Mục ủng hộ trong README và `.github/FUNDING.yml` đang để giữ chỗ; chủ dự án sẽ tạo tài khoản rồi nhờ AI điền.
+- Khôi phục mật khẩu: hashcat/john tải thủ công (không có nguồn checksum tự động ổn định); engine chạy thật đã kiểm chứng với bkcrack, hashcat/john mới kiểm bằng giả lập (cần GPU/bản john Windows để chạy thật). Pause/resume dựa vào session restore của công cụ.
+- Giấy phép: tuyệt đối không nhúng hay biên dịch bkcrack/hashcat/john vào app (john là GPL). Chỉ gọi tiến trình.
 - Ý tưởng tiếp: tạo SFX, chuyển đổi định dạng, xem trước ảnh/văn bản trong file nén, sửa file nén (thêm/xóa mục).
 
 ## 7. Những điểm tuyệt đối cần giữ an toàn

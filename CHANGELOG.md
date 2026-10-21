@@ -9,6 +9,28 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.1.0 - 2026-10-21
+
+### Added
+
+- **Recover ZIP password** tab, for ZIP files you own or are allowed to open (an on-screen note states this). It runs three well-known open-source tools as **separate processes** (never compiled in, so their licenses — including John's GPL — do not reach this app's MIT code):
+  - **bkcrack** (zlib) for a legacy ZipCrypto archive when you still have one original file from inside it (fastest).
+  - **hashcat** (MIT) on the GPU for AES ZIPs, John the Ripper jumbo (GPLv2+) on the CPU otherwise; wordlist first, then brute force by chosen charset/length.
+  - The hash itself is read with John's `zip2john`, so John is the base tool; hashcat is an optional GPU accelerator; bkcrack is the standalone fast path.
+  - UI: choose ZIP, known-file picker for ZipCrypto, wordlist selector (a small `common-passwords.txt` ships with the app), brute-force charset/length, device choice, progress with speed and ETA, Pause/Resume (via hashcat/John restore sessions) and Cancel, the found password with copy, and "Extract now".
+  - Tools are **not bundled**. Each has an opt-in automatic download (consent box with name, license, size and official source; SHA-256 verified against the source's published digest, discarded on mismatch) and an always-available manual button to the official page. The app never re-hosts the files; downloads go to `%APPDATA%\quick-extract-ultra	ools\`. Only bkcrack currently offers a verified automatic download; hashcat and John are manual, with the reason shown.
+- Two more interface languages: **Simplified Chinese (简体中文)** and **Traditional Chinese (繁體中文)**, as separate options. The app now has five languages.
+
+### Verified
+
+- `npm test` 42/42 (adds recovery: output parsers for hashcat/John/bkcrack, charset/length helpers, no-verified-auto-download for hashcat/John, tool detection under `tools/<id>/`, engine routing AES→hashcat and ZipCrypto→John and bkcrack with a known file, unprotected-ZIP rejection, Cancel, the bundled wordlist, and that all five locales share the same keys and placeholders).
+- Real end-to-end checks on this machine: auto-downloaded bkcrack 1.8.1 from its official GitHub release, verified its published SHA-256, extracted and detected it; then recovered the real password of a ZipCrypto archive from a known plaintext file, through the engine, with live progress.
+- `npm run typecheck`, `npm run build`; `npm run test:ui` adds a check for five languages and the recovery tab.
+
+### Package
+
+- Bundles `tools/wordlists/common-passwords.txt` as a resource. Outputs: `QuickExtractUltra-Setup-2.1.0.exe`, `QuickExtractUltra-Portable-2.1.0-win-x64.zip`.
+
 ## 2.0.2 - 2026-10-21
 
 ### Changed

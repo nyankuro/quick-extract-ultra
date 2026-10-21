@@ -9,7 +9,7 @@ const DEFAULT_SETTINGS = {
   propagateZone: true,
   trashAfterExtract: false
 };
-const LANGUAGES = new Set(['en', 'ja', 'vi']);
+const LANGUAGES = new Set(['en', 'ja', 'vi', 'zh-Hans', 'zh-Hant']);
 
 function sanitize(input = {}) {
   return {

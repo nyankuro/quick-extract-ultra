@@ -37,5 +37,18 @@ contextBridge.exposeInMainWorld('quickExtract', {
   createArchive: (options) => ipcRenderer.invoke('archive:create', options),
   hashFile: (filePath, algorithms) => ipcRenderer.invoke('hash:file', { filePath, algorithms }),
   showItemInFolder: (itemPath) => ipcRenderer.invoke('shell:show-item', itemPath),
-  getShellIcons: (paths, size) => ipcRenderer.invoke('shell:icons', { paths, size })
+  getShellIcons: (paths, size) => ipcRenderer.invoke('shell:icons', { paths, size }),
+
+  listTools: () => ipcRenderer.invoke('tools:list'),
+  openToolPage: (url) => ipcRenderer.invoke('tools:open-page', url),
+  openToolsFolder: () => ipcRenderer.invoke('tools:open-folder'),
+  downloadTool: (toolId, consent) => ipcRenderer.invoke('tools:download', { toolId, consent }),
+  onToolProgress: (callback) => subscribe('tools:progress', callback),
+  inspectZip: (zipPath) => ipcRenderer.invoke('recovery:inspect', { zipPath }),
+  startRecovery: (options) => ipcRenderer.invoke('recovery:start', options),
+  pauseRecovery: () => ipcRenderer.invoke('recovery:pause'),
+  resumeRecovery: () => ipcRenderer.invoke('recovery:resume'),
+  cancelRecovery: () => ipcRenderer.invoke('recovery:cancel'),
+  recoveryExtract: (options) => ipcRenderer.invoke('recovery:extract', options),
+  onRecoveryEvent: (callback) => subscribe('recovery:event', callback)
 });

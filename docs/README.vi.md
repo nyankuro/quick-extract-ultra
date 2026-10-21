@@ -6,7 +6,7 @@
 
 **Phần mềm nén và giải nén miễn phí, dễ dùng cho Windows. Giải nén, nén, xem bên trong và kiểm tra ZIP, 7Z, RAR cùng hơn 30 định dạng khác.**
 
-[English](../README.md) · [日本語](README.ja.md) · **Tiếng Việt**
+[English](../README.md) · [日本語](README.ja.md) · **Tiếng Việt** · 简体中文 · 繁體中文
 
 [![Bản mới nhất](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=t%E1%BA%A3i%20v%E1%BB%81&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](../LICENSE)
@@ -26,7 +26,7 @@ Làm được những việc như WinRAR hay 7-Zip, nhưng với giao diện hi�
 - 🔐 **Mật khẩu không làm kẹt hàng chờ.** File có mật khẩu sẽ đợi bạn, các file khác vẫn tiếp tục giải nén.
 - 🧠 **Giải nén thông minh** tránh tình trạng "thư mục nằm trong thư mục trùng tên".
 - 🛡️ **An toàn ngay từ thiết kế.** Không bao giờ ghi đè, không để lại kết quả dở dang, và file tải từ mạng vẫn giữ cảnh báo an toàn của Windows.
-- 🌏 **English, 日本語 và Tiếng Việt**, đổi bất cứ lúc nào.
+- 🌏 **Năm ngôn ngữ** — English, 日本語, Tiếng Việt, 简体中文, 繁體中文 — đổi bất cứ lúc nào.
 - 💻 **Chạy hoàn toàn trên máy.** File của bạn không bao giờ bị gửi đi đâu.
 
 ## Tính năng
@@ -54,6 +54,17 @@ Làm được những việc như WinRAR hay 7-Zip, nhưng với giao diện hi�
 | <img src="screenshots/tools.png" width="440" /> | <img src="screenshots/extract-password.png" width="440" /> |
 
 </details>
+
+## Khôi phục mật khẩu ZIP đã quên
+
+Thẻ **Khôi phục mật khẩu ZIP** giúp bạn mở lại một file ZIP **thuộc quyền của bạn hoặc bạn được phép mở** (app có dòng nhắc điều này). App không tự chứa mã bẻ khóa nào — nó chạy ba công cụ mã nguồn mở nổi tiếng như các chương trình riêng, nên giấy phép của chúng (kể cả GPL của John) không lây sang app:
+
+- **bkcrack** — nếu ZIP dùng định dạng cũ ZipCrypto và bạn còn một file gốc (chưa mã hóa) nằm trong đó, công cụ này khôi phục mật khẩu rất nhanh.
+- **hashcat** (GPU) và **John the Ripper** (CPU) — nếu không, app đọc mã băm của ZIP bằng `zip2john` của John rồi dò mật khẩu: thử danh sách mật khẩu trước (có kèm sẵn một danh sách nhỏ các mật khẩu phổ biến), sau đó dò toàn bộ theo bộ ký tự và độ dài bạn chọn. Với ZIP mã hóa AES thì dùng GPU qua hashcat; nếu không thì dùng John trên CPU.
+
+Các công cụ này **không kèm sẵn** và không bao giờ được host lại. Trong app, bạn thêm từng công cụ bằng **tải tự động** (hộp xác nhận ghi rõ tên, giấy phép, dung lượng và nguồn chính thức, và file tải được kiểm tra với mã SHA-256 mà nguồn công bố) hoặc **thủ công** từ trang chính thức. File tải lưu trong `%APPDATA%\quick-extract-ultra\tools\`. John là công cụ nền (`zip2john` của nó đọc mã băm); hashcat là phần tăng tốc GPU tùy chọn; bkcrack là đường nhanh độc lập.
+
+Thẻ này hiện tiến độ, tốc độ và thời gian ước tính, kèm Tạm dừng, Tiếp tục và Hủy. Khi tìm ra mật khẩu, nó được hiển thị rõ ràng kèm nút sao chép và nút **Giải nén ngay**.
 
 ## Tải về và cài đặt
 

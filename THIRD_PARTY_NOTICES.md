@@ -23,3 +23,22 @@ Electron is MIT licensed. Chromium and Node.js licenses are included in the pack
 ## JavaScript libraries
 
 React, React DOM (MIT) and lucide-react (ISC) are bundled into the interface.
+
+## ZIP password recovery tools (not bundled)
+
+The optional **Recover ZIP password** feature (for your own files) runs these
+tools as separate programs. They are **not** included with Quick Extract Ultra
+and are never re-hosted by it. You add them yourself, from their official
+sources, with the in-app download or manually. Each keeps its own license.
+
+- **bkcrack** — zlib license — https://github.com/kimci86/bkcrack
+- **hashcat** — MIT license — https://hashcat.net/hashcat/
+- **John the Ripper (jumbo)** — GPLv2+ (with some components under other free
+  licenses) — https://www.openwall.com/john/
+
+Because these run as separate processes, their licenses (including John's GPL)
+do not extend to Quick Extract Ultra's own MIT-licensed code.
+
+The built-in `tools/wordlists/common-passwords.txt` is a short list of very
+common passwords assembled for this project and is released under the same MIT
+license as the app.
