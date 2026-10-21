@@ -36,5 +36,6 @@ contextBridge.exposeInMainWorld('quickExtract', {
   testArchive: (archivePath, password) => ipcRenderer.invoke('archive:test', { archivePath, password }),
   createArchive: (options) => ipcRenderer.invoke('archive:create', options),
   hashFile: (filePath, algorithms) => ipcRenderer.invoke('hash:file', { filePath, algorithms }),
-  showItemInFolder: (itemPath) => ipcRenderer.invoke('shell:show-item', itemPath)
+  showItemInFolder: (itemPath) => ipcRenderer.invoke('shell:show-item', itemPath),
+  getShellIcons: (paths, size) => ipcRenderer.invoke('shell:icons', { paths, size })
 });

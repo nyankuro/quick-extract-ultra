@@ -11,6 +11,7 @@ const { isArchiveFile, archiveBaseName, archiveFormatLabel, EXTRACT_EXTENSIONS, 
 const { listArchive, testArchive, createArchive, hashFile, HASH_ALGORITHMS } = require('./archive-ops.cjs');
 const { SettingsStore } = require('./settings.cjs');
 const { registerContextMenu, unregisterContextMenu, isContextMenuRegistered } = require('./shell-integration.cjs');
+const { ShellIcons } = require('./shell-icons.cjs');
 const locales = {
   en: require('../locales/en.json'),
   ja: require('../locales/ja.json'),
@@ -125,6 +126,10 @@ if (hasInstanceLock) {
     });
   });
 }
+
+// Explorer's own icons for the file picker; app.getFileIcon (32 px) is the fallback.
+const shellIcons = new ShellIcons(async (filePath) => (await app.getFileIcon(filePath, { size: 'large' })).toDataURL());
+app.on('will-quit', () => shellIcons.stop());
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -664,6 +669,14 @@ ipcMain.handle('hash:file', async (_event, { filePath, algorithms }) => asResult
   requirePath(filePath, 'File');
   return hashFile(filePath, Array.isArray(algorithms) ? algorithms : HASH_ALGORITHMS, (progress) => sendTaskProgress('hash', progress));
 }));
+
+ipcMain.handle('shell:icons', async (_event, { paths, size }) => {
+  const icons = {};
+  for (const item of requireStringArray(paths, 'Paths').slice(0, 400)) {
+    icons[item] = await shellIcons.get(item, Number(size) || 64).catch(() => '');
+  }
+  return icons;
+});
 
 ipcMain.handle('shell:show-item', async (_event, itemPath) => {
   shell.showItemInFolder(requirePath(itemPath, 'Item'));

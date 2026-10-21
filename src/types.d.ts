@@ -167,6 +167,7 @@ declare global {
       createArchive: (options: CreateArchiveOptions) => Promise<TaskResult<{ outputPath: string; files: string[] }>>;
       hashFile: (filePath: string, algorithms?: string[]) => Promise<TaskResult<HashResult>>;
       showItemInFolder: (itemPath: string) => Promise<void>;
+      getShellIcons: (paths: string[], size: number) => Promise<Record<string, string>>;
     };
   }
 }

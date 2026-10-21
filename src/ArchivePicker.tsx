@@ -78,6 +78,7 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
     readStored(SORT_KEY, { key: 'modified', descending: true }, (value) =>
       Boolean(value) && ['name', 'modified', 'type', 'size'].includes((value as { key: string }).key)));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [icons, setIcons] = useState<Record<string, string>>({});
   const menuRef = useRef<HTMLDivElement>(null);
 
   const navigate = useCallback(async (path?: string) => {
@@ -127,6 +128,25 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
     return list.sort((a, b) => direction * compare(a, b) || a.name.localeCompare(b.name));
   }, [folder, sort]);
 
+  const current = VIEWS.find((item) => item.id === view) ?? VIEWS[0];
+  // Ask for roughly 1.5x the drawn size so icons stay sharp on high-DPI screens.
+  const iconRequestSize = Math.min(256, Math.ceil(current.iconSize * 1.5));
+
+  // Load Explorer's own icons in small batches, nearest items first.
+  useEffect(() => {
+    if (!folder || !entries.length) return;
+    let cancelled = false;
+    const wanted = entries.map((entry) => entry.path);
+    void (async () => {
+      for (let index = 0; index < wanted.length && !cancelled; index += 24) {
+        const batch = wanted.slice(index, index + 24);
+        const loaded = await window.quickExtract.getShellIcons(batch, iconRequestSize).catch(() => ({}));
+        if (!cancelled) setIcons((previous) => ({ ...previous, ...Object.fromEntries(Object.entries(loaded).map(([key, value]) => [`${iconRequestSize}|${key}`, value])) }));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [folder, entries, iconRequestSize]);
+
   const chooseView = (next: PickerView) => {
     setView(next);
     store(VIEW_KEY, next);
@@ -165,7 +185,6 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
     finally { setBusy(false); }
   };
 
-  const current = VIEWS.find((item) => item.id === view) ?? VIEWS[0];
   const CurrentIcon = current.icon;
   const sortLabel = t(`picker.sort.${sort.key}`);
   const header = (key: SortKey) => (
@@ -237,7 +256,9 @@ export default function ArchivePicker({ initialFolderPath, onChoose, onClose }: 
               onKeyDown={(event) => { if (entry.isDirectory && event.key === 'Enter') { event.preventDefault(); void navigate(entry.path); } }}
             >
               {isSelected && <Check className="picker-check" size={18} />}
-              {entry.isDirectory
+              {icons[`${iconRequestSize}|${entry.path}`]
+                ? <img className="picker-file-icon picker-shell-icon" src={icons[`${iconRequestSize}|${entry.path}`]} alt="" draggable={false} />
+                : entry.isDirectory
                 ? <Folder className="picker-file-icon folder-icon" size={current.iconSize} strokeWidth={current.iconSize > 40 ? 1.2 : 1.8} />
                 : <Archive className="picker-file-icon" size={current.iconSize} strokeWidth={current.iconSize > 40 ? 1.2 : 1.8} />}
               <strong className="picker-name">{entry.name}</strong>

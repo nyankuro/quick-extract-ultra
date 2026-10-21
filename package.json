@@ -1,6 +1,6 @@
 {
   "name": "quick-extract-ultra",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Free, open-source archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese and Vietnamese.",
   "main": "electron/main.cjs",
   "scripts": {
@@ -61,6 +61,7 @@
     ],
     "asarUnpack": [
       "electron/folder-view.ps1",
+      "electron/shell-icons.ps1",
       "node_modules/7zip-bin-full/**/*"
     ],
     "win": {

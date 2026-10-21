@@ -9,6 +9,26 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.0.2 - 2026-10-21
+
+### Changed
+
+- The archive picker shows the real Windows icons and thumbnails, the same ones Explorer shows (for example the WinRAR icon for archives when WinRAR is installed, and the Windows folder icon), in every view. They come from the Windows Shell image factory through a small PowerShell helper (`electron/shell-icons.ps1`) that stays open for the session; icons are cached and requested at about 1.5x their drawn size so they stay sharp. If the helper fails, `app.getFileIcon` (32 px) and then the built-in drawing are used.
+
+### Found
+
+- `nativeImage.createThumbnailFromPath` only reads Explorer's thumbnail cache and failed for archives and folders; `app.getFileIcon` is limited to 32 px on Windows, too small for the extra large view.
+
+### Verified
+
+- `npm run typecheck`, `npm test` 29/29, `npm run test:ui` pass.
+- `scripts/picker-preview.cjs` now waits until all 32 entries show shell icons and checks every view for overflow at 1280x800.
+- Packaged build: the helper script is unpacked next to `app.asar` and returns icons.
+
+### Package
+
+- `electron/shell-icons.ps1` added to `asarUnpack`. Outputs: `QuickExtractUltra-Setup-2.0.2.exe`, `QuickExtractUltra-Portable-2.0.2-win-x64.zip`.
+
 ## 2.0.1 - 2026-10-21
 
 ### Fixed

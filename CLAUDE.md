@@ -24,6 +24,7 @@ Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nh�
 - `electron/extraction.cjs`: chạy 7-Zip (`runSevenZipCommand`), staging, smart, tar lồng, giải nén một phần qua list file.
 - `electron/archive-ops.cjs`: liệt kê, kiểm tra, tạo file nén, mã băm.
 - `electron/formats.cjs`: danh sách định dạng, tên gốc, nhận diện file nhiều phần.
+- `electron/shell-icons.cjs` + `shell-icons.ps1`: biểu tượng/ảnh thu nhỏ thật của Windows cho bảng chọn file (PowerShell chạy suốt phiên, có cache). Không dùng `createThumbnailFromPath` (chỉ đọc cache, lỗi với file nén) hay chỉ `getFileIcon` (tối đa 32 px).
 - `electron/shell-integration.cjs`: tạo file `.reg` (UTF-16LE) và `reg import`/`reg delete` dưới HKCU.
 - `electron/settings.cjs`, `password-queue.cjs`, `folder-browser.cjs`, `folder-view.*`, `preload.cjs`.
 - `src/App.tsx` (khung, thẻ Giải nén, xử lý lệnh), `CompressView.tsx`, `BrowseView.tsx`, `ToolsView.tsx`, `SettingsDialog.tsx`, `ArchivePicker.tsx`, `i18n.tsx`, `types.d.ts`.
@@ -74,7 +75,7 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 - Không đưa mật khẩu vào command-line args, log, file tạm hoặc lưu bền vững. Luồng hiện tại gửi mật khẩu qua stdin và xóa khỏi hàng đợi khi dùng/kết thúc.
 - Giữ bảo vệ không cho chạy hai batch chồng nhau và giữ cách xử lý yêu cầu mật khẩu để tiến trình không treo vì prompt ẩn.
 - Không nới lỏng Electron security settings hoặc expose API Node/IPC thô cho renderer. Khi thêm IPC, thêm API tối thiểu ở preload và cập nhật `src/types.d.ts`.
-- Không bỏ `asarUnpack` cho binary 7-Zip và script PowerShell: chúng cần file vật lý có thể chạy trong bản đóng gói.
+- Không bỏ `asarUnpack` cho binary 7-Zip và các script PowerShell (`folder-view.ps1`, `shell-icons.ps1`): chúng cần file vật lý có thể chạy trong bản đóng gói.
 - Không thay đổi chế độ xem Explorer theo hướng sửa cài đặt toàn cục; helper chỉ nên tác động tới thư mục được mở.
 - Nếu đổi giao thức sự kiện IPC hoặc trạng thái archive, cập nhật đồng bộ main, preload, types, UI và kiểm thử liên quan.
 - Mỗi thay đổi ứng dụng phải cập nhật `CHANGELOG.md` theo mẫu hiện có: phiên bản/ngày, thay đổi, lỗi/cách sửa, xác minh và tác động đóng gói/shortcut nếu có.

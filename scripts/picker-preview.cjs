@@ -51,6 +51,8 @@ async function main() {
   for (const view of views) {
     await window.webContents.executeJavaScript(`document.querySelector('.picker-view-menu [data-view="${view}"]').click()`);
     await until(`document.querySelector('.picker-grid').dataset.view === '${view}'`);
+    // Explorer's own icons replace the placeholders once loaded.
+    await until("document.querySelectorAll('.picker-shell-icon').length === 32");
     await window.webContents.executeJavaScript('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
     // Fail if any tile's text spills outside its own box or overlaps the next tile.
     const overlap = await window.webContents.executeJavaScript(`(() => {

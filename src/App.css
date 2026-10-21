@@ -817,6 +817,11 @@ button:disabled {
   color: #ffcc75;
 }
 
+.picker-shell-icon {
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+
 .picker-name {
   width: 100%;
   min-width: 0;
