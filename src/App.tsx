@@ -13,7 +13,6 @@ import {
   FolderOutput,
   FolderSearch,
   HardDrive,
-  Heart,
   Languages,
   LoaderCircle,
   LockKeyhole,
@@ -51,6 +50,47 @@ import type {
 
 export type AddLog = (level: ActivityLog['level'], message: string) => void;
 type Tab = 'extract' | 'compress' | 'browse' | 'tools' | 'recover';
+
+// A little hot cup with a heart, drawn locally so it ships inside the app and
+// works offline (no remote image to load). White cup with the button colour
+// showing through the heart cut-out, plus two wisps of steam.
+function KofiIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {/* steam */}
+      <path
+        d="M9 1.6c-.9.8-.9 1.7 0 2.5M12.3 1.2c-1 .9-1 1.9 0 2.8"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
+      {/* cup body with a heart cut out of it */}
+      <path
+        fill="#fff"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M3.4 6.3h11.1v6.2a5.55 5.55 0 0 1-11.1 0V6.3Zm5.55 2.0c-1.05-1.15-3.1-.5-3.1 1.1 0 1.55 3.1 3.5 3.1 3.5s3.1-1.95 3.1-3.5c0-1.6-2.05-2.25-3.1-1.1Z"
+      />
+      {/* handle */}
+      <path
+        fill="none"
+        stroke="#fff"
+        strokeWidth="1.9"
+        d="M15.2 7.6h1.9a3.1 3.1 0 0 1 0 6.2h-1.1"
+      />
+      {/* saucer */}
+      <rect x="2.4" y="19.1" width="13.1" height="2.3" rx="1.15" fill="#fff" />
+    </svg>
+  );
+}
 
 const STATUS_KEYS: Record<ArchiveStatus, string> = {
   ready: 'status.ready',
@@ -716,7 +756,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
                   onClick={() => void window.quickExtract.openToolPage('https://ko-fi.com/nyannyankuro')}
                   title="ko-fi.com/nyannyankuro"
                 >
-                  <Heart size={15} aria-hidden="true" />
+                  <KofiIcon />
                   {t('support.button')}
                 </button>
                 <span className="kofi-caption">{t('support.caption')}</span>

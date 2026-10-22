@@ -9,6 +9,20 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.7 - 2026-10-22
+
+### Changed
+
+- The **"Support me"** button now shows a little coffee-cup-with-heart icon instead of the plain heart, matching the "buy me a coffee" feel of the Ko-fi page. The icon is an original SVG drawn in the app code (`KofiIcon` in `src/App.tsx`), so it ships inside the app and works fully offline — nothing is loaded from a remote server, and it is not a copy of any third-party logo. The button keeps its pink colour and caption.
+
+### Verification
+
+- `npm run typecheck`, `npm test` (all suites pass), `npm run build`.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.7.exe`, `QuickExtractUltra-Portable-2.2.7-win-x64.zip`.
+
 ## 2.2.6 - 2026-10-22
 
 ### Added

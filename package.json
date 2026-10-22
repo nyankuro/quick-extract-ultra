@@ -1,6 +1,6 @@
 {
   "name": "quick-extract-ultra",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "Free, open-source archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese and Vietnamese.",
   "main": "electron/main.cjs",
   "scripts": {
