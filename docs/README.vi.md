@@ -149,9 +149,8 @@ Quick Extract Ultra luôn miễn phí. Nếu nó giúp ích cho bạn, bạn có
 
 - ⭐ **Bấm Star cho kho mã này**. Việc này giúp nhiều người khác tìm thấy nó.
 - 🐛 Báo lỗi và đề xuất tính năng ở mục [Issues](https://github.com/nyankuro/quick-extract-ultra/issues).
-- ☕ Ủng hộ tài chính (sắp có):
+- ☕ **[Ủng hộ mình trên Ko-fi](https://ko-fi.com/nyannyankuro)** — trong app cũng có nút "Ủng hộ mình" ngay dưới tên ứng dụng.
   - GitHub Sponsors: *sắp có*
-  - Ko-fi: *sắp có*
   - PayPal: *sắp có*
 
 ## Giấy phép

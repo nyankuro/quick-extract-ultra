@@ -75,7 +75,7 @@ export default function SettingsDialog({ settings, appInfo, onChange, onClose, a
           <p className="muted">{t('settings.formats')}: {appInfo?.extractFormats.map((item) => item.toUpperCase()).join(', ')}</p>
           <div className="panel-actions">
             <a className="secondary-button compact" href={REPOSITORY_URL} target="_blank" rel="noreferrer"><ExternalLink size={16} />GitHub</a>
-            <a className="secondary-button compact support-link" href={`${REPOSITORY_URL}#support-the-project`} target="_blank" rel="noreferrer"><Heart size={16} />{t('settings.support')}</a>
+            <a className="secondary-button compact support-link" href="https://ko-fi.com/nyannyankuro" target="_blank" rel="noreferrer"><Heart size={16} />{t('settings.support')}</a>
           </div>
           <p className="muted small-print">{t('settings.credits')}</p>
         </section>

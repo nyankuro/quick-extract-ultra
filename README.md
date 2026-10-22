@@ -153,9 +153,8 @@ Quick Extract Ultra is free and always will be. If it saves you time, you can he
 
 - ⭐ **Star this repository**. It really helps others find it.
 - 🐛 Report bugs and suggest features in [Issues](https://github.com/nyankuro/quick-extract-ultra/issues).
-- ☕ Donations (coming soon):
+- ☕ **[Support me on Ko-fi](https://ko-fi.com/nyannyankuro)** — there's also a "Support me" button in the app, under the title.
   - GitHub Sponsors: *coming soon*
-  - Ko-fi: *coming soon*
   - PayPal: *coming soon*
 
 ## License

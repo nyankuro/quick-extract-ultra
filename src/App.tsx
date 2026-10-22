@@ -13,6 +13,7 @@ import {
   FolderOutput,
   FolderSearch,
   HardDrive,
+  Heart,
   Languages,
   LoaderCircle,
   LockKeyhole,
@@ -708,6 +709,18 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
             <div>
               <h1>Quick Extract <em>Ultra</em>{appInfo?.version && <small className="app-version">v{appInfo.version}</small>}</h1>
               <span>{notice || t('notice.ready')}</span>
+              <div className="kofi-row">
+                <button
+                  className="kofi-button"
+                  type="button"
+                  onClick={() => void window.quickExtract.openToolPage('https://ko-fi.com/nyannyankuro')}
+                  title="ko-fi.com/nyannyankuro"
+                >
+                  <Heart size={15} aria-hidden="true" />
+                  {t('support.button')}
+                </button>
+                <span className="kofi-caption">{t('support.caption')}</span>
+              </div>
             </div>
           </div>
           <nav className="tab-bar" aria-label={t('tab.label')}>

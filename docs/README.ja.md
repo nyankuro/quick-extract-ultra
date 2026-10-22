@@ -149,9 +149,8 @@ Quick Extract Ultra はこれからもずっと無料です。役に立ったら
 
 - ⭐ **このリポジトリにスターを付ける**。他の人が見つけやすくなります。
 - 🐛 [Issues](https://github.com/nyankuro/quick-extract-ultra/issues) でバグ報告や機能の提案。
-- ☕ 寄付（準備中）：
+- ☕ **[Ko-fi で応援する](https://ko-fi.com/nyannyankuro)** — アプリ内のタイトル下にも「応援する」ボタンがあります。
   - GitHub Sponsors：*準備中*
-  - Ko-fi：*準備中*
   - PayPal：*準備中*
 
 ## ライセンス

@@ -9,6 +9,17 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.6 - 2026-10-22
+
+### Added
+
+- A pink **"Support me"** button under the app title that opens the project's Ko-fi page (`ko-fi.com/nyannyankuro`) in the default browser, with a small friendly caption beside it. Implemented as a **native button** that opens the page externally rather than injecting Ko-fi's remote overlay-widget `<script>` — this keeps the Electron renderer free of third-party remote code (safer, and not blocked by the app's isolation). The button label and caption are in all five languages.
+- README "Support the project" sections (EN/JA/VI), `.github/FUNDING.yml`, and the Settings "Support the project" link now point to the Ko-fi page.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.6.exe`, `QuickExtractUltra-Portable-2.2.6-win-x64.zip`.
+
 ## 2.2.5 - 2026-10-22
 
 ### Added

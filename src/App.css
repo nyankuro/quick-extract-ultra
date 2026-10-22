@@ -2115,3 +2115,53 @@ input:focus-visible,
   font-size: 13px;
 }
 .expectations-note svg { flex: 0 0 auto; color: var(--cyan-soft); }
+
+/* Ko-fi support button under the app name. */
+.kofi-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  background: #ff38b8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255, 56, 184, 0.3);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.kofi-button:hover {
+  background: #ff5ac6;
+  box-shadow: 0 0 28px rgba(255, 56, 184, 0.45);
+}
+
+.kofi-button:active {
+  transform: translateY(1px);
+}
+
+.kofi-button svg {
+  fill: currentColor;
+}
+
+.kofi-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.kofi-row .kofi-button {
+  margin-top: 0;
+}
+
+.kofi-caption {
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 340px;
+  line-height: 1.4;
+}
