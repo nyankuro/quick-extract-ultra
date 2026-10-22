@@ -96,14 +96,26 @@ class RecoveryJob {
     this.paused = false;
     this.restore = null;                     // () => childPromise to resume
     this.decryptedZipPath = '';
+    // Power level keeps the machine from running flat out and overheating.
+    const cores = Math.max(1, require('node:os').cpus().length || 4);
+    this.power = options.power === 'eco' || options.power === 'max' ? options.power : 'balanced';
+    this.threads = this.power === 'eco' ? Math.max(1, Math.floor(cores / 4))
+      : this.power === 'max' ? cores
+      : Math.max(1, Math.floor(cores / 2));
+    this.workload = this.power === 'eco' ? '1' : this.power === 'max' ? '3' : '2';
+  }
+
+  // Env that caps CPU threads (OpenMP) for John/zip2john so the machine stays cooler.
+  cpuEnv() {
+    return { ...process.env, OMP_NUM_THREADS: String(this.threads), OMP_THREAD_LIMIT: String(this.threads) };
   }
 
   log(message) { this.emit({ type: 'info', message }); }
 
-  run(exePath, args, { onLine, onStdout, onStderr, cwd } = {}) {
+  run(exePath, args, { onLine, onStdout, onStderr, cwd, env } = {}) {
     return new Promise((resolve, reject) => {
       if (this.cancelled) { reject(Object.assign(new Error('cancelled'), { code: 'CANCELLED' })); return; }
-      const child = this.spawn(exePath, args, { cwd: cwd || this.workDir, windowsHide: true });
+      const child = this.spawn(exePath, args, { cwd: cwd || this.workDir, windowsHide: true, ...(env ? { env } : {}) });
       this.child = child;
       let tail = '';
       const feed = (chunk) => {
@@ -164,7 +176,7 @@ class RecoveryJob {
     this.emit({ type: 'stage', stage: 'bkcrack', entry: cipherEntry });
     this.log(`bkcrack: ${cipherEntry}`);
     let keys = null;
-    await this.run(bkcrack, ['-C', this.options.zipPath, '-c', cipherEntry, '-p', plain], {
+    await this.run(bkcrack, ['-C', this.options.zipPath, '-c', cipherEntry, '-p', plain, '-t', String(this.threads)], {
       onLine: (line) => {
         const parsed = parseBkcrackLine(line);
         if (!parsed) return;
@@ -225,7 +237,7 @@ class RecoveryJob {
     const potfile = path.join(this.workDir, 'hashcat.pot');
     const outfile = path.join(this.workDir, 'found.txt');
     const restoreFile = path.join(this.workDir, `${this.session}.restore`);
-    const base = ['-m', mode, '--status', '--status-json', '--status-timer', '1', '--potfile-path', potfile, '-o', outfile, '--outfile-format', '2', '--session', this.session, '--restore-file-path', restoreFile, '-w', '3'];
+    const base = ['-m', mode, '--status', '--status-json', '--status-timer', '1', '--potfile-path', potfile, '-o', outfile, '--outfile-format', '2', '--session', this.session, '--restore-file-path', restoreFile, '-w', this.workload];
     const attack = this.options.attack || {};
     const stages = [];
     if (attack.mode === 'bruteforce') {
@@ -237,11 +249,11 @@ class RecoveryJob {
     } else if (attack.mode === 'wordlist') {
       if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath]);
     } else {
-      // Auto (default): most effective real-world order — common passwords with
-      // rules, then digits (PINs/dates), then a Markov-ordered mixed search.
+      // Auto (default): digits first (PINs/dates) for fast wins, then common passwords
+      // with rules, then a Markov-ordered mixed search.
       const rule = path.join(path.dirname(this.tools.hashcat), 'rules', 'best64.rule');
-      if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath, ...(await pathExists(rule) ? ['-r', rule] : [])]);
       stages.push(['-a', '3', hashPath, '?d'.repeat(10), '--increment', '--increment-min', '1']);
+      if (attack.wordlistPath) stages.push(['-a', '0', hashPath, attack.wordlistPath, ...(await pathExists(rule) ? ['-r', rule] : [])]);
       stages.push(['-a', '3', '-1', '?l?u?d', hashPath, '?1'.repeat(8), '--increment', '--increment-min', '1']);
     }
     this.emit({ type: 'stage', stage: 'hashcat', device: 'gpu', mode });
@@ -286,12 +298,13 @@ class RecoveryJob {
     } else if (attack.mode === 'wordlist') {
       if (attack.wordlistPath) stages.push([`--wordlist=${attack.wordlistPath}`]);
     } else {
-      // Auto (default): John's own common-password list with mangling rules, then
-      // digits-only (Markov order), then its smart Markov search of mixed passwords.
+      // Auto (default): try the most likely things first so common passwords come out fast.
+      // 1) digits only (PINs/dates), 2) our short common list, 3) a bigger list + rules,
+      // 4) a Markov-ordered mixed search as the catch-all.
       const builtin = path.join(path.dirname(john), 'password.lst');
-      const wordlist = attack.wordlistPath || (await pathExists(builtin) ? builtin : '');
-      if (wordlist) stages.push([`--wordlist=${wordlist}`, '--rules']);
       stages.push(['--incremental=Digits', '--max-length=12']);
+      if (attack.wordlistPath) stages.push([`--wordlist=${attack.wordlistPath}`]);
+      if (await pathExists(builtin)) stages.push([`--wordlist=${builtin}`, '--rules']);
       stages.push(['--incremental', '--max-length=10']);
     }
     this.emit({ type: 'stage', stage: 'john', device: 'cpu' });
@@ -307,7 +320,7 @@ class RecoveryJob {
     this.restore = true;
     const resumable = await pathExists(path.join(this.workDir, `${this.session}.rec`));
     const finalArgs = resumable ? [`--restore=${this.session}`] : args;
-    return this.run(this.tools.john.exe, finalArgs, { onLine: (line) => {
+    return this.run(this.tools.john.exe, finalArgs, { env: this.cpuEnv(), onLine: (line) => {
       const status = parseJohnStatus(line);
       if (status) this.emit({ type: 'progress', percent: status.percent, speed: status.speed, eta: null, etaText: status.etaText });
     } });

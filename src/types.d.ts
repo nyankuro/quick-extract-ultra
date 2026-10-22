@@ -175,6 +175,7 @@ export interface RecoveryOptions {
   entryName?: string;
   knownPlaintextPath?: string;
   device?: 'auto' | 'gpu' | 'cpu';
+  power?: 'eco' | 'balanced' | 'max';
   attack?: {
     mode: 'auto' | 'wordlist' | 'bruteforce';
     wordlistPath?: string;

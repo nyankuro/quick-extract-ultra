@@ -76,6 +76,7 @@ export default function RecoverView({ addLog }: Props) {
   const [minLen, setMinLen] = useState(1);
   const [maxLen, setMaxLen] = useState(8);
   const [device, setDevice] = useState<'auto' | 'gpu' | 'cpu'>('auto');
+  const [power, setPower] = useState<'eco' | 'balanced' | 'max'>('balanced');
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [stage, setStage] = useState('');
@@ -200,6 +201,7 @@ export default function RecoverView({ addLog }: Props) {
       zipPath,
       knownPlaintextPath: isZipCrypto && knownPlaintext ? knownPlaintext : undefined,
       device,
+      power,
       attack: {
         mode: attackMode,
         wordlistPath: attackMode === 'bruteforce' ? undefined : wordlistPath,
@@ -447,14 +449,25 @@ export default function RecoverView({ addLog }: Props) {
               </div>
             )}
 
-            <label className="field">
-              <span>{t('recover.device')}</span>
-              <select value={device} onChange={(event) => setDevice(event.target.value as 'auto' | 'gpu' | 'cpu')} disabled={phase === 'running'}>
-                <option value="auto">{t('recover.deviceAuto')}</option>
-                <option value="gpu">{t('recover.deviceGpu')}</option>
-                <option value="cpu">{t('recover.deviceCpu')}</option>
-              </select>
-            </label>
+            <div className="field-grid">
+              <label className="field">
+                <span>{t('recover.device')}</span>
+                <select value={device} onChange={(event) => setDevice(event.target.value as 'auto' | 'gpu' | 'cpu')} disabled={phase === 'running'}>
+                  <option value="auto">{t('recover.deviceAuto')}</option>
+                  <option value="gpu">{t('recover.deviceGpu')}</option>
+                  <option value="cpu">{t('recover.deviceCpu')}</option>
+                </select>
+              </label>
+              <label className="field">
+                <span>{t('recover.power')}</span>
+                <select value={power} onChange={(event) => setPower(event.target.value as 'eco' | 'balanced' | 'max')} disabled={phase === 'running'}>
+                  <option value="eco">{t('recover.powerEco')}</option>
+                  <option value="balanced">{t('recover.powerBalanced')}</option>
+                  <option value="max">{t('recover.powerMax')}</option>
+                </select>
+              </label>
+            </div>
+            <p className="muted small-print">{t('recover.powerHint')}</p>
           </div>
 
           <div className="recover-controls">

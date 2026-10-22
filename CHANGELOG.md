@@ -9,6 +9,24 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.2 - 2026-10-22
+
+### Added
+
+- **Processing level** for password recovery: **Economy / Balanced / Maximum**, so the machine does not overheat. The default is **Balanced**, which uses about half the CPU; it scales to the computer's own core count (Economy ≈ a quarter, Maximum = all). It caps John via `OMP_NUM_THREADS`, hashcat via its workload profile (`-w 1/2/3`), and bkcrack via `-t`.
+
+### Changed
+
+- **Auto recovery tries the most likely passwords first.** New order: digits only (PINs, dates) → the built-in common-password list → a bigger list with mangling rules → a Markov-ordered mixed search. Previously the wordlist ran first, so a numeric password only came out after that finished. Now short numeric and common passwords are found much sooner.
+
+### Verified
+
+- `npm test` 42/42, typecheck, build, UI smoke test. Real end-to-end: a RAR5 archive with a 4-digit numeric password was recovered in ~30 s on Balanced (14 of 28 threads) via the digits-first stage.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.2.exe`, `QuickExtractUltra-Portable-2.2.2-win-x64.zip`.
+
 ## 2.2.1 - 2026-10-22
 
 ### Fixed
