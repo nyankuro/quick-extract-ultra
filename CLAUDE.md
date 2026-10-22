@@ -31,7 +31,7 @@ Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nh�
 - `electron/password-tools.cjs` + `tool-sources.json`: dò công cụ khôi phục trong `tools/<id>/`; tải tự động từ nguồn chính thức qua HTTPS — bkcrack qua GitHub Releases (xác minh SHA-256 bằng `asset.digest`), hashcat và john qua scrape trang chính thức (`resolveScrapeAsset`: hashcat.net, openwall.com) rồi tải, không có checksum máy kiểm được nên chỉ ghi lại SHA-256, không chặn. `setupAllTools` tải hết các công cụ chưa có. Giải nén bằng 7-Zip, tải về `%APPDATA%\quick-extract-ultra\tools`.
 - `electron/password-recovery.cjs`: engine khôi phục mật khẩu cho **ZIP và RAR**. `inspect()` nhận diện định dạng (zip/rar; RAR mã hóa header thì `listArchive` lỗi PASSWORD_REQUIRED → vẫn coi là rar). Chọn chiến lược theo loại hash: ZIP+ZipCrypto+file gốc → bkcrack; ZIP AES → hashcat GPU **13600**; **RAR5 (`$rar5$`) → hashcat GPU 13000** (đã đo thật trên RTX 3060 ~40.500 H/s); ZipCrypto/RAR3 → john (CPU). Đọc hash bằng `zip2john`/`rar2john` (cùng thư mục run/ của john). **hashcat phải chạy với cwd = thư mục chứa hashcat.exe** (nếu không sẽ không tìm thấy kernel GPU → lỗi → rơi về John); lỗi launch hashcat được nêu rõ rồi mới fallback. **Ghi hash dạng token trần** (`$zip2$…`, `$rar5$…`) vì tiền tố `name:` của *2john chứa đường dẫn có dấu `:` ổ đĩa làm john hiểu sai. `mode: 'auto'` (mặc định) = wordlist+rules → digits → incremental Markov. Parser hashcat `--status-json`, john `--status`, bkcrack. Pause/resume bằng session restore; hủy taskkill+kill. Gọi mọi công cụ như tiến trình riêng. 7z chưa hỗ trợ (7z2john là Perl, bản john Windows không kèm Perl).
 - `src/RecoverView.tsx`: giao diện khôi phục. Khi chưa có công cụ nào thì hiện màn hình cài đặt (Tải tự động tất cả / Tự thêm / nút (?) giải thích + mẹo an toàn); có công cụ rồi thì hiện giao diện đầy đủ (chọn ZIP, tiến độ, tốc độ/ETA, tạm dừng/hủy, hiện mật khẩu, giải nén ngay). Thẻ "Recover" được tô nổi bật (khung hổ phách) qua class `tab-special`.
-- `tools/`: README + `wordlists/common-passwords.txt` (wordlist kèm sẵn, MIT). Công cụ bẻ khóa KHÔNG kèm sẵn.
+- `tools/`: README + `wordlists/common-passwords.txt` (wordlist kèm sẵn, CC0). Công cụ bẻ khóa KHÔNG kèm sẵn.
 - `electron/update-check.cjs`: kiểm tra cập nhật. `compareVersions`/`interpretLatest` là hàm thuần (test được), `checkForUpdate` gọi GitHub API; IPC `update:check` → `window.quickExtract.checkForUpdate()`.
 - `electron/settings.cjs`, `password-queue.cjs`, `folder-browser.cjs`, `folder-view.*`, `preload.cjs`.
 - `src/App.tsx` (khung, thẻ Giải nén, xử lý lệnh), `CompressView.tsx`, `BrowseView.tsx`, `ToolsView.tsx`, `SettingsDialog.tsx`, `ArchivePicker.tsx`, `i18n.tsx`, `types.d.ts`.
@@ -72,9 +72,11 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 
 - Chưa có chữ ký số nên SmartScreen cảnh báo lần đầu chạy.
 - Menu Windows 11 kiểu mới (không qua "Show more options") cần sparse package/IExplorerCommand; chưa làm.
-- Mục ủng hộ trong README và `.github/FUNDING.yml` đang để giữ chỗ; chủ dự án sẽ tạo tài khoản rồi nhờ AI điền.
+- Ủng hộ: Ko-fi `nyannyankuro` đã điền (nút trong app, README, `.github/FUNDING.yml`); GitHub Sponsors/PayPal vẫn để "sắp có".
 - Khôi phục mật khẩu: hashcat/john tải thủ công (không có nguồn checksum tự động ổn định); engine chạy thật đã kiểm chứng với bkcrack, hashcat/john mới kiểm bằng giả lập (cần GPU/bản john Windows để chạy thật). Pause/resume dựa vào session restore của công cụ.
 - Giấy phép: tuyệt đối không nhúng hay biên dịch bkcrack/hashcat/john vào app (john là GPL). Chỉ gọi tiến trình.
+- Giấy phép của app (từ 2.3.0): **PolyForm Shield 1.0.0**, KHÔNG phải MIT. Chủ dự án chọn để chặn người khác bán lại: ai cũng được dùng (cả ở chỗ làm), chia sẻ, sửa để tự dùng; cấm bán hoặc đưa ra sản phẩm cạnh tranh (kể cả miễn phí). Không gọi app là "open source" (đây là source-available); dùng "miễn phí, mã nguồn công khai". `LICENSE` = văn bản gốc nguyên văn + dòng `Required Notice:`. Wordlist kèm sẵn là CC0.
+- Commit dùng email ẩn của GitHub (`56506462+nyankuro@users.noreply.github.com`, đặt trong git config cục bộ của repo), không dùng Gmail cá nhân của chủ dự án.
 - Ý tưởng tiếp: tạo SFX, chuyển đổi định dạng, xem trước ảnh/văn bản trong file nén, sửa file nén (thêm/xóa mục).
 
 ## 7. Những điểm tuyệt đối cần giữ an toàn

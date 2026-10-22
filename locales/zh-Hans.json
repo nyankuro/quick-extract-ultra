@@ -203,7 +203,7 @@
   "settings.trashAfter": "解压后把压缩包移入回收站",
   "settings.trashAfterHint": "仅在成功解压后。分卷压缩包会一起移动。可从回收站还原。",
   "settings.about": "关于",
-  "settings.aboutText": "Quick Extract Ultra 是一款免费、开源的压缩工具。一切都在你的电脑上运行，不会上传任何内容。",
+  "settings.aboutText": "Quick Extract Ultra 是一款免费的压缩工具，源代码公开在 GitHub 上。一切都在你的电脑上运行，不会上传任何内容。",
   "settings.formats": "可打开",
   "settings.support": "支持此项目",
   "settings.credits": "由 Igor Pavlov 的 7-Zip 提供支持（GNU LGPL，含 unRAR 限制）。使用 Electron 和 React 构建。",

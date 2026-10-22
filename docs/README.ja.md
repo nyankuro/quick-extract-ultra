@@ -9,7 +9,7 @@
 [English](../README.md) · **日本語** · [Tiếng Việt](README.vi.md) · 简体中文 · 繁體中文
 
 [![最新リリース](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](../LICENSE)
+[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-a948e8)](../LICENSE)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
 
 <img src="screenshots/extract-ja.png" alt="Quick Extract Ultra のメイン画面" width="900" />
@@ -155,5 +155,11 @@ Quick Extract Ultra はこれからもずっと無料です。役に立ったら
 
 ## ライセンス
 
-[MIT](../LICENSE) © 2026 nyankuro。
+© 2026 nyankuro。Quick Extract Ultra は**無料**で、ソースコードは [PolyForm Shield License 1.0.0](../LICENSE) のもとで公開しています（法的に有効なのは英語の原文です）。
+
+かんたんに言うと：
+- ✅ 家でも職場でも無料で使え、ほかの人と共有でき、自分用に改変もできます。
+- ❌ 販売すること、または本アプリ（名前やブランドを変えたものを含む）を Quick Extract Ultra と競合する製品として提供することは、無料であっても**できません**。
+
+同梱のサードパーティ製部分は、それぞれのライセンスに従います（下記参照）。
 [7-Zip](https://www.7-zip.org/)（Igor Pavlov 作、GNU LGPL・unRAR 制限付き）を使用しています。詳しくは [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) をご覧ください。

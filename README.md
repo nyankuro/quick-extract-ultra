@@ -9,7 +9,7 @@
 **English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md) · 简体中文 · 繁體中文
 
 [![Latest release](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=download&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](LICENSE)
+[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-a948e8)](LICENSE)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
 [![Build](https://img.shields.io/github/actions/workflow/status/nyankuro/quick-extract-ultra/release.yml?label=build)](https://github.com/nyankuro/quick-extract-ultra/actions)
 
@@ -159,6 +159,12 @@ Quick Extract Ultra is free and always will be. If it saves you time, you can he
 
 ## License
 
-[MIT](LICENSE) © 2026 nyankuro.
+© 2026 nyankuro. Quick Extract Ultra is **free** and its source code is public, under the [PolyForm Shield License 1.0.0](LICENSE).
+
+In plain words:
+- ✅ You may use it for free, at home or at work, share it with others, and change it for your own use.
+- ❌ You may **not** sell it, or offer it (or a renamed/rebranded copy) as a product that competes with Quick Extract Ultra, even for free.
+
+The bundled third-party parts keep their own licenses (see below).
 Powered by [7-Zip](https://www.7-zip.org/) by Igor Pavlov (GNU LGPL + unRAR restriction). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 Inspired by the great open-source archivers [7-Zip](https://www.7-zip.org/), [NanaZip](https://github.com/M2Team/NanaZip) and [PeaZip](https://github.com/peazip/PeaZip).

@@ -9,6 +9,20 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.3.0 - 2026-10-22
+
+### Changed
+
+- **License changed from MIT to the PolyForm Shield License 1.0.0**, at the owner's request to stop others from taking the app and reselling it. MIT (and GPL) both allow resale; PolyForm Shield does not. In plain terms: anyone may use the app for free (at home or at work), share it, and modify it for their own use, but nobody may sell it or offer it, or a renamed/rebranded copy, as a product that competes with Quick Extract Ultra, even for free. `LICENSE` holds the verbatim official text plus the `Required Notice:` copyright line the license asks for.
+- The app is now described as "free, with public source code" rather than "open source" (PolyForm Shield is source-available, not an OSI open-source license): About text in all five languages, `package.json` description, READMEs (EN/JA/VI) with a plain-language license summary, and `THIRD_PARTY_NOTICES.md`.
+- `package.json` `license` is `SEE LICENSE IN LICENSE` (PolyForm Shield has no SPDX identifier).
+- The built-in common-passwords wordlist is now explicitly dedicated to the public domain (CC0 1.0) instead of "same MIT license as the app".
+- Bundled third-party software keeps its own licenses (7-Zip LGPL + unRAR restriction, Electron/React MIT, lucide ISC); the recovery tools are still never bundled.
+
+### Verification
+
+- `npm run typecheck`, `npm test`, `npm run build`.
+
 ## 2.2.9 - 2026-10-22
 
 ### Added

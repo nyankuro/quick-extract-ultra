@@ -1,7 +1,7 @@
 {
   "name": "quick-extract-ultra",
-  "version": "2.2.9",
-  "description": "Free, open-source archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese and Vietnamese.",
+  "version": "2.3.0",
+  "description": "Free archive manager for Windows: extract, compress, browse and test ZIP, 7Z, RAR and 30+ formats. English, Japanese, Vietnamese and Chinese.",
   "main": "electron/main.cjs",
   "scripts": {
     "test": "node --test scripts/extraction.test.cjs scripts/ultra.test.cjs scripts/recovery.test.cjs",
@@ -25,7 +25,7 @@
     "windows"
   ],
   "author": "nyankuro",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "7zip-bin-full": "^26.2.1"
   },

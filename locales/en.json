@@ -203,7 +203,7 @@
   "settings.trashAfter": "Move archives to the Recycle Bin after extracting",
   "settings.trashAfterHint": "Only after a successful extraction. Multi-part archives are moved together. You can restore them from the Recycle Bin.",
   "settings.about": "About",
-  "settings.aboutText": "Quick Extract Ultra is a free, open-source archive tool. Everything runs on your computer; nothing is uploaded.",
+  "settings.aboutText": "Quick Extract Ultra is a free archive tool, with its source code public on GitHub. Everything runs on your computer; nothing is uploaded.",
   "settings.formats": "Opens",
   "settings.support": "Support the project",
   "settings.credits": "Powered by 7-Zip by Igor Pavlov (GNU LGPL, unRAR restriction). Built with Electron and React.",

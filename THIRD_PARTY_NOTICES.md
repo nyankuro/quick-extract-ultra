@@ -1,6 +1,8 @@
 # Third-party notices
 
-Quick Extract Ultra is MIT licensed. It ships with the following third-party software.
+Quick Extract Ultra's own code is licensed under the PolyForm Shield License 1.0.0
+(see `LICENSE`). That license covers only Quick Extract Ultra's own code. It ships with the
+following third-party software, each under its own license.
 
 ## 7-Zip
 
@@ -37,8 +39,9 @@ sources, with the in-app download or manually. Each keeps its own license.
   licenses) — https://www.openwall.com/john/
 
 Because these run as separate processes, their licenses (including John's GPL)
-do not extend to Quick Extract Ultra's own MIT-licensed code.
+do not extend to Quick Extract Ultra's own code.
 
 The built-in `tools/wordlists/common-passwords.txt` is a short list of very
-common passwords assembled for this project and is released under the same MIT
-license as the app.
+common passwords assembled for this project. It is dedicated to the public
+domain under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), so
+you may use it freely for any purpose.

@@ -9,7 +9,7 @@
 [English](../README.md) · [日本語](README.ja.md) · **Tiếng Việt** · 简体中文 · 繁體中文
 
 [![Bản mới nhất](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=t%E1%BA%A3i%20v%E1%BB%81&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-a948e8)](../LICENSE)
+[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-a948e8)](../LICENSE)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
 
 <img src="screenshots/extract-vi.png" alt="Cửa sổ chính của Quick Extract Ultra" width="900" />
@@ -155,5 +155,11 @@ Quick Extract Ultra luôn miễn phí. Nếu nó giúp ích cho bạn, bạn có
 
 ## Giấy phép
 
-[MIT](../LICENSE) © 2026 nyankuro.
+© 2026 nyankuro. Quick Extract Ultra **miễn phí** và mã nguồn được công khai, theo [Giấy phép PolyForm Shield 1.0.0](../LICENSE) (bản gốc tiếng Anh là bản có giá trị pháp lý).
+
+Nói đơn giản:
+- ✅ Bạn được dùng miễn phí, ở nhà hay ở chỗ làm, chia sẻ cho người khác, và sửa lại để tự dùng.
+- ❌ Bạn **không** được bán phần mềm này, hoặc đưa nó (hay một bản đổi tên/đổi thương hiệu) ra làm sản phẩm cạnh tranh với Quick Extract Ultra, kể cả khi phát miễn phí.
+
+Các thành phần bên thứ ba đi kèm vẫn giữ giấy phép riêng của chúng (xem bên dưới).
 Sử dụng [7-Zip](https://www.7-zip.org/) của Igor Pavlov (GNU LGPL, kèm giới hạn unRAR). Xem [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).

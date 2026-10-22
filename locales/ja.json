@@ -203,7 +203,7 @@
   "settings.trashAfter": "展開後にアーカイブをごみ箱へ移動",
   "settings.trashAfterHint": "展開に成功したときだけ移動します。分割アーカイブはまとめて移動します。ごみ箱から元に戻せます。",
   "settings.about": "このアプリについて",
-  "settings.aboutText": "Quick Extract Ultra は無料のオープンソース圧縮・展開ツールです。すべての処理はあなたのパソコン内で行われ、何もアップロードされません。",
+  "settings.aboutText": "Quick Extract Ultra は無料の圧縮・展開ツールで、ソースコードは GitHub で公開しています。すべての処理はあなたのパソコン内で行われ、何もアップロードされません。",
   "settings.formats": "対応形式",
   "settings.support": "プロジェクトを応援する",
   "settings.credits": "7-Zip（Igor Pavlov 作、GNU LGPL・unRAR 制限付き）を使用しています。Electron と React で作られています。",

@@ -203,7 +203,7 @@
   "settings.trashAfter": "Chuyển file nén vào Thùng rác sau khi giải nén",
   "settings.trashAfterHint": "Chỉ khi giải nén thành công. File nén nhiều phần được chuyển cùng nhau. Có thể khôi phục từ Thùng rác.",
   "settings.about": "Giới thiệu",
-  "settings.aboutText": "Quick Extract Ultra là công cụ nén/giải nén miễn phí, mã nguồn mở. Mọi thứ chạy trên máy của bạn, không tải gì lên mạng.",
+  "settings.aboutText": "Quick Extract Ultra là công cụ nén/giải nén miễn phí, mã nguồn được công khai trên GitHub. Mọi thứ chạy trên máy của bạn, không tải gì lên mạng.",
   "settings.formats": "Mở được",
   "settings.support": "Ủng hộ dự án",
   "settings.credits": "Sử dụng 7-Zip của Igor Pavlov (GNU LGPL, kèm giới hạn unRAR). Xây dựng bằng Electron và React.",
