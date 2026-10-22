@@ -132,11 +132,26 @@ class RecoveryJob {
 
   async inspect() {
     this.emit({ type: 'stage', stage: 'inspect' });
-    const listing = await this.listArchive(this.sevenZipPath, this.options.zipPath, '');
+    let listing;
+    try {
+      listing = await this.listArchive(this.sevenZipPath, this.options.zipPath, '');
+    } catch (error) {
+      // A RAR with an encrypted header can't be listed without the password, but rar2john
+      // can still read it, so treat it as an encrypted RAR and carry on.
+      if ((error.code === 'PASSWORD_REQUIRED' || error.code === 'PASSWORD_INCORRECT') && /\.rar$/i.test(this.options.zipPath)) {
+        return { encrypted: [], zipCrypto: false, format: 'rar' };
+      }
+      throw error;
+    }
+    const type = (listing.info.type || '').toLowerCase();
+    const format = /^zip$/.test(type) ? 'zip' : /^rar/.test(type) ? 'rar' : '';
+    if (!format) throw Object.assign(new Error('Only ZIP and RAR archives are supported here.'), { code: 'NOT_SUPPORTED' });
+    // RAR with an encrypted header lists nothing without a password, but it is still encrypted.
     const encrypted = listing.entries.filter((entry) => entry.encrypted && !entry.isDirectory);
-    if (!encrypted.length) throw Object.assign(new Error('This ZIP is not password-protected.'), { code: 'NOT_ENCRYPTED' });
-    const zipCrypto = encrypted.every((entry) => /ZipCrypto/i.test(entry.method));
-    return { encrypted, zipCrypto };
+    const headerEncrypted = format === 'rar' && listing.entries.length === 0;
+    if (!encrypted.length && !headerEncrypted) throw Object.assign(new Error('This archive is not password-protected.'), { code: 'NOT_ENCRYPTED' });
+    const zipCrypto = format === 'zip' && encrypted.every((entry) => /ZipCrypto/i.test(entry.method));
+    return { encrypted, zipCrypto, format };
   }
 
   // Legacy ZipCrypto + a known plaintext file -> recover keys, then password or a decrypted copy.
@@ -173,22 +188,31 @@ class RecoveryJob {
     return { found: true, password: null, via: 'bkcrack-keys', decryptedZipPath: this.decryptedZipPath };
   }
 
-  async writeHash() {
+  async writeHash(format) {
     const zip2john = this.tools.john?.helpers?.zip2john;
-    if (!zip2john) throw Object.assign(new Error('zip2john (part of John the Ripper) is needed to read the ZIP hash.'), { code: 'NEED_JOHN' });
-    const hashPath = path.join(this.workDir, 'hash.txt');
+    if (!zip2john) throw Object.assign(new Error('John the Ripper (its zip2john/rar2john) is needed to read the archive hash.'), { code: 'NEED_JOHN' });
+    // rar2john sits next to zip2john in John's run/ folder.
+    const extractor = format === 'rar' ? path.join(path.dirname(zip2john), 'rar2john.exe') : zip2john;
+    if (format === 'rar' && !(await pathExists(extractor))) throw Object.assign(new Error('rar2john (part of John the Ripper) is needed to read RAR archives.'), { code: 'NEED_JOHN' });
     let out = '';
     let err = '';
-    // zip2john writes the hash to stdout and notes to stderr; keep both.
-    await this.run(zip2john, [this.options.zipPath], { onLine: () => {}, onStdout: (chunk) => { out += chunk; }, onStderr: (chunk) => { err += chunk; } });
-    // Pull out just the hash token ($zip2$...$/zip2$ or $pkzip2$...$/pkzip2$); both John and hashcat take it bare.
-    const match = out.match(/\$(?:zip2|pkzip2?)\$[\s\S]*?\$\/(?:zip2|pkzip2?)\$/);
-    if (!match) {
-      const reason = (err.split('\n').map((line) => line.trim()).filter(Boolean).pop() || '').replace(/^ver [\d.]+ /, '');
-      throw Object.assign(new Error(reason ? `Could not read a password hash from this ZIP: ${reason}` : 'Could not read a password hash from this ZIP.'), { code: 'NO_HASH' });
+    await this.run(extractor, [this.options.zipPath], { onLine: () => {}, onStdout: (chunk) => { out += chunk; }, onStderr: (chunk) => { err += chunk; } });
+    // Find the first real hash line (it holds a $…$ marker for the format).
+    const line = out.split(/\r?\n/).find((l) => /\$(?:zip2|pkzip2?|rar5|RAR3)\$/.test(l));
+    if (!line) {
+      const reason = (err.split('\n').map((l) => l.trim()).filter(Boolean).pop() || '').replace(/^ver [\d.]+ /, '');
+      throw Object.assign(new Error(reason ? `Could not read a password hash from this archive: ${reason}` : 'Could not read a password hash from this archive.'), { code: 'NO_HASH' });
     }
-    await fs.writeFile(hashPath, `${match[0]}\n`, 'utf8');
-    return { hashPath, isAes: match[0].startsWith('$zip2$') };
+    const hashPath = path.join(this.workDir, 'hash.txt');
+    // Write the bare hash token. The "name:" prefix from *2john contains the archive's
+    // full path, whose drive-letter colon (C:\...) makes John mis-split "login:hash" and
+    // report "No password hashes loaded". ZIP has a closed $…$/…$ token; RAR runs to line end.
+    const zipToken = line.match(/\$(?:zip2|pkzip2?)\$[\s\S]*?\$\/(?:zip2|pkzip2?)\$/);
+    const rarStart = line.search(/\$(?:rar5|RAR3)\$/);
+    const hash = zipToken ? zipToken[0] : rarStart >= 0 ? line.slice(rarStart).trim() : line.trim();
+    const isAes = Boolean(zipToken && zipToken[0].startsWith('$zip2$'));
+    await fs.writeFile(hashPath, `${hash}\n`, 'utf8');
+    return { hashPath, isAes, format };
   }
 
   emitHashcat(status) {
@@ -301,27 +325,29 @@ class RecoveryJob {
   async start() {
     await fs.mkdir(this.workDir, { recursive: true });
     try {
-      const { encrypted, zipCrypto } = await this.inspect();
+      const { encrypted, zipCrypto, format } = await this.inspect();
       const device = this.options.device || 'auto';
       const canGpu = device !== 'cpu' && this.tools.hashcat;
 
-      if (zipCrypto && this.options.knownPlaintextPath && this.tools.bkcrack) {
+      // bkcrack is ZIP/ZipCrypto only, and needs a known original file.
+      if (format === 'zip' && zipCrypto && this.options.knownPlaintextPath && this.tools.bkcrack) {
         const result = await this.runBkcrack(encrypted);
         if (result.found) { this.emit({ type: 'found', ...result }); return; }
         this.log('bkcrack did not find the keys; falling back to a password search.');
       }
 
-      const { hashPath, isAes } = await this.writeHash();
+      const { hashPath, isAes } = await this.writeHash(format);
 
-      // AES ZIPs go to the GPU (hashcat); legacy ZipCrypto is most reliable on John.
+      // ZIP AES is fastest on the GPU (hashcat); RAR and legacy ZipCrypto go to John (CPU).
       let result = { found: false };
-      if (canGpu && isAes) {
+      const useHashcat = canGpu && format === 'zip' && isAes;
+      if (useHashcat) {
         try { result = await this.runHashcat(hashPath, isAes); }
         catch (error) { if (error.code === 'CANCELLED' || error.code === 'PAUSED') throw error; this.log(`hashcat unavailable (${error.message}); using John instead.`); }
       }
       if (!result.found && this.tools.john?.exe) result = await this.runJohn(hashPath);
-      else if (!result.found && !this.tools.john?.exe && !(canGpu && isAes)) {
-        throw Object.assign(new Error('No usable tool for this ZIP. Install John the Ripper (CPU) or hashcat (GPU).'), { code: 'NO_TOOL' });
+      else if (!result.found && !this.tools.john?.exe && !useHashcat) {
+        throw Object.assign(new Error('No usable tool. Install John the Ripper (CPU) or hashcat (GPU).'), { code: 'NO_TOOL' });
       }
 
       if (result.found) this.emit({ type: 'found', ...result });

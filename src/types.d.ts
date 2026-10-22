@@ -158,6 +158,7 @@ export interface EncryptedEntry {
 
 export interface ZipInspection {
   fileName: string;
+  format: 'zip' | 'rar';
   encrypted: EncryptedEntry[];
   zipCrypto: boolean;
 }

@@ -396,6 +396,10 @@ export default function RecoverView({ addLog }: Props) {
             </div>
           )}
 
+          {inspection?.format === 'rar' && (
+            <p className="hint small-print"><AlertTriangle size={16} />{t('recover.rarSlow')}</p>
+          )}
+
           {inspection && isZipCrypto && (
             <div className="known-plain">
               <p className="muted">{t('recover.knownHint')}</p>

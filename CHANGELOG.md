@@ -9,6 +9,26 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.0 - 2026-10-22
+
+### Added
+
+- **Password recovery now supports RAR as well as ZIP.** The app auto-detects the archive type: ZIP uses `zip2john` (and bkcrack for the ZipCrypto known-plaintext fast path); RAR uses `rar2john` (bundled with John, no extra dependency) and John the Ripper. Header-encrypted RAR (made with `-hp`) is handled too — 7-Zip can't list it without the password, but `rar2john` reads it. The one-button "Try automatically" flow is unchanged. The tab is now "Recover password" and the picker accepts `.zip` and `.rar`.
+  - A note warns that RAR (especially RAR5) uses strong encryption, so recovery is much slower than ZIP and realistically only finds short, numeric, or common passwords.
+  - 7z is still not supported (its `7z2john` is a Perl script and John's Windows build ships no Perl).
+
+### Fixed
+
+- Hashes are now written as the **bare token** (`$zip2$…`, `$rar5$…`). `rar2john` prefixes the archive's full path, whose drive-letter colon (`C:\…`) made John mis-split `login:hash` and report "No password hashes loaded". This affected RAR and could affect ZIP.
+
+### Verified
+
+- `npm test` 42/42, typecheck, build, UI smoke test. Real end-to-end on this machine: created RAR5 archives with WinRAR (both `-hp` header-encrypted and `-p` data-encrypted) and the engine's auto mode recovered the password through `rar2john` + John.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.0.exe`, `QuickExtractUltra-Portable-2.2.0-win-x64.zip`.
+
 ## 2.1.2 - 2026-10-22
 
 ### Added

@@ -9,3 +9,5 @@ dist-renderer/
 .DS_Store
 Thumbs.db
 docs/screenshots/picker/
+.john-test/
+Quick Extract Ultra.john-test/

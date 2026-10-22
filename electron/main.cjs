@@ -476,7 +476,7 @@ ipcMain.handle('folder:select', async (_event, options = {}) => {
 ipcMain.handle('files:select', async (_event, { folders = false, archives = false, zip = false } = {}) => {
   const defaultPath = await getLastFolder();
   const filters = zip
-    ? [{ name: 'ZIP', extensions: ['zip'] }, { name: tr('main.allFiles'), extensions: ['*'] }]
+    ? [{ name: 'ZIP, RAR', extensions: ['zip', 'rar'] }, { name: tr('main.allFiles'), extensions: ['*'] }]
     : archives
       ? [{ name: tr('main.archiveFilter'), extensions: EXTRACT_EXTENSIONS }, { name: tr('main.allFiles'), extensions: ['*'] }]
       : undefined;
@@ -752,16 +752,28 @@ ipcMain.handle('tools:setup-all', async (_event, { consent } = {}) => asResult(a
 ipcMain.handle('recovery:inspect', async (_event, { zipPath }) => asResult(async () => {
   requirePath(zipPath, 'ZIP');
   const { listArchive } = require('./archive-ops.cjs');
-  const listing = await listArchive(resolveSevenZipPath(), zipPath, '');
-  // The recovery tools (zip2john, bkcrack) are ZIP-only. Reject anything else clearly.
-  if (!/^zip$/i.test(listing.info.type || '')) {
-    throw Object.assign(new Error(tr('recover.notZip', { name: path.basename(zipPath), type: (listing.info.type || path.extname(zipPath).slice(1) || '?').toUpperCase() })), { code: 'NOT_ZIP' });
+  let listing;
+  try {
+    listing = await listArchive(resolveSevenZipPath(), zipPath, '');
+  } catch (error) {
+    // A header-encrypted RAR can't be listed without its password; rar2john still reads it.
+    if ((error.code === 'PASSWORD_REQUIRED' || error.code === 'PASSWORD_INCORRECT') && /\.rar$/i.test(zipPath)) {
+      return { fileName: path.basename(zipPath), format: 'rar', encrypted: [], zipCrypto: false };
+    }
+    throw error;
+  }
+  const type = (listing.info.type || '').toLowerCase();
+  const format = /^zip$/.test(type) ? 'zip' : /^rar/.test(type) ? 'rar' : '';
+  // The recovery tools support ZIP and RAR only (zip2john / rar2john, bkcrack is ZIP-only).
+  if (!format) {
+    throw Object.assign(new Error(tr('recover.notZip', { name: path.basename(zipPath), type: (listing.info.type || path.extname(zipPath).slice(1) || '?').toUpperCase() })), { code: 'NOT_SUPPORTED' });
   }
   const encrypted = listing.entries.filter((entry) => entry.encrypted && !entry.isDirectory)
     .map((entry) => ({ path: entry.path, size: entry.size, method: entry.method }));
-  if (!encrypted.length) throw Object.assign(new Error(tr('recover.notEncrypted')), { code: 'NOT_ENCRYPTED' });
-  const zipCrypto = encrypted.every((entry) => /ZipCrypto/i.test(entry.method));
-  return { fileName: path.basename(zipPath), encrypted, zipCrypto };
+  const headerEncrypted = format === 'rar' && listing.entries.length === 0;
+  if (!encrypted.length && !headerEncrypted) throw Object.assign(new Error(tr('recover.notEncrypted')), { code: 'NOT_ENCRYPTED' });
+  const zipCrypto = format === 'zip' && encrypted.every((entry) => /ZipCrypto/i.test(entry.method));
+  return { fileName: path.basename(zipPath), format, encrypted, zipCrypto };
 }));
 
 ipcMain.handle('recovery:start', async (_event, options = {}) => asResult(async () => {
