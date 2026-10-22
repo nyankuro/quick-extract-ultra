@@ -7,7 +7,7 @@
 **一款免费又好用的 Windows 压缩软件。**<br />
 打开、解压和创建 ZIP、7Z、RAR 等 30 多种格式，界面清爽，用起来顺手。
 
-[English](../README.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · **简体中文**
+[English](../README.md) · [日本語](README.ja.md) · **简体中文** · [Tiếng Việt](README.vi.md)
 
 [![下载](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=%E4%B8%8B%E8%BD%BD&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
@@ -28,7 +28,7 @@ WinRAR、7-Zip 能做的日常工作它都能做，还有一些它们做不到�
 - 🧹 **告别“文件夹里套同名文件夹”。** 一个开关（智能）就能去掉多余的那层文件夹。
 - 🔓 **忘了自己文件的密码，也有办法找回。** 忘了自己 ZIP 或 RAR 的密码？软件可以帮你试着找回来，条件允许时还会用上显卡。大多数压缩软件根本没有这个功能。
 - 💸 **真正免费。** 没有广告，没有试用期，也没有“请购买”的提醒。它完全在你的电脑上运行，文件不会被发送到任何地方。
-- 🌏 **界面好看，还有中文：** 简洁现代的界面，支持简体中文、繁體中文、English、日本語和 Tiếng Việt。
+- 🌏 **界面好看，还有中文：** 简洁现代的界面，支持 English、日本語、简体中文、繁體中文和 Tiếng Việt。
 
 ### 一眼看懂
 
@@ -117,7 +117,7 @@ WinRAR、7-Zip 能做的日常工作它都能做，还有一些它们做不到�
 
 | 设置 | 默认 | 作用 |
 |---|---|---|
-| 语言 | English | English、日本語、Tiếng Việt、简体中文、繁體中文 |
+| 语言 | English | English、日本語、简体中文、繁體中文、Tiếng Việt |
 | 资源管理器右键菜单 | 关 | 添加上面介绍的右键菜单 |
 | 解压后打开文件夹 | 关 | 完成后在资源管理器中打开结果文件夹 |
 | 保留下载安全警告 | **开** | 从下载的压缩包里解压出的文件，会保留“来自互联网”的标记，让 SmartScreen 和 Office 继续保护你 |

@@ -7,7 +7,7 @@
 **Phần mềm nén và giải nén miễn phí, dễ dùng cho Windows.**<br />
 Mở, giải nén và tạo file ZIP, 7Z, RAR cùng hơn 30 định dạng khác, với giao diện gọn gàng, dễ chịu.
 
-[English](../README.md) · [日本語](README.ja.md) · **Tiếng Việt** · [简体中文](README.zh-Hans.md)
+[English](../README.md) · [日本語](README.ja.md) · [简体中文](README.zh-Hans.md) · **Tiếng Việt**
 
 [![Tải về](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=t%E1%BA%A3i%20v%E1%BB%81&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
@@ -28,7 +28,7 @@ Quick Extract Ultra làm được những việc hằng ngày như WinRAR hay 7-
 - 🧹 **Hết cảnh "thư mục lồng trong thư mục".** Chỉ một công tắc (Thông minh) là bỏ được lớp thư mục thừa khi không cần.
 - 🔓 **Có cách mở lại file của chính mình khi quên mật khẩu.** Quên mật khẩu file ZIP hay RAR của mình? App có thể thử tìm lại, dùng cả card đồ họa khi được. Hầu hết phần mềm giải nén khác không có tính năng này.
 - 💸 **Miễn phí thật sự.** Không quảng cáo, không thời hạn dùng thử, không bảng nhắc "hãy mua bản quyền". App chạy ngay trên máy, file của bạn không bị gửi đi đâu cả.
-- 🌏 **Nhìn dễ chịu, có tiếng Việt:** giao diện hiện đại, gọn gàng, dùng được bằng Tiếng Việt, English, 日本語, 简体中文 hoặc 繁體中文.
+- 🌏 **Nhìn dễ chịu, có tiếng Việt:** giao diện hiện đại, gọn gàng, dùng được bằng English, 日本語, 简体中文, 繁體中文 hoặc Tiếng Việt.
 
 ### So sánh nhanh
 
@@ -117,7 +117,7 @@ Nên biết trước: mật khẩu ngắn, đơn giản có khi vài giây là r
 
 | Cài đặt | Mặc định | Tác dụng |
 |---|---|---|
-| Ngôn ngữ | English | English, 日本語, Tiếng Việt, 简体中文 hoặc 繁體中文 |
+| Ngôn ngữ | English | English, 日本語, 简体中文, 繁體中文 hoặc Tiếng Việt |
 | Menu chuột phải trong Explorer | Tắt | Thêm menu chuột phải như ở trên |
 | Mở thư mục sau khi giải nén | Tắt | Tự mở thư mục kết quả khi giải nén xong |
 | Giữ cảnh báo an toàn của file tải về | **Bật** | File giải nén từ file tải trên mạng vẫn mang dấu "tải từ internet", để SmartScreen và Office tiếp tục bảo vệ bạn |

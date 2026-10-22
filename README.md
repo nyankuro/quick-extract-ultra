@@ -7,7 +7,7 @@
 **A free, friendly archive tool for Windows.**<br />
 Open, extract and create ZIP, 7Z, RAR and 30+ other formats in a window that's actually nice to use.
 
-**English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md) · [简体中文](docs/README.zh-Hans.md)
+**English** · [日本語](docs/README.ja.md) · [简体中文](docs/README.zh-Hans.md) · [Tiếng Việt](docs/README.vi.md)
 
 [![Download](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=download&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
@@ -28,7 +28,7 @@ Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, plus a few thi
 - 🧹 **No more "folder inside a folder".** One switch (Smart) removes the extra wrapper folder when it isn't needed.
 - 🔓 **A way back into your own locked files.** Forgot the password to your own ZIP or RAR? The app can try to find it, using your graphics card when it can. Most archive tools don't offer this at all.
 - 💸 **Free, for real.** No ads, no trial period, no "please buy" reminders. It works offline, so your files never leave your computer.
-- 🌏 **Easy on the eyes, in your language:** a clean, modern window in English, 日本語, Tiếng Việt, 简体中文 or 繁體中文.
+- 🌏 **Easy on the eyes, in your language:** a clean, modern window in English, 日本語, 简体中文, 繁體中文 or Tiếng Việt.
 
 ### At a glance
 
@@ -117,7 +117,7 @@ Good to know: a short, simple password can turn up in seconds, but a long random
 
 | Setting | Default | What it does |
 |---|---|---|
-| Language | English | English, 日本語, Tiếng Việt, 简体中文 or 繁體中文 |
+| Language | English | English, 日本語, 简体中文, 繁體中文 or Tiếng Việt |
 | Explorer right-click menu | Off | Adds the right-click menu described above |
 | Open the folder after extracting | Off | Opens the result in File Explorer when a job finishes |
 | Keep download safety warnings | **On** | Files extracted from a downloaded archive keep Windows' "from the internet" mark, so SmartScreen and Office still protect you |
