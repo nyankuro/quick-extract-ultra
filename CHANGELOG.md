@@ -9,6 +9,16 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.4 - 2026-10-22
+
+### Fixed
+
+- The **installer window is no longer blurry** on high-DPI displays. electron-builder's NSIS installer was not DPI-aware, so Windows bitmap-stretched it (it looked like a low-res / 720p screen). A `customHeader` hook in `build/installer.nsh` now sets `ManifestDPIAware true`, so Windows renders the installer's text and controls at native resolution. Verified the built `Setup.exe` now carries `dpiAware` in its application manifest.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.4.exe`, `QuickExtractUltra-Portable-2.2.4-win-x64.zip`.
+
 ## 2.2.3 - 2026-10-22
 
 ### Fixed
