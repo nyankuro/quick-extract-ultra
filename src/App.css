@@ -1893,7 +1893,7 @@ input:focus-visible,
 
 .recover-view {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 12px;
   min-height: 0;
 }
@@ -2101,3 +2101,17 @@ input:focus-visible,
   background: rgba(25, 200, 255, 0.1);
   vertical-align: middle;
 }
+
+.expectations-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid rgba(25, 200, 255, 0.32);
+  border-radius: var(--radius);
+  background: rgba(25, 200, 255, 0.07);
+  color: #cfe9ff;
+  font-size: 13px;
+}
+.expectations-note svg { flex: 0 0 auto; color: var(--cyan-soft); }

@@ -17,6 +17,7 @@ import {
   LoaderCircle,
   Pause,
   Play,
+  Hourglass,
   ShieldAlert,
   Square,
   Wrench,
@@ -269,6 +270,7 @@ export default function RecoverView({ addLog }: Props) {
     return (
       <div className="recover-view setup">
         <p className="ownership-note" role="note"><ShieldAlert size={18} />{t('recover.ownership')}</p>
+        <p className="expectations-note" role="note"><Hourglass size={18} />{t('recover.expectations')}</p>
         <section className="recover-setup">
           <KeyRound size={46} className="accent-icon" />
           <h2>{t('recover.setupTitle')}</h2>
@@ -307,6 +309,10 @@ export default function RecoverView({ addLog }: Props) {
       <p className="ownership-note" role="note">
         <ShieldAlert size={18} />
         {t('recover.ownership')}
+      </p>
+      <p className="expectations-note" role="note">
+        <Hourglass size={18} />
+        {t('recover.expectations')}
       </p>
 
       <div className="recover-grid">

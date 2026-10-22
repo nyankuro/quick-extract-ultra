@@ -275,6 +275,7 @@
   "picker.typeFolder": "Folder",
   "picker.typeArchive": "{type} archive",
   "recover.ownership": "Use this only on archives you own or have permission to open. Recovering someone else’s password may be illegal.",
+  "recover.expectations": "Finding a password can take anywhere from seconds to days — and may not succeed at all — depending on how long and complex it is. This is not a magic tool: short, numeric, or common passwords are found quickly, but long random ones can be impractical.",
   "recover.toolsTitle": "Recovery tools",
   "recover.toolsHint": "This feature runs three open-source tools as separate programs. They are not bundled; add them with the automatic download (checksum-verified where the source publishes one) or manually.",
   "recover.openToolsFolder": "Open tools folder",

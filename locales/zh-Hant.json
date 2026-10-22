@@ -275,6 +275,7 @@
   "picker.typeFolder": "資料夾",
   "picker.typeArchive": "{type} 壓縮包",
   "recover.ownership": "僅可用於你擁有或有權開啟的壓縮包。恢復他人的密碼可能違法。",
+  "recover.expectations": "找到密碼可能需要幾秒到幾天，甚至可能找不到，取決於密碼的長度和複雜度。這不是萬能工具：短的、純數字或常見的密碼很快就能找到，但又長又隨機的幾乎不可能。",
   "recover.toolsTitle": "恢復工具",
   "recover.toolsHint": "此功能會把三個開源工具作為獨立程式執行。它們沒有隨應用捆綁；請用自動下載（在來源公開校驗碼時會校驗）或手動方式新增。",
   "recover.openToolsFolder": "開啟 tools 資料夾",

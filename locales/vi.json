@@ -275,6 +275,7 @@
   "picker.typeFolder": "Thư mục",
   "picker.typeArchive": "File nén {type}",
   "recover.ownership": "Chỉ dùng cho file nén thuộc quyền của bạn hoặc bạn được phép mở. Khôi phục mật khẩu của người khác có thể là vi phạm pháp luật.",
+  "recover.expectations": "Việc tìm ra mật khẩu có thể mất từ vài giây đến nhiều ngày — và có khi không tìm được — tùy mật khẩu dài và phức tạp đến đâu. Đây không phải công cụ thần kỳ: mật khẩu ngắn, toàn số hoặc phổ biến thì ra nhanh, còn mật khẩu dài và ngẫu nhiên thì gần như không khả thi.",
   "recover.toolsTitle": "Công cụ khôi phục",
   "recover.toolsHint": "Tính năng này chạy ba công cụ mã nguồn mở như các chương trình riêng. Chúng không được kèm sẵn; bạn thêm vào bằng tải tự động (có kiểm tra checksum khi nguồn công bố) hoặc thủ công.",
   "recover.openToolsFolder": "Mở thư mục tools",

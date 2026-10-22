@@ -9,6 +9,16 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.5 - 2026-10-22
+
+### Added
+
+- A clear note in the password-recovery tab setting expectations: finding a password can take anywhere from seconds to days (or may not succeed at all) depending on its length and complexity — it is not a magic tool. Shown in all five languages, on both the first-run setup screen and the main recovery view, under the ownership reminder.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.5.exe`, `QuickExtractUltra-Portable-2.2.5-win-x64.zip`.
+
 ## 2.2.4 - 2026-10-22
 
 ### Fixed

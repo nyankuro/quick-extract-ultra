@@ -275,6 +275,7 @@
   "picker.typeFolder": "文件夹",
   "picker.typeArchive": "{type} 压缩包",
   "recover.ownership": "仅可用于你拥有或有权打开的压缩包。恢复他人的密码可能违法。",
+  "recover.expectations": "找到密码可能需要几秒到几天，甚至可能找不到，取决于密码的长度和复杂度。这不是万能工具：短的、纯数字或常见的密码很快就能找到，但又长又随机的几乎不可能。",
   "recover.toolsTitle": "恢复工具",
   "recover.toolsHint": "此功能会把三个开源工具作为独立程序运行。它们没有随应用捆绑；请用自动下载（在来源公开校验码时会校验）或手动方式添加。",
   "recover.openToolsFolder": "打开 tools 文件夹",
