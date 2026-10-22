@@ -11,6 +11,7 @@ const { listArchive, testArchive, createArchive, hashFile } = require('../electr
 const { isArchiveFile, archiveBaseName, archiveFormatLabel } = require('../electron/formats.cjs');
 const { buildRegFile, registerContextMenu, unregisterContextMenu, isContextMenuRegistered } = require('../electron/shell-integration.cjs');
 const { SettingsStore } = require('../electron/settings.cjs');
+const { compareVersions, interpretLatest } = require('../electron/update-check.cjs');
 
 let workspace;
 let source;
@@ -183,6 +184,27 @@ test('settings are sanitised and saved', async () => {
   await third.load();
   assert.equal(third.value.deleteAfterExtract, true);
   assert.equal(third.value.deleteAfterExtractRemember, true);
+});
+
+test('update check compares versions and interprets the latest release', () => {
+  assert.equal(compareVersions('2.2.8', '2.2.9'), -1);
+  assert.equal(compareVersions('2.3.0', '2.2.9'), 1);
+  assert.equal(compareVersions('v2.2.8', '2.2.8'), 0);
+  assert.equal(compareVersions('2.10.0', '2.9.9'), 1); // numeric, not lexical
+
+  // A newer tag on GitHub is offered as an available update, with the page URL.
+  const available = interpretLatest('2.2.8', { tag_name: 'v2.2.9', html_url: 'https://example/releases/tag/v2.2.9' });
+  assert.equal(available.status, 'available');
+  assert.equal(available.latest, '2.2.9');
+  assert.equal(available.url, 'https://example/releases/tag/v2.2.9');
+
+  // Same or older tag means we are current.
+  assert.equal(interpretLatest('2.2.9', { tag_name: 'v2.2.9' }).status, 'current');
+  assert.equal(interpretLatest('2.3.0', { tag_name: 'v2.2.9' }).status, 'current');
+
+  // Drafts or missing tags offer nothing.
+  assert.equal(interpretLatest('2.2.8', { tag_name: 'v2.9.0', draft: true }).status, 'none');
+  assert.equal(interpretLatest('2.2.8', {}).status, 'none');
 });
 
 const labels = { archiveMenu: 'QEU', open: 'Mở', extractTo: 'To...', extractHere: 'ここに展開', extractFolder: 'Folder', test: 'Test', addMenu: 'Add', addArchive: 'Add...', addZip: 'ZIP', add7z: '7Z', hash: 'Hash' };

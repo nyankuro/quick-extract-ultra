@@ -2027,6 +2027,49 @@ input:focus-visible,
   font-size: 12px;
 }
 
+/* ---- Check for updates (Settings) ---- */
+.update-box {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.update-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(170, 211, 255, 0.16);
+  background: rgba(7, 15, 33, 0.5);
+  font-size: 14px;
+}
+
+.update-status.available {
+  color: #d7ffe6;
+  border-color: rgba(70, 220, 140, 0.45);
+  background: rgba(30, 90, 60, 0.22);
+}
+
+.update-status.current {
+  color: #cfeaff;
+}
+
+.update-status.error {
+  color: #ffd7df;
+  border-color: rgba(255, 90, 120, 0.4);
+}
+
+.update-status > span {
+  flex: 1 1 200px;
+}
+
+.update-download {
+  flex: 0 0 auto;
+}
+
 /* ---- Recover ZIP password ---- */
 
 .recover-view {

@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('quickExtract', {
   onAppCommand: (callback) => subscribe('app:command', callback),
   onTaskProgress: (callback) => subscribe('task:progress', callback),
   getAppInfo: () => ipcRenderer.invoke('app:info'),
+  checkForUpdate: () => ipcRenderer.invoke('update:check'),
   getSettings: () => ipcRenderer.invoke('settings:get'),
   updateSettings: (patch) => ipcRenderer.invoke('settings:update', patch),
   selectPaths: (options) => ipcRenderer.invoke('files:select', options),

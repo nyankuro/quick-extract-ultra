@@ -12,6 +12,7 @@ const { applyFolderView } = require('./folder-view.cjs');
 const { isArchiveFile, archiveBaseName, archiveFormatLabel, EXTRACT_EXTENSIONS, CREATE_FORMATS } = require('./formats.cjs');
 const { listArchive, testArchive, createArchive, hashFile, HASH_ALGORITHMS } = require('./archive-ops.cjs');
 const { SettingsStore } = require('./settings.cjs');
+const { checkForUpdate } = require('./update-check.cjs');
 const { registerContextMenu, unregisterContextMenu, isContextMenuRegistered } = require('./shell-integration.cjs');
 const { ShellIcons } = require('./shell-icons.cjs');
 const locales = {
@@ -432,6 +433,10 @@ ipcMain.handle('app:info', () => ({
   createFormats: Object.keys(CREATE_FORMATS),
   hashAlgorithms: HASH_ALGORITHMS
 }));
+
+// Checks GitHub Releases for a newer version. Returns a plain data object (never
+// throws across IPC); the renderer opens the download page itself with tools:open-page.
+ipcMain.handle('update:check', () => checkForUpdate(require('../package.json').version));
 
 ipcMain.handle('settings:get', async () => ({
   ...settings.value,

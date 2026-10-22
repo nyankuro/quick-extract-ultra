@@ -63,6 +63,10 @@ export interface AppInfo {
   hashAlgorithms: string[];
 }
 
+export type UpdateCheckResult =
+  | { ok: true; status: 'available' | 'current' | 'none'; current: string; latest: string; url: string }
+  | { ok: false; code: string; message: string };
+
 export type AppCommandAction = 'open' | 'extract-to' | 'extract-here' | 'extract-folder' | 'test' | 'compress' | 'add-zip' | 'add-7z' | 'hash';
 
 export interface AppCommand {
@@ -237,6 +241,7 @@ declare global {
       onAppCommand: (callback: (command: AppCommand) => void) => () => void;
       onTaskProgress: (callback: (event: { task: string; progress: number }) => void) => () => void;
       getAppInfo: () => Promise<AppInfo>;
+      checkForUpdate: () => Promise<UpdateCheckResult>;
       getSettings: () => Promise<AppSettings>;
       updateSettings: (patch: Partial<AppSettings>) => Promise<TaskResult<AppSettings>>;
       selectPaths: (options: { folders?: boolean; archives?: boolean; zip?: boolean }) => Promise<string[]>;

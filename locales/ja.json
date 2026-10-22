@@ -388,5 +388,13 @@
   "log.deleteAfterOn": "展開後に削除：オン。展開に成功した書庫は完全に削除されます。",
   "log.deleteAfterOff": "展開後に削除：オフ。",
   "main.deleted": "完全に削除しました：{name}",
-  "main.deleteFailed": "展開しましたが、{name} を削除できませんでした：{message}"
+  "main.deleteFailed": "展開しましたが、{name} を削除できませんでした：{message}",
+  "settings.update": "アップデート",
+  "settings.updateHint": "GitHub で Quick Extract Ultra の新しいバージョンを確認します",
+  "settings.checkUpdate": "更新を確認",
+  "settings.updateDownload": "ダウンロード",
+  "settings.updateAvailable": "新しいバージョン {version} が利用できます。",
+  "settings.updateCurrent": "最新バージョンを使用中です。",
+  "settings.updateNone": "公開されたリリースはまだ見つかりません。",
+  "settings.updateError": "更新を確認できませんでした。インターネット接続を確認してください。"
 }

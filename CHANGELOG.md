@@ -9,6 +9,26 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.9 - 2026-10-22
+
+### Added
+
+- A **"Check for updates"** button in **Settings → Updates**. It asks GitHub for the project's latest Release, compares it with the running version, and shows one of: a new version is available (with a **Download** button that opens the Release page), you're on the latest version, no published release found yet, or a friendly "couldn't check — check your connection" message.
+- Why a check-and-download flow rather than silent auto-install: the app is not code-signed yet, so a silently-downloaded installer would still trigger Windows SmartScreen/antivirus prompts; and the repo isn't published yet, so there is no Release feed to pull from. The check is safe (it never downloads or runs anything itself — it just opens the official download page) and fully testable now. We can move to true one-click auto-update (electron-updater) later, once the repo is public, each version is cut as a GitHub Release, and we have code signing.
+- New main-process module `electron/update-check.cjs` (pure `compareVersions` / `interpretLatest` plus a networked `checkForUpdate`), IPC `update:check`, and `window.quickExtract.checkForUpdate()`. Strings added in all five languages.
+
+### Known limitation
+
+- "Check for updates" will report "no published release found yet" until the `nyankuro/quick-extract-ultra` repo is published and versions are tagged as GitHub Releases. A 404 from GitHub (no releases) is treated as a normal "nothing found", not an error.
+
+### Verification
+
+- `npm run typecheck`, `npm test` (43/43 pass, incl. a new version-compare/interpret test), a live check against the GitHub API (correctly returns "none" while the repo is unpublished), `npm run build`.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.9.exe`, `QuickExtractUltra-Portable-2.2.9-win-x64.zip`.
+
 ## 2.2.8 - 2026-10-22
 
 ### Added

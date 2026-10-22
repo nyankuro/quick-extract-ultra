@@ -388,5 +388,13 @@
   "log.deleteAfterOn": "Delete-after-extract on: archives will be permanently deleted after a successful extraction.",
   "log.deleteAfterOff": "Delete-after-extract off.",
   "main.deleted": "Permanently deleted: {name}",
-  "main.deleteFailed": "Extracted, but could not delete {name}: {message}"
+  "main.deleteFailed": "Extracted, but could not delete {name}: {message}",
+  "settings.update": "Updates",
+  "settings.updateHint": "Check GitHub for a newer version of Quick Extract Ultra",
+  "settings.checkUpdate": "Check for updates",
+  "settings.updateDownload": "Download",
+  "settings.updateAvailable": "A new version {version} is available.",
+  "settings.updateCurrent": "You're on the latest version.",
+  "settings.updateNone": "No published release found yet.",
+  "settings.updateError": "Couldn't check for updates — check your internet connection."
 }

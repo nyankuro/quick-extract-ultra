@@ -388,5 +388,13 @@
   "log.deleteAfterOn": "解压后删除：已开启，成功解压后压缩包将被永久删除。",
   "log.deleteAfterOff": "解压后删除：已关闭。",
   "main.deleted": "已永久删除：{name}",
-  "main.deleteFailed": "已解压，但无法删除 {name}：{message}"
+  "main.deleteFailed": "已解压，但无法删除 {name}：{message}",
+  "settings.update": "更新",
+  "settings.updateHint": "在 GitHub 上检查 Quick Extract Ultra 是否有新版本",
+  "settings.checkUpdate": "检查更新",
+  "settings.updateDownload": "下载",
+  "settings.updateAvailable": "有新版本 {version} 可用。",
+  "settings.updateCurrent": "你使用的已是最新版本。",
+  "settings.updateNone": "尚未找到已发布的版本。",
+  "settings.updateError": "无法检查更新——请检查网络连接。"
 }

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExternalLink, Heart, X } from 'lucide-react';
+import { ExternalLink, Heart, LoaderCircle, RefreshCw, X } from 'lucide-react';
 import { LANGUAGE_NAMES, useT } from './i18n';
 import type { AddLog } from './App';
-import type { AppInfo, AppSettings, Language } from './types';
+import type { AppInfo, AppSettings, Language, UpdateCheckResult } from './types';
 
 export const REPOSITORY_URL = 'https://github.com/nyankuro/quick-extract-ultra';
 
@@ -19,6 +19,25 @@ export default function SettingsDialog({ settings, appInfo, onChange, onClose, a
   const dialog = useRef<HTMLDialogElement>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [checking, setChecking] = useState(false);
+  const [updateState, setUpdateState] = useState<UpdateCheckResult | null>(null);
+
+  const runUpdateCheck = async () => {
+    setChecking(true);
+    setUpdateState(null);
+    try {
+      setUpdateState(await window.quickExtract.checkForUpdate());
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const updateMessage = (state: UpdateCheckResult): string => {
+    if (!state.ok) return t('settings.updateError');
+    if (state.status === 'available') return t('settings.updateAvailable', { version: state.latest });
+    if (state.status === 'current') return t('settings.updateCurrent');
+    return t('settings.updateNone');
+  };
 
   useEffect(() => {
     dialog.current?.showModal();
@@ -68,6 +87,29 @@ export default function SettingsDialog({ settings, appInfo, onChange, onClose, a
         {toggle('propagateZone', t('settings.propagateZone'), t('settings.propagateZoneHint'))}
         {toggle('trashAfterExtract', t('settings.trashAfter'), t('settings.trashAfterHint'))}
         {error && <p className="picker-error" role="alert">{error}</p>}
+
+        <section className="update-box">
+          <div className="setting-row">
+            <span>
+              <strong>{t('settings.update')}</strong>
+              <small>{t('settings.updateHint')}</small>
+            </span>
+            <button type="button" className="secondary-button compact" onClick={() => void runUpdateCheck()} disabled={checking}>
+              {checking ? <LoaderCircle size={16} className="spin" aria-hidden="true" /> : <RefreshCw size={16} aria-hidden="true" />}
+              {t('settings.checkUpdate')}
+            </button>
+          </div>
+          {updateState && (
+            <p className={`update-status ${updateState.ok ? updateState.status : 'error'}`} role="status">
+              <span>{updateMessage(updateState)}</span>
+              {updateState.ok && updateState.status === 'available' && (
+                <button type="button" className="secondary-button compact update-download" onClick={() => void window.quickExtract.openToolPage(updateState.url)}>
+                  <ExternalLink size={16} aria-hidden="true" />{t('settings.updateDownload')}
+                </button>
+              )}
+            </p>
+          )}
+        </section>
 
         <section className="about-box">
           <h3>{t('settings.about')}</h3>

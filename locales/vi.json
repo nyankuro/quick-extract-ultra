@@ -388,5 +388,13 @@
   "log.deleteAfterOn": "Đã bật xóa sau khi giải nén: file nén sẽ bị xóa vĩnh viễn sau khi giải nén thành công.",
   "log.deleteAfterOff": "Đã tắt xóa sau khi giải nén.",
   "main.deleted": "Đã xóa vĩnh viễn: {name}",
-  "main.deleteFailed": "Đã giải nén, nhưng không thể xóa {name}: {message}"
+  "main.deleteFailed": "Đã giải nén, nhưng không thể xóa {name}: {message}",
+  "settings.update": "Cập nhật",
+  "settings.updateHint": "Kiểm tra GitHub xem có phiên bản Quick Extract Ultra mới hơn không",
+  "settings.checkUpdate": "Kiểm tra cập nhật",
+  "settings.updateDownload": "Tải về",
+  "settings.updateAvailable": "Đã có phiên bản mới {version}.",
+  "settings.updateCurrent": "Bạn đang dùng phiên bản mới nhất.",
+  "settings.updateNone": "Chưa tìm thấy bản phát hành nào.",
+  "settings.updateError": "Không kiểm tra được cập nhật — hãy kiểm tra kết nối mạng."
 }
