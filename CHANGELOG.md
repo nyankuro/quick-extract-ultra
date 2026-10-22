@@ -9,6 +9,16 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.1 - 2026-10-22
+
+### Fixed
+
+- Buttons no longer disappear when the window is not maximized. On the Extract tab the control buttons used to stack into a tall two-column grid whose last buttons ("Open folder", "Clear all", and sometimes "Extract all") fell off the bottom. They now pack into as many columns as fit, the whole app scrolls when short, and the minimum window size is smaller (860×580), so no button is ever cut off at any size. Verified across widths from 860 to 1920 and heights down to 560: no control is clipped or unreachable.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.1.exe`, `QuickExtractUltra-Portable-2.2.1-win-x64.zip`.
+
 ## 2.2.0 - 2026-10-22
 
 ### Added

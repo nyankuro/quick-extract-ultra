@@ -1074,26 +1074,59 @@ button:disabled {
   color: var(--muted);
 }
 
+/* Below the width where every Extract control fits on one row, the whole app
+   scrolls vertically and the control buttons pack into as many columns as fit,
+   so no button is ever pushed off-screen or clipped. */
 @media (max-width: 1180px) {
   body {
     overflow: auto;
   }
 
   .app-shell {
+    height: auto;
     min-height: 100vh;
   }
 
   .window-frame {
     height: auto;
-    min-height: 940px;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .view,
+  .view-extract,
+  .view-pane,
+  .table-panel {
+    min-height: 0;
   }
 
   .folder-controls {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    align-items: stretch;
   }
 
-  .source-display {
+  .folder-controls .secondary-button,
+  .folder-controls .primary-button,
+  .folder-controls .mode-button,
+  .destination-control {
+    min-width: 0;
+    height: 48px;
+    padding: 0 12px;
+  }
+
+  .source-display,
+  .destination-control {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+
+  .destination-button {
+    width: 100%;
+    height: 48px;
+  }
+
+  .primary-button[data-action="extract-all"] {
     grid-column: 1 / -1;
   }
 
@@ -1101,9 +1134,8 @@ button:disabled {
     display: none;
   }
 
-  .secondary-button,
-  .primary-button {
-    min-width: 0;
+  .table-body {
+    max-height: 48vh;
   }
 
   .summary-strip {
@@ -1111,8 +1143,29 @@ button:disabled {
   }
 
   .archive-table {
-    grid-template-columns: 32px minmax(180px, 1.4fr) minmax(130px, 0.9fr) minmax(160px, 0.7fr) minmax(110px, 0.9fr) 80px;
+    grid-template-columns: 32px minmax(160px, 1.4fr) minmax(120px, 0.9fr) minmax(150px, 0.7fr) minmax(100px, 0.9fr) 72px;
     gap: 8px;
+  }
+
+  .recover-grid,
+  .tool-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Very narrow: let the tabs and summary wrap instead of overflowing. */
+@media (max-width: 760px) {
+  .tab-bar {
+    flex-wrap: wrap;
+    border-radius: var(--radius);
+  }
+
+  .summary-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .recover-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
