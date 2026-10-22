@@ -1,6 +1,6 @@
 # Quick Extract Ultra — hướng dẫn cho AI tiếp tục phát triển
 
-Tài liệu này mô tả trạng thái dự án trong mã nguồn hiện tại. Khi có khác biệt, hãy kiểm tra mã và `CHANGELOG.md` trước. Repo GitHub dự kiến: `nyankuro/quick-extract-ultra` (công khai). Chủ dự án không biết lập trình: mọi thay đổi do AI thực hiện, commit, push và phát hành; giải thích cho chủ dự án bằng tiếng Việt đơn giản.
+Tài liệu này mô tả trạng thái dự án trong mã nguồn hiện tại. Khi có khác biệt, hãy kiểm tra mã và `CHANGELOG.md` trước. Repo GitHub: https://github.com/nyankuro/quick-extract-ultra (công khai, đăng lần đầu với bản 2.3.0 ngày 2026-10-23). Chủ dự án không biết lập trình: mọi thay đổi do AI thực hiện, commit, push và phát hành; giải thích cho chủ dự án bằng tiếng Việt đơn giản.
 
 Bản gốc `H:\Quick Extract` (1.0.2, làm bằng Codex) được giữ nguyên, không sửa. Thư mục này là bản nâng cấp 2.x.
 
@@ -48,7 +48,7 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 - `npm run dist`: bản cài NSIS (per-user) + portable dạng .zip vào `dist/`. Không dùng target `portable` (exe tự bung): mỗi lần chạy mất ~3 giây nên menu chuột phải rất chậm.
 - `electron scripts/picker-preview.cjs [rộng] [cao]`: chụp mọi chế độ xem của bảng chọn file và kiểm tra không có chữ/biểu tượng tràn ô.
 - `npm run package`: thư mục `dist/win-unpacked` + shortcut Desktop "Quick Extract Ultra".
-- Phát hành: tăng `version` trong `package.json`, cập nhật `CHANGELOG.md`, commit, `git tag vX.Y.Z`, `git push --tags`; GitHub Actions build và đăng Release.
+- Phát hành: tăng `version` trong `package.json`, cập nhật `CHANGELOG.md`, commit, `git tag -a vX.Y.Z`, đẩy `main` rồi đẩy đúng tag đó (`git push origin vX.Y.Z`); GitHub Actions build bản cài + portable và đăng Release (kèm `latest.yml`), nút "Check for updates" trong app sẽ thấy bản mới. Chỉ đẩy `main` và tag phiên bản, không dùng `--all`/`--mirror` (bản lịch sử cũ trước khi dọn chỉ được giữ trên máy).
 
 ## 5. Quyết định thiết kế quan trọng
 
