@@ -18,16 +18,29 @@ Mở, giải nén và tạo file ZIP, 7Z, RAR cùng hơn 30 định dạng khác
 
 </div>
 
-## ✨ Có gì hay?
+## ✨ Có gì khác biệt?
 
-Quick Extract Ultra làm được những việc hằng ngày như WinRAR hay 7-Zip, và lúc nào cũng cho bạn thấy rõ mọi thứ đang diễn ra thế nào.
+Quick Extract Ultra làm được những việc hằng ngày như WinRAR hay 7-Zip, và còn có vài điều mà chúng không làm được:
 
-- 📦 **Giải nén cả đống file một lúc.** Mỗi file vào một thư mục riêng, có thanh tiến độ để bạn theo dõi.
-- 🔑 **Gặp file có mật khẩu cũng không bị kẹt.** File đó chờ bạn nhập mật khẩu, các file khác vẫn chạy tiếp.
-- 🧹 **Hết cảnh "thư mục lồng trong thư mục".** Chế độ thông minh bỏ bớt lớp thư mục thừa khi không cần.
-- 🛡️ **An toàn cho dữ liệu.** Không ghi đè file nào, cũng không để lại kết quả giải nén dở dang.
-- 🌏 **Có tiếng Việt**, cùng English, 日本語, 简体中文 và 繁體中文.
-- 💻 **Chạy hoàn toàn trên máy bạn.** File của bạn không bao giờ bị gửi đi đâu.
+- 🔑 **Một file có mật khẩu không làm cả loạt bị đứng.** Với hầu hết phần mềm giải nén, chỉ cần một file bị khóa là bảng hỏi mật khẩu hiện lên và mọi thứ phải chờ bạn. Ở đây, file đó tự đứng sang một bên, các file khác vẫn giải nén tiếp, lúc nào rảnh bạn mới nhập mật khẩu.
+- 🔍 **Tự đi tìm file nén giúp bạn.** Chỉ cần chọn một thư mục, app sẽ gom hết các file nén bên trong, kể cả nằm sâu trong thư mục con, rồi giải nén tất cả một lần, mỗi file vào một thư mục riêng.
+- 🛡️ **Không bao giờ để lại thư mục giải nén dở dang.** File được giải nén vào một thư mục tạm trước, chỉ khi 7-Zip xác nhận mọi thứ nguyên vẹn thì mới được chuyển vào đúng chỗ. Lỡ có lỗi, thư mục của bạn vẫn y như cũ, và không file nào bị ghi đè.
+- 🧹 **Hết cảnh "thư mục lồng trong thư mục".** Chỉ một công tắc (Thông minh) là bỏ được lớp thư mục thừa khi không cần.
+- 🔓 **Có cách mở lại file của chính mình khi quên mật khẩu.** Quên mật khẩu file ZIP hay RAR của mình? App có thể thử tìm lại, dùng cả card đồ họa khi được. Hầu hết phần mềm giải nén khác không có tính năng này.
+- 💸 **Miễn phí thật sự.** Không quảng cáo, không thời hạn dùng thử, không bảng nhắc "hãy mua bản quyền". App chạy ngay trên máy, file của bạn không bị gửi đi đâu cả.
+- 🌏 **Nhìn dễ chịu, có tiếng Việt:** giao diện hiện đại, gọn gàng, dùng được bằng Tiếng Việt, English, 日本語, 简体中文 hoặc 繁體中文.
+
+### So sánh nhanh
+
+| | Quick Extract Ultra | 7-Zip | WinRAR |
+|---|:---:|:---:|:---:|
+| Giá | Miễn phí | Miễn phí | Trả phí (có dùng thử) |
+| Mở được ZIP, 7Z và RAR | Có | Có | Có |
+| Vẫn giải nén tiếp khi một file đang chờ mật khẩu | **Có** | Không | Không |
+| Giúp tìm lại mật khẩu đã quên (file của bạn) | **Có** | Không | Không |
+| Tạo được file RAR | Không | Không | Có |
+
+<sub>So với các tính năng có sẵn của từng phần mềm, tính đến năm 2026.</sub>
 
 ## 📥 Tải về và cài đặt
 

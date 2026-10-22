@@ -18,16 +18,29 @@ Open, extract and create ZIP, 7Z, RAR and 30+ other formats in a window that's a
 
 </div>
 
-## ✨ Why you might like it
+## ✨ What makes it different
 
-Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, and it always shows you what's going on.
+Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, plus a few things they don't do:
 
-- 📦 **Unpack a whole pile of archives at once.** Each one gets its own folder, and you can watch the progress.
-- 🔑 **Passwords don't hold anything up.** A locked archive waits for you while the others keep going.
-- 🧹 **No more "folder inside a folder".** Smart mode skips the extra wrapper folder when it isn't needed.
-- 🛡️ **Your files stay safe.** Nothing gets overwritten, and you never end up with a half-extracted mess.
-- 🌏 **Speaks your language:** English, 日本語, Tiếng Việt, 简体中文 and 繁體中文.
-- 💻 **Works offline.** Your files never leave your computer.
+- 🔑 **One password doesn't stop the whole batch.** In most archive tools, a single locked archive pops up a password box and everything waits for you. Here it just steps aside: the rest keep extracting, and you type the password whenever you're ready.
+- 🔍 **It finds your archives for you.** Point it at a folder and it gathers every archive inside, even deep in subfolders, then extracts them all in one go, each into its own folder.
+- 🛡️ **No half-finished folders, ever.** Files are unpacked into a temporary folder first and only moved into place once 7-Zip confirms everything is intact. If something goes wrong, your folders stay exactly as they were, and nothing is ever overwritten.
+- 🧹 **No more "folder inside a folder".** One switch (Smart) removes the extra wrapper folder when it isn't needed.
+- 🔓 **A way back into your own locked files.** Forgot the password to your own ZIP or RAR? The app can try to find it, using your graphics card when it can. Most archive tools don't offer this at all.
+- 💸 **Free, for real.** No ads, no trial period, no "please buy" reminders. It works offline, so your files never leave your computer.
+- 🌏 **Easy on the eyes, in your language:** a clean, modern window in English, 日本語, Tiếng Việt, 简体中文 or 繁體中文.
+
+### At a glance
+
+| | Quick Extract Ultra | 7-Zip | WinRAR |
+|---|:---:|:---:|:---:|
+| Price | Free | Free | Paid (free trial) |
+| Opens ZIP, 7Z and RAR | Yes | Yes | Yes |
+| Keeps extracting while a locked archive waits for its password | **Yes** | No | No |
+| Helps you recover a forgotten password (your own files) | **Yes** | No | No |
+| Creates RAR files | No | No | Yes |
+
+<sub>Compared with each app's standard features as of 2026.</sub>
 
 ## 📥 Download
 

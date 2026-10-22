@@ -22,6 +22,7 @@ Version notes are required for every future app change. Each release should reco
 ### Docs
 
 - READMEs rewritten in a friendlier, plainer tone (English, Japanese, Vietnamese), plus a new **Simplified Chinese** README (`docs/README.zh-Hans.md`). Every button name matches that language's on-screen label.
+- New "What makes it different" section in every README, highlighting what sets the app apart (batches keep going while an archive waits for its password, automatic folder/subfolder scanning, staged extraction that never leaves half-finished folders, smart extraction, password recovery for your own files, free with no trial reminders), plus a short, honest comparison table against 7-Zip and WinRAR (it includes the row WinRAR wins: creating RAR files).
 - Brought up to date with current features: the Delete archive switch, ZIP + RAR password recovery (Try automatically, processing levels, realistic expectations, antivirus tip), Check for updates, five languages.
 - Ko-fi added to every README: a badge at the top and Ko-fi's official GitHub button in the Support section.
 - Fixed an outdated claim: the app is not fully offline. It only goes online when the user presses Check for updates or downloads the recovery tools.
