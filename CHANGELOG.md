@@ -9,6 +9,22 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.3 - 2026-10-22
+
+### Fixed
+
+- **RAR5 password recovery now really runs on the GPU** (hashcat mode 13000), instead of falling back to John on the CPU. Before, "Automatic (GPU if possible)" was misleading for RAR and numeric passwords were slow. Measured on this machine's RTX 3060: ~40,500 guesses/s; a 7-digit numeric RAR5 password was recovered in under a minute, where the CPU path was effectively impractical.
+- hashcat is now launched **from its own folder** so it finds its GPU kernels/modules; previously it failed to start and the engine silently dropped to John (CPU). A real hashcat launch failure is now surfaced, and only then does it fall back to John.
+- Routing is by hash type: ZIP AES → hashcat 13600, RAR5 → hashcat 13000 (both GPU); ZIP ZipCrypto and RAR3 → John (CPU), which have no reliable GPU mode here.
+
+### Verified
+
+- `npm test` 42/42. Real end-to-end on the RTX 3060: `rar2john` hash of a RAR5 archive loaded into hashcat mode 13000 and cracked a 5-digit password in ~25 s and a 7-digit numeric password in ~55 s, all on the GPU (confirmed by the device name NVIDIA GeForce RTX 3060 in hashcat's status), with no fallback to the CPU.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.3.exe`, `QuickExtractUltra-Portable-2.2.3-win-x64.zip`.
+
 ## 2.2.2 - 2026-10-22
 
 ### Added

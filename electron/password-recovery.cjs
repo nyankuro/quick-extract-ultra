@@ -223,8 +223,11 @@ class RecoveryJob {
     const rarStart = line.search(/\$(?:rar5|RAR3)\$/);
     const hash = zipToken ? zipToken[0] : rarStart >= 0 ? line.slice(rarStart).trim() : line.trim();
     const isAes = Boolean(zipToken && zipToken[0].startsWith('$zip2$'));
+    // hashcat GPU modes we support: ZIP AES (13600) and RAR5 (13000). Everything else (ZIP
+    // ZipCrypto, RAR3) has no reliable GPU mode here, so it goes to John on the CPU.
+    const hashcatMode = isAes ? '13600' : /^\$rar5\$/.test(hash) ? '13000' : null;
     await fs.writeFile(hashPath, `${hash}\n`, 'utf8');
-    return { hashPath, isAes, format };
+    return { hashPath, isAes, format, hashcatMode };
   }
 
   emitHashcat(status) {
@@ -232,8 +235,7 @@ class RecoveryJob {
     this.emit({ type: 'progress', percent: status.percent, speed: status.speed, eta: status.eta, tried: status.tried, total: status.total });
   }
 
-  async runHashcat(hashPath, isAes) {
-    const mode = isAes ? '13600' : '17225';
+  async runHashcat(hashPath, mode) {
     const potfile = path.join(this.workDir, 'hashcat.pot');
     const outfile = path.join(this.workDir, 'found.txt');
     const restoreFile = path.join(this.workDir, `${this.session}.restore`);
@@ -273,7 +275,16 @@ class RecoveryJob {
     const finalArgs = resumable
       ? ['--session', this.session, '--restore-file-path', restoreFile, '--restore', '--status', '--status-json', '--status-timer', '1']
       : args;
-    return this.run(this.tools.hashcat, finalArgs, { onLine: (line) => this.emitHashcat(parseHashcatStatus(line)) });
+    // hashcat must run from its own folder so it finds its OpenCL kernels and modules.
+    let errTail = '';
+    const code = await this.run(this.tools.hashcat, finalArgs, {
+      cwd: path.dirname(this.tools.hashcat),
+      onLine: (line) => this.emitHashcat(parseHashcatStatus(line)),
+      onStderr: (chunk) => { errTail = (errTail + chunk).slice(-600); }
+    });
+    // Exit 0 = cracked, 1 = exhausted; anything else is a real hashcat failure.
+    if (code !== 0 && code !== 1) throw Object.assign(new Error(errTail.replace(/\s+/g, ' ').trim() || `hashcat exited with code ${code}`), { code: 'HASHCAT_FAILED' });
+    return code;
   }
 
   async readHashcatResult(outfile) {
@@ -349,13 +360,14 @@ class RecoveryJob {
         this.log('bkcrack did not find the keys; falling back to a password search.');
       }
 
-      const { hashPath, isAes } = await this.writeHash(format);
+      const { hashPath, hashcatMode } = await this.writeHash(format);
 
-      // ZIP AES is fastest on the GPU (hashcat); RAR and legacy ZipCrypto go to John (CPU).
+      // ZIP AES and RAR5 run on the GPU (hashcat, modes 13600 / 13000). ZipCrypto and RAR3
+      // have no GPU mode here, so they go to John (CPU).
       let result = { found: false };
-      const useHashcat = canGpu && format === 'zip' && isAes;
+      const useHashcat = canGpu && Boolean(hashcatMode);
       if (useHashcat) {
-        try { result = await this.runHashcat(hashPath, isAes); }
+        try { result = await this.runHashcat(hashPath, hashcatMode); }
         catch (error) { if (error.code === 'CANCELLED' || error.code === 'PAUSED') throw error; this.log(`hashcat unavailable (${error.message}); using John instead.`); }
       }
       if (!result.found && this.tools.john?.exe) result = await this.runJohn(hashPath);
