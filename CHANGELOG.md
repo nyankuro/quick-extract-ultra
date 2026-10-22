@@ -9,6 +9,32 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## 2.2.8 - 2026-10-22
+
+### Added
+
+- A prominent **"Delete archive"** slide toggle on the Extract screen (amber/red, with a left/right sliding switch). When ON, each source archive is **permanently deleted** right after it extracts **successfully** — never on failure or cancel. Default OFF.
+  - The **first time** it is switched ON, a warning dialog explains that deletion is permanent (files do **not** go to the Recycle Bin and can't be recovered), with **Agree / Cancel** and a **"Don't show this again"** checkbox.
+  - Persistence rule (as requested): if the user ticks "Don't show this again" and agrees, their on/off choice is remembered across app launches and the warning never shows again. If they do **not** tick it, the toggle resets to OFF on every future launch and warns again next time. Backed by two new settings, `deleteAfterExtract` and `deleteAfterExtractRemember`.
+  - Permanent delete (the toggle) takes precedence over the gentler Settings option "Move archive to Recycle Bin after extract" — they never both run on the same file. Multi-volume sets are deleted together.
+  - Toggle label, warning text and checkbox are in all five languages.
+
+### Changed
+
+- The **"Save to:"** control on the Extract screen now stands out: a brighter cyan frame/glow and a clearer, brighter "Save to:" label, so it's easier to spot among the other buttons.
+
+### Safety
+
+- Deletion only ever runs inside the extraction success path (after 7-Zip's exit code and integrity check), so a failed or cancelled extraction never deletes the original. The destructive toggle is off by default, requires an explicit first-run confirmation, and only persists when the user opts in.
+
+### Verification
+
+- `npm run typecheck`, `npm test` (42/42 pass, including the updated settings-persistence test), `npm run build`, `npm run test:ui`.
+
+### Package
+
+- Outputs: `QuickExtractUltra-Setup-2.2.8.exe`, `QuickExtractUltra-Portable-2.2.8-win-x64.zip`.
+
 ## 2.2.7 - 2026-10-22
 
 ### Changed

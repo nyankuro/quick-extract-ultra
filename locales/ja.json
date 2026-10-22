@@ -376,5 +376,17 @@
   "recover.extractedLog": "{path} に展開しました",
   "recover.extracted": "{name} を {target} に展開しました",
   "recover.exhausted": "この設定ではパスワードが見つかりませんでした。より大きなワードリストや広い総当たり範囲を試してください。",
-  "recover.errorLog": "復元エラー: {message}"
+  "recover.errorLog": "復元エラー: {message}",
+  "extract.deleteAfter": "書庫を削除",
+  "extract.deleteAfterHint": "展開に成功した書庫を展開後に完全に削除します。元ファイルは完全に消え、ごみ箱には入りません",
+  "deleteWarning.title": "展開後に書庫を削除しますか？",
+  "deleteWarning.body": "オンにすると、各書庫ファイルは展開に成功した直後に完全に削除されます。完全に成功したときだけで、失敗やキャンセルのときは削除しません。",
+  "deleteWarning.note": "完全に削除されたファイルはごみ箱に入らず、元に戻せません。",
+  "deleteWarning.dontShow": "次回から表示しない（選択を記憶する）",
+  "deleteWarning.agree": "オンにして削除",
+  "deleteWarning.cancel": "キャンセル",
+  "log.deleteAfterOn": "展開後に削除：オン。展開に成功した書庫は完全に削除されます。",
+  "log.deleteAfterOff": "展開後に削除：オフ。",
+  "main.deleted": "完全に削除しました：{name}",
+  "main.deleteFailed": "展開しましたが、{name} を削除できませんでした：{message}"
 }

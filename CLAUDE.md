@@ -15,6 +15,7 @@ Trình quản lý file nén cho Windows, giống WinRAR/7-Zip/NanaZip/PeaZip nh�
 - Thẻ Xem bên trong: liệt kê bằng `7z l -slt`, điều hướng thư mục, tìm kiếm, giải nén mục chọn, kiểm tra.
 - Thẻ Kiểm tra & mã băm: `7z t`, mã băm tính bằng Node (`crypto`, `zlib.crc32`).
 - Cài đặt (lưu `settings.json` trong userData): ngôn ngữ, menu Explorer, mở thư mục sau khi giải nén, giữ Mark-of-the-Web (`-snz`), chuyển file nén vào Thùng rác.
+- Nút gạt "Xóa file nén" (nổi bật, màu hổ phách) trên thẻ Giải nén: **xóa vĩnh viễn** file nén sau khi giải nén **thành công** (không vào Thùng rác). Chỉ chạy trong nhánh thành công của `processArchive` (sau khi 7-Zip báo thành công), không bao giờ xóa khi lỗi/hủy. Lần đầu bật hiện hộp cảnh báo + ô "không hiện lại". Hai khóa settings `deleteAfterExtract`/`deleteAfterExtractRemember`: giá trị bật/tắt chỉ được nhớ qua các lần mở app khi người dùng tích "không hiện lại"; nếu không, mặc định OFF mỗi lần mở. Cờ `deleteAfterExtract` truyền qua `ScanOptions` lúc giải nén (không phải settings phía main). Ưu tiên hơn tùy chọn "chuyển vào Thùng rác"; không bao giờ chạy cả hai cho cùng một file.
 - Menu chuột phải (HKCU, chỉ khi người dùng bật), lệnh dòng lệnh `--qe-action=<action> "<path>"`, single-instance gom nhiều file.
 - Kéo thả trên mọi thẻ; ~30 định dạng đọc; `.tar.gz` tự giải nén lớp TAR; bộ nhiều phần mở qua phần đầu.
 

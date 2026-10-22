@@ -563,6 +563,7 @@ ipcMain.handle('archives:extract-all', async (_event, { folderPath, archiveIds, 
   const summary = batch.summary;
   const outputParentPaths = new Set();
   const smart = Boolean(options?.smart);
+  const deleteAfterExtract = Boolean(options?.deleteAfterExtract);
   try {
     await rememberLastFolder(folderPath);
     const selectedIds = new Set(archiveIds);
@@ -594,7 +595,18 @@ ipcMain.handle('archives:extract-all', async (_event, { folderPath, archiveIds, 
           targetPath: publishedPath, targetFolder: displayTargetFolder(folderPath, publishedPath)
         } });
         log('done', tr('main.completed', { name: archive.fileName, seconds: ((Date.now() - startedAt) / 1000).toFixed(1) }));
-        if (settings.value.trashAfterExtract) {
+        // Only ever runs after a verified-successful extraction (we are inside the
+        // try's success path, past extractArchive which checks 7-Zip's exit code).
+        // Permanent delete (the main-screen toggle) takes precedence over the
+        // gentler "move to Recycle Bin" setting; they never both run.
+        if (deleteAfterExtract) {
+          try {
+            for (const part of await volumeSet(archive.archivePath)) await fs.rm(part, { force: true });
+            log('info', tr('main.deleted', { name: archive.fileName }));
+          } catch (error) {
+            log('error', tr('main.deleteFailed', { name: archive.fileName, message: error.message }));
+          }
+        } else if (settings.value.trashAfterExtract) {
           try {
             for (const part of await volumeSet(archive.archivePath)) await shell.trashItem(part);
             log('info', tr('main.trashed', { name: archive.fileName }));

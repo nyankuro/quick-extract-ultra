@@ -174,9 +174,15 @@ test('settings are sanitised and saved', async () => {
   assert.equal((await store.load()).language, 'en');
   await store.update({ language: 'ja', explorerMenu: 'yes', bogus: 1 });
   const reloaded = new SettingsStore(path.join(workspace, 'settings'));
-  assert.deepEqual(await reloaded.load(), { language: 'ja', explorerMenu: true, openFolderAfter: false, propagateZone: true, trashAfterExtract: false });
+  assert.deepEqual(await reloaded.load(), { language: 'ja', explorerMenu: true, openFolderAfter: false, propagateZone: true, trashAfterExtract: false, deleteAfterExtract: false, deleteAfterExtractRemember: false });
   await reloaded.update({ language: 'xx' });
   assert.equal(reloaded.value.language, 'en');
+  // The "delete after extract" choice persists only once the user has chosen to remember it.
+  await reloaded.update({ deleteAfterExtract: true, deleteAfterExtractRemember: 'yes' });
+  const third = new SettingsStore(path.join(workspace, 'settings'));
+  await third.load();
+  assert.equal(third.value.deleteAfterExtract, true);
+  assert.equal(third.value.deleteAfterExtractRemember, true);
 });
 
 const labels = { archiveMenu: 'QEU', open: 'Mở', extractTo: 'To...', extractHere: 'ここに展開', extractFolder: 'Folder', test: 'Test', addMenu: 'Add', addArchive: 'Add...', addZip: 'ZIP', add7z: '7Z', hash: 'Hash' };

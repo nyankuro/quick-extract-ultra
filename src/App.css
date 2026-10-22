@@ -1190,6 +1190,14 @@ button:disabled {
   color: var(--text);
   font-weight: 600;
   cursor: pointer;
+  /* Make the "Save to" box stand out from the other controls. */
+  border-color: rgba(25, 200, 255, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(25, 200, 255, 0.16), 0 0 20px rgba(25, 200, 255, 0.1);
+}
+
+.destination-button:hover {
+  border-color: rgba(25, 200, 255, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(25, 200, 255, 0.24), 0 0 26px rgba(25, 200, 255, 0.18);
 }
 
 .destination-control.active .destination-button {
@@ -1199,7 +1207,11 @@ button:disabled {
 
 .destination-label {
   flex: 0 0 auto;
-  color: var(--cyan-soft);
+  /* Brighter, clearer "Save to" label. */
+  color: #d6f4ff;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-shadow: 0 0 10px rgba(25, 200, 255, 0.4);
 }
 
 .destination-value {
@@ -1224,6 +1236,132 @@ button:disabled {
 .destination-note {
   flex-basis: 100%;
   font-size: 13px;
+}
+
+/* --- Delete archive after extract: a standout amber/red slide toggle --- */
+.delete-after-toggle {
+  color: #ffe0bf;
+  border-color: rgba(255, 158, 60, 0.5);
+}
+
+.delete-after-toggle:hover {
+  border-color: rgba(255, 158, 60, 0.85);
+  box-shadow: 0 0 26px rgba(255, 140, 40, 0.18);
+}
+
+.delete-after-toggle.active {
+  color: #2a1203;
+  border-color: rgba(255, 150, 40, 0.95);
+  background: linear-gradient(135deg, #ffb24a, #ff6a5c);
+  box-shadow: 0 0 30px rgba(255, 140, 40, 0.32);
+}
+
+.delete-after-toggle.active svg {
+  color: #2a1203;
+}
+
+/* The left/right sliding switch inside the toggle button. */
+.slide-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(170, 211, 255, 0.24);
+  background: rgba(111, 130, 160, 0.16);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.slide-knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e7eefc;
+  transform: translateY(-50%);
+  transition: left 0.18s ease, background 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.slide-switch.on {
+  background: rgba(42, 18, 3, 0.55);
+  border-color: rgba(42, 18, 3, 0.55);
+}
+
+.slide-switch.on .slide-knob {
+  left: 25px;
+  background: #2a1203;
+}
+
+/* --- First-run "delete after extract" confirmation dialog --- */
+.delete-warning-dialog {
+  max-width: 440px;
+  border-color: rgba(255, 150, 40, 0.55);
+  box-shadow: 0 0 60px rgba(255, 120, 30, 0.22);
+}
+
+.delete-warning-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.delete-warning-header h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.delete-warning-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: #ffce8a;
+  background: rgba(255, 150, 40, 0.16);
+  border: 1px solid rgba(255, 150, 40, 0.4);
+}
+
+.delete-warning-body p {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.delete-warning-note {
+  color: #ffd0a6;
+  font-weight: 600;
+}
+
+.delete-warning-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-warning-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.delete-warning-confirm {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff8a3d, #ff4d67);
+  box-shadow: 0 0 28px rgba(255, 90, 60, 0.28);
+}
+
+.delete-warning-confirm:hover {
+  box-shadow: 0 0 38px rgba(255, 70, 90, 0.4);
 }
 
 .visually-hidden {

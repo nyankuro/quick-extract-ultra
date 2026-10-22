@@ -35,6 +35,7 @@ import BrowseView, { type BrowseRequest } from './BrowseView';
 import ToolsView, { type ToolsRequest } from './ToolsView';
 import RecoverView from './RecoverView';
 import SettingsDialog from './SettingsDialog';
+import DeleteArchiveDialog from './DeleteArchiveDialog';
 import { LANGUAGE_NAMES, LanguageProvider, useT, type Translate } from './i18n';
 import type {
   ActivityLog,
@@ -117,7 +118,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   explorerMenu: false,
   openFolderAfter: false,
   propagateZone: true,
-  trashAfterExtract: false
+  trashAfterExtract: false,
+  deleteAfterExtract: false,
+  deleteAfterExtractRemember: false
 };
 
 function createWelcomeLog(t: Translate): ActivityLog {
@@ -198,6 +201,11 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
   const [useMainFolder, setUseMainFolder] = useState(false);
   const [newMainFolder, setNewMainFolder] = useState(false);
   const [smartExtract, setSmartExtract] = useState(false);
+  // "Delete archive after extract": session-only value used when the user has
+  // NOT ticked "don't show again". When they have (settings.deleteAfterExtractRemember),
+  // the toggle instead reflects the persisted settings.deleteAfterExtract.
+  const [sessionDeleteAfter, setSessionDeleteAfter] = useState(false);
+  const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
   const [outputFolder, setOutputFolder] = useState('');
   const [lastFolderScanWasDeep, setLastFolderScanWasDeep] = useState(false);
   const [lastOutputFolderPath, setLastOutputFolderPath] = useState('');
@@ -456,7 +464,10 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
       selectedReadyIds,
       selectedArchivePaths.length > 0 ? selectedArchivePaths : undefined,
       // "Save to" applies only to explicitly chosen files; scanned folders extract beside each archive.
-      buildScanOptions(useMainFolder, newMainFolder, lastFolderScanWasDeep, selectedArchivePaths.length > 0 ? outputFolder : '')
+      {
+        ...buildScanOptions(useMainFolder, newMainFolder, lastFolderScanWasDeep, selectedArchivePaths.length > 0 ? outputFolder : ''),
+        deleteAfterExtract
+      }
     );
   };
 
@@ -487,6 +498,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     setUseMainFolder(false);
     setNewMainFolder(false);
     setSmartExtract(false);
+    setSessionDeleteAfter(false);
     setOutputFolder('');
     setLastFolderScanWasDeep(false);
     setLastOutputFolderPath('');
@@ -558,6 +570,45 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
     const next = !smartExtract;
     setSmartExtract(next);
     addLog('info', t(next ? 'log.smartOn' : 'log.smartOff'));
+  };
+
+  // Effective "delete archive after extract" state shown on the toggle and sent to
+  // the extractor. When the user has permanently confirmed ("don't show again"),
+  // it comes from saved settings; otherwise it is a session-only value.
+  const deleteAfterExtract = settings.deleteAfterExtractRemember ? settings.deleteAfterExtract : sessionDeleteAfter;
+
+  const persistDeleteSetting = async (patch: Partial<AppSettings>) => {
+    const result = await window.quickExtract.updateSettings(patch);
+    if (result.ok) onSettingsChange(result.value);
+  };
+
+  const toggleDeleteAfter = () => {
+    if (isExtracting) {
+      addLog('error', t('log.waitBeforeMode'));
+      return;
+    }
+    if (deleteAfterExtract) {
+      // Turning OFF. Remember the "off" choice too when already confirmed.
+      if (settings.deleteAfterExtractRemember) void persistDeleteSetting({ deleteAfterExtract: false });
+      else setSessionDeleteAfter(false);
+      addLog('info', t('log.deleteAfterOff'));
+      return;
+    }
+    // Turning ON. Confirmed users skip straight to on; everyone else sees the warning.
+    if (settings.deleteAfterExtractRemember) {
+      void persistDeleteSetting({ deleteAfterExtract: true });
+      addLog('info', t('log.deleteAfterOn'));
+    } else {
+      setDeleteWarningOpen(true);
+    }
+  };
+
+  const resolveDeleteWarning = (agreed: boolean, dontShowAgain: boolean) => {
+    setDeleteWarningOpen(false);
+    if (!agreed) return;
+    if (dontShowAgain) void persistDeleteSetting({ deleteAfterExtract: true, deleteAfterExtractRemember: true });
+    else setSessionDeleteAfter(true);
+    addLog('info', t('log.deleteAfterOn'));
   };
 
   const rescanSelectedFiles = async (
@@ -869,6 +920,21 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
                     <span className={`mode-state ${newMainFolder ? 'on' : 'off'}`}>{newMainFolder ? t('common.on') : t('common.off')}</span>
                   </button>
                   <button
+                    className={`secondary-button delete-after-toggle ${deleteAfterExtract ? 'active' : ''}`}
+                    type="button"
+                    role="switch"
+                    aria-checked={deleteAfterExtract}
+                    onClick={toggleDeleteAfter}
+                    disabled={busy}
+                    title={t('extract.deleteAfterHint')}
+                  >
+                    <Trash2 size={20} aria-hidden="true" />
+                    {t('extract.deleteAfter')}
+                    <span className={`slide-switch ${deleteAfterExtract ? 'on' : 'off'}`} aria-hidden="true">
+                      <span className="slide-knob" />
+                    </span>
+                  </button>
+                  <button
                     className="primary-button"
                     type="button"
                     data-action="extract-all"
@@ -1014,6 +1080,7 @@ function Workspace({ settings, onSettingsChange }: WorkspaceProps) {
           addLog={addLog}
         />
       )}
+      {deleteWarningOpen && <DeleteArchiveDialog onResolve={resolveDeleteWarning} />}
     </main>
   );
 }

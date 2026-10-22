@@ -7,7 +7,12 @@ const DEFAULT_SETTINGS = {
   explorerMenu: false,
   openFolderAfter: false,
   propagateZone: true,
-  trashAfterExtract: false
+  trashAfterExtract: false,
+  // "Delete archive after extract" toggle. The remembered on/off value is only
+  // honoured on launch when deleteAfterExtractRemember is true (user ticked
+  // "don't show again"); otherwise the toggle resets to OFF each launch.
+  deleteAfterExtract: false,
+  deleteAfterExtractRemember: false
 };
 const LANGUAGES = new Set(['en', 'ja', 'vi', 'zh-Hans', 'zh-Hant']);
 
@@ -17,7 +22,9 @@ function sanitize(input = {}) {
     explorerMenu: Boolean(input.explorerMenu),
     openFolderAfter: Boolean(input.openFolderAfter),
     propagateZone: input.propagateZone === undefined ? DEFAULT_SETTINGS.propagateZone : Boolean(input.propagateZone),
-    trashAfterExtract: Boolean(input.trashAfterExtract)
+    trashAfterExtract: Boolean(input.trashAfterExtract),
+    deleteAfterExtract: Boolean(input.deleteAfterExtract),
+    deleteAfterExtractRemember: Boolean(input.deleteAfterExtractRemember)
   };
 }
 

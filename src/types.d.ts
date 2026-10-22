@@ -40,6 +40,7 @@ export interface ScanOptions {
   newMainFolder?: boolean;
   deepScan?: boolean;
   smart?: boolean;
+  deleteAfterExtract?: boolean;
   outputFolder?: string;
 }
 
@@ -51,6 +52,8 @@ export interface AppSettings {
   openFolderAfter: boolean;
   propagateZone: boolean;
   trashAfterExtract: boolean;
+  deleteAfterExtract: boolean;
+  deleteAfterExtractRemember: boolean;
 }
 
 export interface AppInfo {

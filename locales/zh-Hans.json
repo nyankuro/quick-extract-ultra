@@ -376,5 +376,17 @@
   "recover.extractedLog": "已解压到 {path}",
   "recover.extracted": "已把 {name} 解压到 {target}",
   "recover.exhausted": "用当前设置未找到密码。请试更大的密码字典或更大的暴力破解范围。",
-  "recover.errorLog": "恢复出错：{message}"
+  "recover.errorLog": "恢复出错：{message}",
+  "extract.deleteAfter": "删除压缩包",
+  "extract.deleteAfterHint": "成功解压后永久删除每个压缩包——原文件彻底消失，不进回收站",
+  "deleteWarning.title": "解压后删除压缩包？",
+  "deleteWarning.body": "开启后，每个压缩包会在成功解压后立即被永久删除。仅在完全解压成功时才会删除，解压失败或取消时绝不删除。",
+  "deleteWarning.note": "被永久删除的文件不会进入回收站，无法恢复。",
+  "deleteWarning.dontShow": "下次不再显示（记住我的选择）",
+  "deleteWarning.agree": "开启并删除",
+  "deleteWarning.cancel": "取消",
+  "log.deleteAfterOn": "解压后删除：已开启，成功解压后压缩包将被永久删除。",
+  "log.deleteAfterOff": "解压后删除：已关闭。",
+  "main.deleted": "已永久删除：{name}",
+  "main.deleteFailed": "已解压，但无法删除 {name}：{message}"
 }

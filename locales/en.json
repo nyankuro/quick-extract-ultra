@@ -376,5 +376,17 @@
   "recover.extractedLog": "Extracted to {path}",
   "recover.extracted": "Extracted {name} to {target}",
   "recover.exhausted": "Password not found with these settings. Try a bigger wordlist or a wider brute-force range.",
-  "recover.errorLog": "Recovery error: {message}"
+  "recover.errorLog": "Recovery error: {message}",
+  "extract.deleteAfter": "Delete archive",
+  "extract.deleteAfterHint": "Permanently delete each archive after it extracts successfully — the originals are gone for good and do NOT go to the Recycle Bin",
+  "deleteWarning.title": "Delete archives after extracting?",
+  "deleteWarning.body": "When this is on, each archive file is permanently deleted right after it extracts successfully. This happens only on a fully successful extraction — never if it fails or is cancelled.",
+  "deleteWarning.note": "Permanently deleted files do NOT go to the Recycle Bin and cannot be recovered.",
+  "deleteWarning.dontShow": "Don't show this again (remember my choice)",
+  "deleteWarning.agree": "Turn on & delete",
+  "deleteWarning.cancel": "Cancel",
+  "log.deleteAfterOn": "Delete-after-extract on: archives will be permanently deleted after a successful extraction.",
+  "log.deleteAfterOff": "Delete-after-extract off.",
+  "main.deleted": "Permanently deleted: {name}",
+  "main.deleteFailed": "Extracted, but could not delete {name}: {message}"
 }

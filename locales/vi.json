@@ -376,5 +376,17 @@
   "recover.extractedLog": "Đã giải nén vào {path}",
   "recover.extracted": "Đã giải nén {name} vào {target}",
   "recover.exhausted": "Không tìm thấy mật khẩu với thiết lập này. Thử danh sách lớn hơn hoặc mở rộng phạm vi dò.",
-  "recover.errorLog": "Lỗi khôi phục: {message}"
+  "recover.errorLog": "Lỗi khôi phục: {message}",
+  "extract.deleteAfter": "Xóa file nén",
+  "extract.deleteAfterHint": "Xóa vĩnh viễn mỗi file nén sau khi giải nén thành công — file gốc mất hẳn và KHÔNG vào Thùng rác",
+  "deleteWarning.title": "Xóa file nén sau khi giải nén?",
+  "deleteWarning.body": "Khi bật, mỗi file nén sẽ bị xóa vĩnh viễn ngay sau khi giải nén thành công. Chỉ xóa khi giải nén thành công hoàn toàn, không bao giờ xóa nếu giải nén lỗi hoặc bị hủy.",
+  "deleteWarning.note": "File bị xóa vĩnh viễn sẽ KHÔNG vào Thùng rác và không thể khôi phục.",
+  "deleteWarning.dontShow": "Không hiện lại lần sau (ghi nhớ lựa chọn của tôi)",
+  "deleteWarning.agree": "Bật và xóa",
+  "deleteWarning.cancel": "Hủy",
+  "log.deleteAfterOn": "Đã bật xóa sau khi giải nén: file nén sẽ bị xóa vĩnh viễn sau khi giải nén thành công.",
+  "log.deleteAfterOff": "Đã tắt xóa sau khi giải nén.",
+  "main.deleted": "Đã xóa vĩnh viễn: {name}",
+  "main.deleteFailed": "Đã giải nén, nhưng không thể xóa {name}: {message}"
 }
