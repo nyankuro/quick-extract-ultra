@@ -48,9 +48,18 @@ WinRAR、7-Zip 能做的日常工作它都能做，还有一些它们做不到�
 2. 二选一下载：
    - **`QuickExtractUltra-Setup-x.y.z.exe`**：安装版，最省事。会在开始菜单和桌面创建快捷方式，不需要管理员权限。
    - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`**：免安装的便携版。解压到任意位置（U 盘也可以），运行 `Quick Extract Ultra.exe` 即可。
-3. 打开软件。如果 Windows 提示“Windows 已保护你的电脑”，请点击 **更多信息** →**仍要运行**。出现这个提示是因为软件比较新，还没有代码签名。全部源代码都公开在这里，谁都可以查看。
+3. 打开软件。如果出现蓝色的“Windows 已保护你的电脑”提示，请点击 **更多信息** →**仍要运行**（[为什么会这样？](#安全吗)）。
 
 卸载时，在 Windows 的 **设置 → 应用** 里操作即可，右键菜单也会一并清除。
+
+### 安全吗？
+
+安全。那个蓝色提示框只是说明软件比较新，还没有代码签名（签名证书每年都要付费），**并不是**病毒警告。用这个版本的人多了以后，提示也可能自己消失。（在 Ko-fi 上支持我，能帮我早日买到签名证书。）
+
+想自己确认一下？
+- 每个下载文件都是 GitHub 根据这里公开的源代码自动构建的，不是在某个人的电脑上打包的。每次构建的记录都能在 [Actions](https://github.com/nyankuro/quick-extract-ultra/actions) 里看到。
+- 每个[版本发布页](https://github.com/nyankuro/quick-extract-ultra/releases/latest)都列出了每个文件的 SHA-256 校验码，以及 VirusTotal 扫描结果的链接（70 多款杀毒软件一起检查）。
+- 请只从这个 GitHub 页面下载 Quick Extract Ultra。其他网站上的副本可能被改动过。
 
 ### 30 秒上手
 
@@ -134,9 +143,6 @@ WinRAR、7-Zip 能做的日常工作它都能做，还有一些它们做不到�
 
 **能打开哪些格式？**
 ZIP、ZIPX、7Z、RAR（含 RAR5）、TAR、GZ、TGZ、BZ2、XZ、TXZ、ZST、LZ、LZMA、Z、CAB、ISO、WIM、ARJ、LZH/LHA、CPIO、RPM、DEB、DMG、VHD、VHDX 和 XAR。像 `.part1.rar`、`.7z.001` 这样的分卷压缩包，打开第一个分卷即可。
-
-**为什么第一次打开时 Windows 会警告？**
-没有付费代码签名证书的新软件都会触发 SmartScreen 警告。点击 **更多信息** →**仍要运行** 即可。我很希望有一天能给软件签名，你的支持会让这一天早点到来。
 
 **设置保存在哪里？**
 保存在 `%APPDATA%\quick-extract-ultra\settings.json`。压缩包列表和密码永远不会被保存。

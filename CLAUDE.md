@@ -49,6 +49,7 @@ Electron 43, React 19, TypeScript 6, Vite 8, `lucide-react`, `7zip-bin-full` (7-
 - `electron scripts/picker-preview.cjs [rộng] [cao]`: chụp mọi chế độ xem của bảng chọn file và kiểm tra không có chữ/biểu tượng tràn ô.
 - `npm run package`: thư mục `dist/win-unpacked` + shortcut Desktop "Quick Extract Ultra".
 - Phát hành: tăng `version` trong `package.json`, cập nhật `CHANGELOG.md`, commit, `git tag -a vX.Y.Z`, đẩy `main` rồi đẩy đúng tag đó (`git push origin vX.Y.Z`); GitHub Actions build bản cài + portable và đăng Release (kèm `latest.yml`), nút "Check for updates" trong app sẽ thấy bản mới. Chỉ đẩy `main` và tag phiên bản, không dùng `--all`/`--mirror` (bản lịch sử cũ trước khi dọn chỉ được giữ trên máy).
+- Sau khi Release xong (để người dùng tin app không phải virus, vì app chưa ký số nên SmartScreen sẽ cảnh báo): lấy SHA-256 từ `digest` của asset (`gh api repos/nyankuro/quick-extract-ultra/releases/tags/vX.Y.Z`), tải về quét bằng Microsoft Defender (`MpCmdRun -Scan -ScanType 3 -File ...`), gửi hai link tải (Setup.exe và Portable.zip) vào ô URL của VirusTotal (VirusTotal tự tải và quét file), chờ quét xong rồi thêm mục "Is it safe?" vào ghi chú Release: link build trong Actions, kết quả VirusTotal/Defender, bảng SHA-256.
 
 ## 5. Quyết định thiết kế quan trọng
 

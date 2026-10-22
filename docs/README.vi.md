@@ -48,9 +48,18 @@ Quick Extract Ultra làm được những việc hằng ngày như WinRAR hay 7-
 2. Chọn một trong hai:
    - **`QuickExtractUltra-Setup-x.y.z.exe`** là bản cài đặt, dễ nhất. Nó tạo lối tắt ở menu Start và ngoài màn hình, không cần quyền quản trị.
    - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`** là bản dùng ngay, không cần cài. Giải nén ra đâu cũng được (USB cũng được) rồi chạy `Quick Extract Ultra.exe`.
-3. Mở app lên. Nếu Windows báo *"Windows đã bảo vệ PC của bạn"* (*Windows protected your PC*), bấm **Thông tin thêm** (*More info*) rồi **Vẫn chạy** (*Run anyway*). Thông báo này hiện ra vì app còn mới và chưa có chữ ký số. Toàn bộ mã nguồn đều công khai ở đây để ai cũng xem được.
+3. Mở app lên. Nếu hiện bảng màu xanh *"Windows đã bảo vệ PC của bạn"* (*Windows protected your PC*), bấm **Thông tin thêm** (*More info*) rồi **Vẫn chạy** (*Run anyway*). ([Vì sao vậy?](#có-an-toàn-không))
 
 Muốn gỡ app thì vào **Cài đặt của Windows → Ứng dụng**. Menu chuột phải cũng tự được gỡ theo.
+
+### Có an toàn không?
+
+Có. Bảng màu xanh đó chỉ có nghĩa là app còn mới và chưa có chữ ký số (loại chứng chỉ phải trả phí hằng năm). Đó **không phải** cảnh báo virus, và nó có thể tự hết khi đã có đủ nhiều người tải và dùng phiên bản này. (Ủng hộ mình trên Ko-fi sẽ giúp mình có tiền mua chữ ký số sau này.)
+
+Muốn tự kiểm tra?
+- Mọi file tải về đều do GitHub tự động build từ chính mã nguồn công khai ở đây, không phải build trên máy riêng của ai cả. Bạn xem được từng lần build ở mục [Actions](https://github.com/nyankuro/quick-extract-ultra/actions).
+- Mỗi [trang phát hành](https://github.com/nyankuro/quick-extract-ultra/releases/latest) đều ghi mã SHA-256 của từng file và link kết quả quét trên VirusTotal, nơi hơn 70 phần mềm diệt virus cùng kiểm tra.
+- Chỉ nên tải Quick Extract Ultra từ trang GitHub này. File ở trang web khác có thể đã bị chỉnh sửa.
 
 ### Giải nén thử trong 30 giây
 
@@ -134,9 +143,6 @@ Không. Mọi thứ chạy trên máy bạn bằng bộ máy 7-Zip quen thuộc,
 
 **App mở được những định dạng nào?**
 ZIP, ZIPX, 7Z, RAR (cả RAR5), TAR, GZ, TGZ, BZ2, XZ, TXZ, ZST, LZ, LZMA, Z, CAB, ISO, WIM, ARJ, LZH/LHA, CPIO, RPM, DEB, DMG, VHD, VHDX và XAR. File chia nhiều phần như `.part1.rar` hay `.7z.001` thì bạn chỉ cần mở phần đầu tiên.
-
-**Sao lần đầu mở app Windows lại cảnh báo?**
-App mới chưa có chứng chỉ chữ ký số (loại phải trả phí) thì Windows sẽ hiện cảnh báo SmartScreen. Bạn bấm **Thông tin thêm** (*More info*) rồi **Vẫn chạy** (*Run anyway*) là được. Mình rất muốn có chữ ký số cho app một ngày nào đó, và sự ủng hộ của bạn sẽ giúp điều đó thành hiện thực.
 
 **Cài đặt của app được lưu ở đâu?**
 Ở `%APPDATA%\quick-extract-ultra\settings.json`. Danh sách file nén và mật khẩu thì không bao giờ được lưu lại.

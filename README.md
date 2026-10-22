@@ -48,9 +48,18 @@ Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, plus a few thi
 2. Pick one:
    - **`QuickExtractUltra-Setup-x.y.z.exe`** is the installer, and the easy choice. It adds Start menu and desktop shortcuts and doesn't need admin rights.
    - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`** is the portable version. Unzip it anywhere (a USB stick works too) and run `Quick Extract Ultra.exe`.
-3. Open it. If Windows says *"Windows protected your PC"*, click **More info → Run anyway**. You see this because the app is new and isn't code-signed yet. All of the source code is right here if you'd like to check it.
+3. Open it. If a blue *"Windows protected your PC"* box appears, click **More info → Run anyway**. ([Why does this happen?](#is-it-safe))
 
 To uninstall, go to **Windows Settings → Apps**. The right-click menu is removed for you.
+
+### Is it safe?
+
+Yes. That blue box only means the app is new and isn't code-signed yet (a signing certificate costs money every year). It is **not** a virus warning, and it may go away on its own once enough people have downloaded and run this version. (Supporting the project on Ko-fi helps pay for a certificate one day.)
+
+Want to check for yourself?
+- Every download is built automatically by GitHub from the source code you can read here, not on someone's PC. You can see each build under [Actions](https://github.com/nyankuro/quick-extract-ultra/actions).
+- Each [release page](https://github.com/nyankuro/quick-extract-ultra/releases/latest) lists the SHA-256 checksum of every file and links to its VirusTotal scan, where 70+ antivirus programs check it.
+- Please download Quick Extract Ultra only from this GitHub page. Copies on other sites may have been changed.
 
 ### Extract something in 30 seconds
 
@@ -134,9 +143,6 @@ No. Everything happens on your computer, using the well-known 7-Zip engine, and 
 
 **Which formats can it open?**
 ZIP, ZIPX, 7Z, RAR (incl. RAR5), TAR, GZ, TGZ, BZ2, XZ, TXZ, ZST, LZ, LZMA, Z, CAB, ISO, WIM, ARJ, LZH/LHA, CPIO, RPM, DEB, DMG, VHD, VHDX and XAR. Split archives such as `.part1.rar` or `.7z.001` open from their first part.
-
-**Why does Windows warn me the first time?**
-New apps without a paid code-signing certificate get a SmartScreen warning. Click **More info → Run anyway**. I'd love to sign the app one day, and your support helps make that happen.
 
 **Where are my settings saved?**
 In `%APPDATA%\quick-extract-ultra\settings.json`. Your archive lists and passwords are never saved.

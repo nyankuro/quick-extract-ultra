@@ -9,6 +9,13 @@ Version notes are required for every future app change. Each release should reco
 - Verification performed.
 - Package or shortcut changes, if any.
 
+## Unreleased
+
+### Docs
+
+- New "Is it safe?" section in all four READMEs: explains that the blue SmartScreen box appears because the app is new and not code-signed (it is not a virus warning), how to run past it, and how anyone can verify a download (built by GitHub Actions from the public source, SHA-256 checksums and VirusTotal scans on each release page, only download from GitHub). It replaces the old FAQ entry about the warning.
+- The v2.3.0 release notes now include the SHA-256 checksums, Microsoft Defender and VirusTotal results, and a link to the GitHub build that produced the files.
+
 ## 2.3.0 - 2026-10-22
 
 ### Changed
