@@ -19,9 +19,17 @@ Version notes are required for every future app change. Each release should reco
 - The built-in common-passwords wordlist is now explicitly dedicated to the public domain (CC0 1.0) instead of "same MIT license as the app".
 - Bundled third-party software keeps its own licenses (7-Zip LGPL + unRAR restriction, Electron/React MIT, lucide ISC); the recovery tools are still never bundled.
 
+### Docs
+
+- READMEs rewritten in a friendlier, plainer tone (English, Japanese, Vietnamese), plus a new **Simplified Chinese** README (`docs/README.zh-Hans.md`). Every button name matches that language's on-screen label.
+- Brought up to date with current features: the Delete archive switch, ZIP + RAR password recovery (Try automatically, processing levels, realistic expectations, antivirus tip), Check for updates, five languages.
+- Ko-fi added to every README: a badge at the top and Ko-fi's official GitHub button in the Support section.
+- Fixed an outdated claim: the app is not fully offline. It only goes online when the user presses Check for updates or downloads the recovery tools.
+- The UI smoke test also captures `docs/screenshots/extract-zh-Hans.png` for the Chinese README.
+
 ### Verification
 
-- `npm run typecheck`, `npm test`, `npm run build`.
+- `npm run typecheck`, `npm test`, `npm run build`, `npm run test:ui`.
 
 ## 2.2.9 - 2026-10-22
 

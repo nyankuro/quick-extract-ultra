@@ -165,7 +165,7 @@ async function main() {
   assert.ok(await window.webContents.executeJavaScript("document.querySelector('[data-action=choose-destination]').textContent.includes('Next to each archive')"));
 
   // Language switch re-renders the whole interface.
-  for (const [language, label, name] of [['ja', '展開', 'extract-ja.png'], ['vi', 'Giải nén', 'extract-vi.png'], ['en', 'Extract', 'extract-en.png']]) {
+  for (const [language, label, name] of [['ja', '展開', 'extract-ja.png'], ['vi', 'Giải nén', 'extract-vi.png'], ['zh-Hans', '解压', 'extract-zh-Hans.png'], ['en', 'Extract', 'extract-en.png']]) {
     await window.webContents.executeJavaScript(`
       { const select = document.querySelector('.language-select select');
       Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(select, '${language}');

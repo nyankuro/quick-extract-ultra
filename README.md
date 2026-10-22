@@ -4,130 +4,145 @@
 
 # Quick Extract Ultra
 
-**A free, friendly archive manager for Windows. Extract, compress, look inside and verify ZIP, 7Z, RAR and 30+ other formats.**
+**A free, friendly archive tool for Windows.**<br />
+Open, extract and create ZIP, 7Z, RAR and 30+ other formats in a window that's actually nice to use.
 
-**English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md) · 简体中文 · 繁體中文
+**English** · [日本語](docs/README.ja.md) · [Tiếng Việt](docs/README.vi.md) · [简体中文](docs/README.zh-Hans.md)
 
-[![Latest release](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=download&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
-[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-a948e8)](LICENSE)
+[![Download](https://img.shields.io/github/v/release/nyankuro/quick-extract-ultra?label=download&color=19c8ff)](https://github.com/nyankuro/quick-extract-ultra/releases/latest)
 ![Windows 10 | 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4)
-[![Build](https://img.shields.io/github/actions/workflow/status/nyankuro/quick-extract-ultra/release.yml?label=build)](https://github.com/nyankuro/quick-extract-ultra/actions)
+[![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-a948e8)](LICENSE)
+[![Support me on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20me-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/nyannyankuro)
 
 <img src="docs/screenshots/extract-en.png" alt="Quick Extract Ultra main window" width="900" />
 
 </div>
 
----
+## ✨ Why you might like it
 
-## Why Quick Extract Ultra?
+Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, and it always shows you what's going on.
 
-Most archive tools were designed decades ago. Quick Extract Ultra does the same jobs as WinRAR or 7-Zip, but in a modern window that tells you exactly what is happening:
+- 📦 **Unpack a whole pile of archives at once.** Each one gets its own folder, and you can watch the progress.
+- 🔑 **Passwords don't hold anything up.** A locked archive waits for you while the others keep going.
+- 🧹 **No more "folder inside a folder".** Smart mode skips the extra wrapper folder when it isn't needed.
+- 🛡️ **Your files stay safe.** Nothing gets overwritten, and you never end up with a half-extracted mess.
+- 🌏 **Speaks your language:** English, 日本語, Tiếng Việt, 简体中文 and 繁體中文.
+- 💻 **Works offline.** Your files never leave your computer.
 
-- 🗂️ **Extract dozens of archives in one click**, each into its own folder, with live progress.
-- 🔐 **Passwords never block the queue.** Protected archives wait politely while the rest keep going.
-- 🧠 **Smart extraction** avoids the annoying "folder inside a folder with the same name".
-- 🛡️ **Safe by design.** Nothing is ever overwritten, half-finished output never appears, and downloaded files keep Windows' safety warnings.
-- 🌏 **Five languages** — English, 日本語, Tiếng Việt, 简体中文, 繁體中文 — switchable at any time.
-- 💻 **100% offline.** Your files never leave your computer.
+## 📥 Download
 
-## Features
+1. Open the [**latest release**](https://github.com/nyankuro/quick-extract-ultra/releases/latest).
+2. Pick one:
+   - **`QuickExtractUltra-Setup-x.y.z.exe`** is the installer, and the easy choice. It adds Start menu and desktop shortcuts and doesn't need admin rights.
+   - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`** is the portable version. Unzip it anywhere (a USB stick works too) and run `Quick Extract Ultra.exe`.
+3. Open it. If Windows says *"Windows protected your PC"*, click **More info → Run anyway**. You see this because the app is new and isn't code-signed yet. All of the source code is right here if you'd like to check it.
 
-| | What it does |
-|---|---|
-| **Extract** | Choose files, scan a folder, or deep-scan subfolders. Batch extract with per-file progress, a "Main Zip" collection folder, and smart mode. |
-| **Compress** | Create **7Z, ZIP, TAR, TAR.GZ, TAR.XZ, TAR.BZ2** archives. Six compression levels, AES-256 passwords, hidden file names (7Z) and split volumes (100 MB, 700 MB, 1 GB, 4 GB). |
-| **Browse archive** | Look inside without extracting. Folders, search, sizes, dates and encrypted-file markers. Extract only what you select. |
-| **Test** | Check every file in an archive against its stored checksum, without extracting. |
-| **Checksums** | CRC32, MD5, SHA-1, SHA-256 and SHA-512, with copy buttons and a "paste to compare" box. |
-| **Explorer menu** | Right-click → *Extract here (smart)*, *Extract to folder*, *Open*, *Test*, *Add to archive…*, *Add to ZIP*, *Add to 7Z*, *Calculate checksums*. Turn it on in Settings. |
-| **Recover ZIP password** | For your own ZIP files: recover a forgotten password with the open-source tools bkcrack, hashcat (GPU) and John the Ripper (CPU), run as separate programs. See below. |
-| **Drag & drop** | Drop files on any tab: archives to extract, files to compress, an archive to browse, files to hash. |
-| **Multi-part archives** | `.part1.rar`, `.7z.001` and friends are opened through the first part; later parts are hidden from scans. |
+To uninstall, go to **Windows Settings → Apps**. The right-click menu is removed for you.
 
-**Opens:** ZIP, ZIPX, 7Z, RAR (incl. RAR5), TAR, GZ, TGZ, BZ2, XZ, TXZ, ZST, LZ, LZMA, Z, CAB, ISO, WIM, ARJ, LZH/LHA, CPIO, RPM, DEB, DMG, VHD, VHDX, XAR and split `.001` files.
+### Extract something in 30 seconds
 
-<details>
-<summary><b>More screenshots</b></summary>
+1. Drag your archives into the window, or click **Choose files**.
+2. Click **Extract all**.
+3. That's it. Each archive is unpacked into a new folder right next to it.
 
-| Compress | Browse archive |
-|---|---|
-| <img src="docs/screenshots/compress.png" width="440" /> | <img src="docs/screenshots/browse.png" width="440" /> |
-| **Test & checksums** | **Password queue** |
-| <img src="docs/screenshots/tools.png" width="440" /> | <img src="docs/screenshots/extract-password.png" width="440" /> |
+## 📖 Guide
 
-</details>
+### Extracting
 
-## Recover a forgotten ZIP password
+Open the **Extract** tab, then drop archives in or use one of these buttons:
 
-The **Recover ZIP password** tab helps you back into a ZIP **you own or are allowed to open** (the app shows a reminder about this). It contains no cracking code of its own — it runs three well-known open-source tools as separate programs, so their licenses (including John's GPL) stay separate from this app:
+- **Choose files** lets you pick archives yourself.
+- **Scan folder** finds every archive in a folder.
+- **Deep scan** does the same and also looks inside subfolders.
 
-- **bkcrack** — if the ZIP uses the old ZipCrypto format and you still have one original (unencrypted) file that is inside it, this recovers the password very fast.
-- **hashcat** (GPU) and **John the Ripper** (CPU) — otherwise the app reads the ZIP's hash with John's `zip2john` and searches for the password: a wordlist first (a small common-password list is built in), then brute force over a character set and length you choose. On an AES ZIP it uses your GPU through hashcat; otherwise John on the CPU.
+A few switches let you fine-tune things:
 
-These tools are **not bundled** and are never re-hosted. In the app you add each one either with an **automatic download** (a confirmation box shows the tool's name, license, size and official source, and the download is checked against the source's published SHA-256) or **manually** from its official page. Downloads are saved under `%APPDATA%\quick-extract-ultra\tools\`. John is the base tool (its `zip2john` reads the hash); hashcat is an optional GPU accelerator; bkcrack is the standalone fast path.
+- **Save to** sets where the files you chose are extracted. By default that's next to each archive. Click it to pick another folder, or press × to switch back. (Folder scans always extract next to each archive.)
+- **Smart**: if an archive holds just one folder or file, it comes out as is, without an extra folder around it.
+- **Main folder** puts everything into one `Main Zip` folder. **New main** starts a fresh `Main Zip (1)` for this run.
+- **Delete archive** (the orange switch) **permanently** deletes each archive once it has been extracted successfully. It skips the Recycle Bin, so the app asks you to confirm the first time you turn it on. Nothing is deleted if an extraction fails or is cancelled.
 
-The tab shows live progress, speed and estimated time, with Pause, Resume and Cancel. When the password is found it is shown clearly with a copy button and an **Extract now** button.
+Click **Extract all** and you're done. If a folder name is already taken, the app adds `(1)`, `(2)` and so on, so it never overwrites anything.
 
-## Download & install
+If an archive needs a password, a password box appears on its row. Type it in and press **Continue**, or **Skip** it. The other archives keep going in the meantime.
 
-1. Go to the [**latest release**](https://github.com/nyankuro/quick-extract-ultra/releases/latest).
-2. Download one of these:
-   - **`QuickExtractUltra-Setup-x.y.z.exe`**: installer (recommended). Adds Start menu and Desktop shortcuts. No administrator rights needed.
-   - **`QuickExtractUltra-Portable-x.y.z-win-x64.zip`**: portable version. Unzip it anywhere (even a USB stick) and run `Quick Extract Ultra.exe`.
-3. Run it. If Windows SmartScreen says *"Windows protected your PC"*, click **More info → Run anyway**. This appears because the app is new and not code-signed yet; the full source code is right here for anyone to check.
+### Making an archive
 
-To uninstall, use **Settings → Apps** in Windows. The Explorer menu is removed automatically.
+1. Open **Compress** and drop in files or folders (or use **Add files** / **Add folder**).
+2. Choose a name, where to save it, the format and how much to compress.
+3. If you like, add a password (7Z or ZIP), hide the file names (7Z), or split it into parts (100 MB, 700 MB, 1 GB or 4 GB).
+4. Click **Create archive**, then **Show in folder** when it's ready.
 
-## How to use
+> 💡 ZIP passwords can only use English letters, numbers and symbols (a 7-Zip limitation). If your password has accents or Asian characters, choose 7Z.
 
-### Extract archives
-1. Open the **Extract** tab.
-2. Drop archives into the window, or click **Choose files**, **Scan folder** or **Deep scan** (includes subfolders).
-3. Optional switches:
-   - **Save to**: by default each archive is extracted next to itself. Click it to pick another folder (the × button switches back).
-   - **Smart**: if an archive contains just one folder or file, it comes out directly, without an extra wrapper folder.
-   - **Main folder**: all results go into one `Main Zip` folder. **New main** makes a fresh `Main Zip (1)` for this run.
-4. Click **Extract all**. Each archive goes into a new folder named after it; if that name is taken, `(1)`, `(2)`… is added. Nothing is ever overwritten.
-5. If an archive needs a password, a password box appears on its row. Type it and press **Continue**, or **Skip**. Other archives keep extracting meanwhile.
+### Looking inside an archive
 
-### Create an archive
-1. Open **Compress** and drop files/folders, or use **Add files** / **Add folder**.
-2. Choose a name, folder, format and compression level.
-3. Optional: a password (7Z or ZIP), *hide file names* (7Z), or *split into parts*.
-4. Click **Create archive**. When it finishes, **Show in folder** takes you to it.
+Open **Browse archive** and drop an archive in. Double-click folders to look around, search by name, tick what you need and click **Extract selected**. There's no need to unpack everything.
 
-> 💡 ZIP passwords must use English letters, numbers and symbols (a 7-Zip limitation). For passwords with accents or Japanese characters, choose 7Z.
+### Testing and checksums
 
-### Look inside an archive
-Open **Browse archive**, then **Open archive** (or drop one in). Double-click folders to move around, use the search box, tick items and press **Extract selected**, or **Test** to verify everything.
+The **Test & checksums** tab checks that every file inside an archive is intact, without extracting anything. It can also work out CRC32, MD5, SHA-1, SHA-256 and SHA-512 for any file. Paste a checksum from a website to compare the two in one go.
 
-### Add the right-click menu
-Click ⚙️ **Settings** → turn on **Explorer right-click menu**. It adds *Extract files… (choose folder)*, *Extract here (smart)*, *Extract to folder* and more. On Windows 11 the entries are under **Show more options** (or press Shift+F10). The menu is only added for your Windows account and is removed when you turn the setting off.
+### Right-click menu
+
+Turn on **Settings → Explorer right-click menu** to add *Extract files... (choose folder)*, *Extract here (smart)*, *Extract to folder*, *Add to ZIP*, *Calculate checksums* and more to File Explorer. On Windows 11 they're under **Show more options** (or press Shift+F10). The menu is only added for your own Windows account, and it goes away when you switch the setting off.
+
+### Recovering a forgotten password
+
+Locked out of your own ZIP or RAR file? The **Recover password** tab can try to find the password for you.
+
+> Please use it only on archives that are yours, or that you have permission to open.
+
+- **The first time**, the app needs three free helper tools: bkcrack, hashcat and John the Ripper. They don't come with the app, so you choose **Download all automatically** (from their official websites) or **Add them myself**. You only do this once.
+- **After that**, choose the archive and click **Try automatically**. The app tries numbers first, then common passwords and their variations, then a wider search. It uses your graphics card (GPU) for newer ZIP and RAR5 files, and your processor (CPU) for the rest.
+- **Processing level**: *Balanced* is a good default. *Economy* keeps your PC cooler and quieter, and *Maximum* is the fastest but runs hot.
+- You can **Pause**, **Resume** or **Cancel** at any time. When the password turns up, copy it or click **Extract now**.
+
+Good to know: a short, simple password can turn up in seconds, but a long random one can take days, or may never be found. If you have an older ZIP and still have one of the original files that's inside it, the app can use that file to unlock the ZIP very quickly. Some antivirus programs flag password tools by mistake, so if a tool seems to vanish after downloading, check your antivirus quarantine.
 
 ### Settings
-| Setting | Default | Meaning |
+
+| Setting | Default | What it does |
 |---|---|---|
-| Language | English | English / 日本語 / Tiếng Việt |
-| Explorer right-click menu | Off | Adds the context menu described above |
-| Open the folder after extracting | Off | Opens Explorer when a job finishes |
-| Keep download safety warnings | **On** | Extracted files keep the "downloaded from the internet" mark, so SmartScreen and Office Protected View still protect you |
-| Move archives to the Recycle Bin after extracting | Off | Only after success; multi-part sets move together and can be restored |
+| Language | English | English, 日本語, Tiếng Việt, 简体中文 or 繁體中文 |
+| Explorer right-click menu | Off | Adds the right-click menu described above |
+| Open the folder after extracting | Off | Opens the result in File Explorer when a job finishes |
+| Keep download safety warnings | **On** | Files extracted from a downloaded archive keep Windows' "from the internet" mark, so SmartScreen and Office still protect you |
+| Move archives to the Recycle Bin after extracting | Off | A gentler option than *Delete archive*, since you can still restore the archive later |
+| Check for updates | | Checks whether a newer version is out, and opens the download page if there is one |
 
-## FAQ
+## Questions
 
-**Can it create RAR files?**
-No. RAR creation is proprietary to WinRAR. Quick Extract Ultra opens RAR (including RAR5) and creates 7Z, ZIP and TAR-based formats, which every modern tool can open.
+**Can it make RAR files?**
+No. Only WinRAR can create RAR files. Quick Extract Ultra opens RAR files (RAR5 too) and creates 7Z, ZIP and TAR files, which any modern tool can open.
 
-**Is it safe? Does it upload anything?**
-Everything runs locally with the well-known 7-Zip engine. The app has no telemetry and makes no network requests. Extraction happens in a temporary folder first; only a complete, checksum-verified result is moved into place.
+**Does it send my files anywhere?**
+No. Everything happens on your computer, using the well-known 7-Zip engine, and there's no tracking of any kind. The app only goes online when you ask it to: when you press **Check for updates**, or when you download the password-recovery tools.
 
-**Why does Windows warn me when I first run it?**
-New apps without a paid code-signing certificate show a SmartScreen warning. Choose **More info → Run anyway**. We'd love to sign releases in the future; see [Support the project](#support-the-project).
+**Which formats can it open?**
+ZIP, ZIPX, 7Z, RAR (incl. RAR5), TAR, GZ, TGZ, BZ2, XZ, TXZ, ZST, LZ, LZMA, Z, CAB, ISO, WIM, ARJ, LZH/LHA, CPIO, RPM, DEB, DMG, VHD, VHDX and XAR. Split archives such as `.part1.rar` or `.7z.001` open from their first part.
 
-**Where are my settings stored?**
-In `%APPDATA%\quick-extract-ultra\settings.json`. Archive lists and passwords are never saved.
+**Why does Windows warn me the first time?**
+New apps without a paid code-signing certificate get a SmartScreen warning. Click **More info → Run anyway**. I'd love to sign the app one day, and your support helps make that happen.
 
-## Build from source
+**Where are my settings saved?**
+In `%APPDATA%\quick-extract-ultra\settings.json`. Your archive lists and passwords are never saved.
+
+## ☕ Support
+
+Quick Extract Ultra is free, and it's going to stay that way. If it saves you some time, a coffee keeps me going:
+
+<a href="https://ko-fi.com/nyannyankuro"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" /></a>
+
+There's also a **Support me** button in the app, just under the title. Other ways to help:
+
+- ⭐ **Give the project a star.** It helps other people find it.
+- 🐛 **Tell me about bugs or ideas** in [Issues](https://github.com/nyankuro/quick-extract-ultra/issues).
+
+## For developers
+
+<details>
+<summary><b>Build from source</b></summary>
 
 You need [Node.js](https://nodejs.org/) 22 or newer and Windows 10/11.
 
@@ -138,33 +153,27 @@ npm ci
 npm run dev        # run with live reload
 npm test           # archive integration tests (real 7-Zip)
 npm run test:ui    # Electron UI smoke test
-npm run dist       # build the installer and portable exe into dist/
+npm run dist       # build the installer and portable zip into dist/
 ```
 
 Project layout: `electron/` (main process, 7-Zip, Explorer integration), `src/` (React interface), `locales/` (translations), `scripts/` (tests and tools).
 
-## Contributing
+Bug reports, ideas and translations are all welcome in [Issues](https://github.com/nyankuro/quick-extract-ultra/issues). To add a language, copy `locales/en.json`, translate the values, and register it in `src/i18n.tsx` and `electron/settings.cjs`.
 
-Bug reports, ideas and translations are very welcome! Please open an [issue](https://github.com/nyankuro/quick-extract-ultra/issues). To add a language, copy `locales/en.json`, translate the values, and add it to `src/i18n.tsx` and `electron/settings.cjs`.
+</details>
 
-## Support the project
+## 📄 License
 
-Quick Extract Ultra is free and always will be. If it saves you time, you can help keep it going:
+© 2026 nyankuro. Quick Extract Ultra is **free** and its source code is public, under the [PolyForm Shield License 1.0.0](LICENSE). In plain words:
 
-- ⭐ **Star this repository**. It really helps others find it.
-- 🐛 Report bugs and suggest features in [Issues](https://github.com/nyankuro/quick-extract-ultra/issues).
-- ☕ **[Support me on Ko-fi](https://ko-fi.com/nyannyankuro)** — there's also a "Support me" button in the app, under the title.
-  - GitHub Sponsors: *coming soon*
-  - PayPal: *coming soon*
+- ✅ You can use it for free, at home or at work, share it, and change it for your own use.
+- ❌ You can't sell it, or put it out (or a renamed copy of it) as a competing product, even for free.
 
-## License
+Powered by [7-Zip](https://www.7-zip.org/) by Igor Pavlov (GNU LGPL + unRAR restriction). Other bundled parts keep their own licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Thanks to the great archivers that inspired this one: [7-Zip](https://www.7-zip.org/), [NanaZip](https://github.com/M2Team/NanaZip) and [PeaZip](https://github.com/peazip/PeaZip).
 
-© 2026 nyankuro. Quick Extract Ultra is **free** and its source code is public, under the [PolyForm Shield License 1.0.0](LICENSE).
+<div align="center">
 
-In plain words:
-- ✅ You may use it for free, at home or at work, share it with others, and change it for your own use.
-- ❌ You may **not** sell it, or offer it (or a renamed/rebranded copy) as a product that competes with Quick Extract Ultra, even for free.
+Made with ❤️ by nyankuro 🐈‍⬛
 
-The bundled third-party parts keep their own licenses (see below).
-Powered by [7-Zip](https://www.7-zip.org/) by Igor Pavlov (GNU LGPL + unRAR restriction). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-Inspired by the great open-source archivers [7-Zip](https://www.7-zip.org/), [NanaZip](https://github.com/M2Team/NanaZip) and [PeaZip](https://github.com/peazip/PeaZip).
+</div>
