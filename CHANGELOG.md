@@ -14,6 +14,7 @@ Version notes are required for every future app change. Each release should reco
 ### Docs
 
 - New "Is it safe?" section in all four READMEs: explains that the blue SmartScreen box appears because the app is new and not code-signed (it is not a virus warning), how to run past it, and how anyone can verify a download (built by GitHub Actions from the public source, SHA-256 checksums and VirusTotal scans on each release page, only download from GitHub). It replaces the old FAQ entry about the warning.
+- Opening lines of every README, the GitHub repo description, topics and `package.json` description now lead with batch extraction in a GUI you can follow and control, and with password recovery for your own ZIP/RAR files (with an honest note on how long it can take). The password-recovery point moved up next to batch extraction.
 - The v2.3.0 release notes now include the SHA-256 checksums, Microsoft Defender and VirusTotal results, and a link to the GitHub build that produced the files.
 
 ## 2.3.0 - 2026-10-22

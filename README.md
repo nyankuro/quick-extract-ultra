@@ -4,8 +4,8 @@
 
 # Quick Extract Ultra
 
-**A free, friendly archive tool for Windows.**<br />
-Open, extract and create ZIP, 7Z, RAR and 30+ other formats in a window that's actually nice to use.
+**Batch extract dozens or hundreds of ZIP, RAR and 7Z files at once, in a clear window that shows and lets you control every step.**<br />
+A free archive manager for Windows (an easy GUI alternative to WinRAR and 7-Zip), with a built-in tool to recover forgotten passwords of your own ZIP and RAR files.
 
 **English** · [日本語](docs/README.ja.md) · [简体中文](docs/README.zh-Hans.md) · [Tiếng Việt](docs/README.vi.md)
 
@@ -23,10 +23,10 @@ Open, extract and create ZIP, 7Z, RAR and 30+ other formats in a window that's a
 Quick Extract Ultra handles the everyday jobs of WinRAR or 7-Zip, plus a few things they don't do:
 
 - 🔑 **One password doesn't stop the whole batch.** In most archive tools, a single locked archive pops up a password box and everything waits for you. Here it just steps aside: the rest keep extracting, and you type the password whenever you're ready.
+- 🔓 **A way back into your own locked files.** Forgot the password to your own ZIP or RAR? The app can try to find it, using your graphics card when it can. Most archive tools don't offer this at all. Short passwords can turn up in seconds; long, random ones can take days or may never be found.
 - 🔍 **It finds your archives for you.** Point it at a folder and it gathers every archive inside, even deep in subfolders, then extracts them all in one go, each into its own folder.
 - 🛡️ **No half-finished folders, ever.** Files are unpacked into a temporary folder first and only moved into place once 7-Zip confirms everything is intact. If something goes wrong, your folders stay exactly as they were, and nothing is ever overwritten.
 - 🧹 **No more "folder inside a folder".** One switch (Smart) removes the extra wrapper folder when it isn't needed.
-- 🔓 **A way back into your own locked files.** Forgot the password to your own ZIP or RAR? The app can try to find it, using your graphics card when it can. Most archive tools don't offer this at all.
 - 💸 **Free, for real.** No ads, no trial period, no "please buy" reminders. It works offline, so your files never leave your computer.
 - 🌏 **Easy on the eyes, in your language:** a clean, modern window in English, 日本語, 简体中文, 繁體中文 or Tiếng Việt.
 

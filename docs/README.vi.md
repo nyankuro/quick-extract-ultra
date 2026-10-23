@@ -4,8 +4,8 @@
 
 # Quick Extract Ultra
 
-**Phần mềm nén và giải nén miễn phí, dễ dùng cho Windows.**<br />
-Mở, giải nén và tạo file ZIP, 7Z, RAR cùng hơn 30 định dạng khác, với giao diện gọn gàng, dễ chịu.
+**Giải nén hàng loạt hàng chục, hàng trăm file ZIP, RAR, 7Z cùng lúc, với giao diện rõ ràng để bạn theo dõi và kiểm soát từng bước.**<br />
+Phần mềm giải nén miễn phí cho Windows (thay thế WinRAR, 7-Zip với giao diện dễ dùng), có sẵn công cụ tìm lại mật khẩu đã quên cho file ZIP, RAR của chính bạn.
 
 [English](../README.md) · [日本語](README.ja.md) · [简体中文](README.zh-Hans.md) · **Tiếng Việt**
 
@@ -23,10 +23,10 @@ Mở, giải nén và tạo file ZIP, 7Z, RAR cùng hơn 30 định dạng khác
 Quick Extract Ultra làm được những việc hằng ngày như WinRAR hay 7-Zip, và còn có vài điều mà chúng không làm được:
 
 - 🔑 **Một file có mật khẩu không làm cả loạt bị đứng.** Với hầu hết phần mềm giải nén, chỉ cần một file bị khóa là bảng hỏi mật khẩu hiện lên và mọi thứ phải chờ bạn. Ở đây, file đó tự đứng sang một bên, các file khác vẫn giải nén tiếp, lúc nào rảnh bạn mới nhập mật khẩu.
+- 🔓 **Có cách mở lại file của chính mình khi quên mật khẩu.** Quên mật khẩu file ZIP hay RAR của mình? App có thể thử tìm lại, dùng cả card đồ họa khi được. Hầu hết phần mềm giải nén khác không có tính năng này. Mật khẩu ngắn có khi vài giây là ra, còn mật khẩu dài và ngẫu nhiên có thể mất vài ngày hoặc không tìm được.
 - 🔍 **Tự đi tìm file nén giúp bạn.** Chỉ cần chọn một thư mục, app sẽ gom hết các file nén bên trong, kể cả nằm sâu trong thư mục con, rồi giải nén tất cả một lần, mỗi file vào một thư mục riêng.
 - 🛡️ **Không bao giờ để lại thư mục giải nén dở dang.** File được giải nén vào một thư mục tạm trước, chỉ khi 7-Zip xác nhận mọi thứ nguyên vẹn thì mới được chuyển vào đúng chỗ. Lỡ có lỗi, thư mục của bạn vẫn y như cũ, và không file nào bị ghi đè.
 - 🧹 **Hết cảnh "thư mục lồng trong thư mục".** Chỉ một công tắc (Thông minh) là bỏ được lớp thư mục thừa khi không cần.
-- 🔓 **Có cách mở lại file của chính mình khi quên mật khẩu.** Quên mật khẩu file ZIP hay RAR của mình? App có thể thử tìm lại, dùng cả card đồ họa khi được. Hầu hết phần mềm giải nén khác không có tính năng này.
 - 💸 **Miễn phí thật sự.** Không quảng cáo, không thời hạn dùng thử, không bảng nhắc "hãy mua bản quyền". App chạy ngay trên máy, file của bạn không bị gửi đi đâu cả.
 - 🌏 **Nhìn dễ chịu, có tiếng Việt:** giao diện hiện đại, gọn gàng, dùng được bằng English, 日本語, 简体中文, 繁體中文 hoặc Tiếng Việt.
 
